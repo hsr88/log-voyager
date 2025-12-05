@@ -4,12 +4,7 @@ import {
   X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, Shield, Cpu, HelpCircle, History, Clipboard, Check, Github, Box
 } from 'lucide-react';
 
-/**
- * LOG VOYAGER - PRODUCTION BUILD
- * - Rebranding na "LOG VOYAGER".
- * - Dodano link do GitHub i Copyright w stopce menu.
- * - Poprawiono widoczność logo (zmieniono kolor na biały).
- */
+
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
 
@@ -403,7 +398,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded bg-gradient-to-br from-[#00f3ff] to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.3)]"><Box size={18} className="text-white" /></div>
             <div>
-               <h1 className="text-sm font-bold text-white tracking-wider neon-text">LOG VOYAGER <span className="text-[9px] bg-[#ff00ff] text-white px-1 rounded ml-1">PRO</span></h1>
+               <h1 className="text-sm font-bold text-white tracking-wider neon-text">LOG VOYAGER <span className="text-[9px] bg-[#0088ff] text-white px-1 rounded ml-1">Analyze Huge Log Files Instantly</span></h1>
                {file && <p className="text-[10px] text-[#00f3ff] font-mono">{file.name} ({formatBytes(fileSize)})</p>}
             </div>
           </div>
