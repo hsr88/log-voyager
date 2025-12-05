@@ -8,6 +8,10 @@ Use the application instantly (no installation required):
 
 👉 https://www.logvoyager.cc
 
+
+<img width="425" height="439" alt="Zrzut ekranu 2025-12-05 190911" src="https://github.com/user-attachments/assets/2f28cb10-de7d-44e5-ab70-8816b3f26a3c" />
+
+
 ⚡ Key Features
 
 Infinity Scroll Engine: Open files larger than 10GB instantly. The app uses advanced File Slicing API to read only the visible chunks of data into memory (RAM).
