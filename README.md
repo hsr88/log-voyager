@@ -47,21 +47,21 @@ Docker installed
 Quick Start
 
 Clone the repository:
-
+```
 git clone [https://github.com/hsr88/log-voyager.git](https://github.com/hsr88/log-voyager.git)
 cd log-voyager
-
+```
 
 Build the image:
-
+```
 docker build -t log-voyager .
-
+```
 
 Run the container:
-
+```
 docker run -d -p 8080:80 --name my-logs log-voyager
 
-
+```
 Access the app:
 Open your browser and navigate to: http://localhost:8080
 
@@ -70,19 +70,19 @@ Open your browser and navigate to: http://localhost:8080
 If you want to contribute or modify the source code:
 
 Install dependencies:
-
+```
 npm install
 
-
+```
 Start development server:
-
+```
 npm run dev
-
+```
 
 Build for production:
-
+```
 npm run build
-
+```
 
 🛡️ Security Note
 
@@ -93,5 +93,6 @@ It does not require an internet connection (works offline).
 It does not send analytics or file content to any external server.
 
 It uses standard HTML5 File APIs strictly within the browser context.
-
+```
 © 2025 logvoyager.cc | Created by hsr88
+```
