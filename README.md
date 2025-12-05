@@ -1,68 +1,97 @@
 🚀 Log Voyager
 
-Log Voyager to nowoczesne, webowe narzędzie do analizy gigantycznych plików logów (1GB+), działające w pełni lokalnie w przeglądarce. Zaprojektowane dla DevOpsów i Backend Developerów.
+The missing tool for DevOps and Backend Developers. Analyze gigabyte-sized log files instantly in your browser without crashing your device.
 
-⚡ Główne Funkcje
+🔴 Live Demo
 
-Zero instalacji: Działa w każdej nowoczesnej przeglądarce.
+Use the application instantly (no installation required):
 
-Lokalne przetwarzanie: Pliki nigdy nie są wysyłane na serwer (Privacy First).
+👉 https://www.logvoyager.cc
 
-Wydajność: Otwiera pliki o rozmiarze 10GB+ dzięki technologii File Slicing.
+⚡ Key Features
 
-Warp Jump: Zakładki pozwalają na błyskawiczne skakanie po pliku.
+Infinity Scroll Engine: Open files larger than 10GB instantly. The app uses advanced File Slicing API to read only the visible chunks of data into memory (RAM).
 
-Wsparcie JSON: Automatyczne formatowanie (pretty-print) logów JSON.
+Privacy First: 100% Local Execution. Your log files never leave your device. They are processed within the browser sandbox. No data is uploaded to any cloud.
 
-Analiza: Kolorowanie składni (Error/Warn) i filtrowanie.
+JSON Prettifier: Automatically detects JSON objects in log lines and formats them into readable trees with a single click.
 
-🌍 Opcja 1: Użyj Online (Najszybciej)
+Warp Jump Bookmarks: Mark important lines and "warp" between them instantly, even if they are gigabytes apart.
 
-Wersja publiczna dostępna jest pod adresem:
-https://log-voyager.vercel.app
+Focus Mode: Filter out noise and display only lines matching your search query.
 
-🐳 Opcja 2: Uruchom u siebie (Docker)
+Zero Install: Works on Desktop, Mobile (Android/iOS), and Tablets. Ideal for emergency debugging on the go.
 
-To zalecana metoda dla firm i pracy z wrażliwymi danymi. Aplikacja działa w izolowanym kontenerze w Twojej sieci lokalnej.
+🛠️ How It Works
 
-Wymagania
+Traditional editors (Notepad++, VS Code) try to load the entire file into RAM. If a file is larger than your available memory, the application crashes.
 
-Zainstalowany Docker
+Log Voyager acts like a video streaming service but for text:
 
-Instrukcja krok po kroku
+It creates a virtual map of the file.
 
-Pobierz kod:
+It reads only a tiny buffer (50KB) corresponding to the scrollbar position.
+
+When you scroll or jump, the old buffer is discarded, and a new one is read from the disk.
+
+This ensures consistent performance whether the file is 5MB or 50GB.
+
+🐳 Run Locally (Docker)
+
+For enterprise environments with strict security policies (air-gapped networks), you can run Log Voyager as a self-hosted container.
+
+Prerequisites
+
+Docker installed
+
+Quick Start
+
+Clone the repository:
 
 git clone [https://github.com/hsr88/log-voyager.git](https://github.com/hsr88/log-voyager.git)
 cd log-voyager
 
 
-Zbuduj obraz:
+Build the image:
 
 docker build -t log-voyager .
 
 
-Uruchom kontener:
+Run the container:
 
 docker run -d -p 8080:80 --name my-logs log-voyager
 
 
-Gotowe!
-Otwórz przeglądarkę i wejdź na: http://localhost:8080
+Access the app:
+Open your browser and navigate to: http://localhost:8080
 
-💻 Opcja 3: Development (Node.js)
+💻 Development
 
-Jeśli chcesz edytować kod źródłowy:
+If you want to contribute or modify the source code:
 
-# Instalacja zależności
+Install dependencies:
+
 npm install
 
-# Uruchomienie serwera deweloperskiego
+
+Start development server:
+
 npm run dev
 
 
-🛡️ Bezpieczeństwo
+Build for production:
 
-Aplikacja jest statyczną stroną HTML/JS. Po załadowaniu do przeglądarki, nie wymaga połączenia z internetem do działania. Możesz odłączyć kabel sieciowy, a analiza logów nadal będzie działać.
+npm run build
 
-© 2025 logvoyager.cc | Built by hsr88
+
+🛡️ Security Note
+
+Although this is a web application, it functions as a static tool. Once loaded:
+
+It does not require an internet connection (works offline).
+
+It does not send analytics or file content to any external server.
+
+It uses standard HTML5 File APIs strictly within the browser context.
+
+© 2025 logvoyager.cc | Created by hsr88
