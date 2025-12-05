@@ -5,10 +5,9 @@ import {
 } from 'lucide-react';
 
 /**
- * LOG VIEWER - PRODUCTION BUILD
- * - Usunięto nieużywany kod (Demo, Play icon).
- * - Przywrócono wyświetlanie rozmiaru pliku (naprawia błąd fileSize).
- * - Czysty kod gotowy do kompilacji.
+ * LOG VIEWER - PRODUCTION BUILD (CDN FIX)
+ * - Dodano automatyczne ładowanie Tailwind CDN.
+ * - Naprawia to problem "braku stylów" na Vercel, gdy build CSS się nie powiedzie.
  */
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
@@ -285,6 +284,16 @@ export default function App() {
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // --- CDN FIX: Automatyczne ładowanie stylów Tailwind w razie awarii builda ---
+  useEffect(() => {
+    // Sprawdzamy czy style działają (czy body ma czarne tło). Jeśli nie - ładujemy CDN.
+    // Dla pewności ładujemy zawsze, bo na Vercel build CSS nie zadziałał.
+    const script = document.createElement('script');
+    script.src = "https://cdn.tailwindcss.com";
+    script.async = true;
+    document.head.appendChild(script);
+  }, []);
+
   useEffect(() => {
     const saved = localStorage.getItem('log_history_v2');
     if (saved) setHistory(JSON.parse(saved));
@@ -366,6 +375,8 @@ export default function App() {
   const toggleBookmark = (lineNum: number, content: string) => { const newBookmarks = new Map(bookmarks); if (newBookmarks.has(lineNum)) newBookmarks.delete(lineNum); else newBookmarks.set(lineNum, { lineNum, content: content.length > 50 ? content.substring(0, 50) + '...' : content, chunkOffset: currentOffset }); setBookmarks(newBookmarks); };
   const jumpToBookmark = (bookmark: BookmarkData) => { if (bookmark.chunkOffset === currentOffset) { const element = document.getElementById(`line-${bookmark.lineNum}`); if (element) { element.scrollIntoView({ behavior: 'smooth', block: 'center' }); element.classList.add('animate-flash'); setTimeout(() => element.classList.remove('animate-flash'), 1500); } } else { readChunk(bookmark.chunkOffset); setPendingScrollLine(bookmark.lineNum); } setShowBookmarksList(false); };
   const filteredLines = focusMode && searchTerm ? lines.filter(l => l.toLowerCase().includes(searchTerm.toLowerCase())) : lines;
+
+  const loadDemo = () => { setIsLoading(true); setTimeout(() => { handleFile(generateDemoLog()); }, 600); }; // Demo function kept if needed, but not in UI
 
   return (
     <div className="bg-[#050505] text-slate-300 font-jetbrains h-[100dvh] overflow-hidden flex flex-col tech-grid relative">
