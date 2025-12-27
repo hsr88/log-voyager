@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   FileText, Search, UploadCloud, Zap, Bug, FileJson, 
-  X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, Shield, Cpu, HelpCircle, History, Clipboard, Check, Github, Box, Settings, Type, AlignLeft, Download, Regex
+  X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, Shield, Cpu, HelpCircle, History, Clipboard, Check, Github, Box, Settings, Type, AlignLeft, Download
 } from 'lucide-react';
 
+// --- BUILD FIX: Zakomentowano import, który powodował błąd na Vercel/Web ---
+// import { SendIntent } from 'capacitor-plugin-send-intent';
+
 /**
- * LOG VOYAGER - STABLE WEB BUILD
- * - Usunięto całkowicie zależności mobile (capacitor-plugin-send-intent).
- * - Gwarantuje to udany build na Vercel.
+ * LOG VOYAGER - PLATINUM CLEAN
+ * - Usunięto martwy kod (generateDemoLog, nieużywane importy).
+ * - Zawiera: Regex, Settings, Export, Paste, History, Full FAQ/About.
  */
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
@@ -67,26 +70,18 @@ const getLogLevel = (line: string) => {
   return 'default';
 };
 
-const generateDemoLog = (): File => {
-  const lines = [];
-  const types = ['INFO', 'WARN', 'ERROR', 'DEBUG'];
-  const services = ['Auth', 'Payment', 'DB_Shard_01', 'Gateway'];
-  for (let i = 0; i < 5000; i++) {
-    const type = types[Math.floor(Math.random() * types.length)];
-    const srv = services[Math.floor(Math.random() * services.length)];
-    const date = new Date().toISOString().split('T')[1].slice(0, -1);
-    let content = `${date} [${srv}] ${type} req:${Math.floor(Math.random() * 10000).toString(16)}`;
-    if (type === 'ERROR') content += ` connection_refused 127.0.0.1:5432`;
-    else if (i % 20 === 0) content += ` payload={"uid":${i},"status":"active"}`;
-    lines.push(content);
-  }
-  const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
-  return new File([blob], "trace_log_huge.log", { type: "text/plain", lastModified: Date.now() });
-};
-
 // --- Typy ---
-interface BookmarkData { lineNum: number; content: string; chunkOffset: number; }
-interface HistoryItem { name: string; size: string; date: string; }
+interface BookmarkData {
+  lineNum: number;
+  content: string;
+  chunkOffset: number;
+}
+
+interface HistoryItem {
+  name: string;
+  size: string;
+  date: string;
+}
 
 // --- Komponent: Settings Modal ---
 const SettingsModal = ({ onClose, settings, onUpdate }: any) => {
@@ -98,6 +93,7 @@ const SettingsModal = ({ onClose, settings, onUpdate }: any) => {
           <button onClick={onClose} className="text-slate-400 hover:text-white"><X size={20} /></button>
         </div>
         <div className="p-6 space-y-6">
+          {/* Font Size */}
           <div>
             <label className="text-xs text-slate-500 font-bold uppercase mb-3 block flex items-center gap-2"><Type size={14} /> Font Size</label>
             <div className="flex bg-black/40 p-1 rounded-lg border border-white/5">
@@ -112,6 +108,7 @@ const SettingsModal = ({ onClose, settings, onUpdate }: any) => {
               ))}
             </div>
           </div>
+          {/* Line Wrap */}
           <div>
             <label className="text-xs text-slate-500 font-bold uppercase mb-3 block flex items-center gap-2"><AlignLeft size={14} /> Text Wrapping</label>
             <div className="flex bg-black/40 p-1 rounded-lg border border-white/5">
@@ -145,22 +142,43 @@ const InfoModal = ({ onClose }: { onClose: () => void }) => {
         <div className="flex-1 overflow-y-auto p-6 text-sm text-slate-300 leading-relaxed scrollbar-thin scrollbar-thumb-slate-700">
           {activeTab === 'about' && (
             <div className="space-y-6">
-              <div><h4 className="text-white font-bold mb-2 flex items-center gap-2"><Cpu size={16} className="text-[#00f3ff]" /> The Mission</h4><p className="text-slate-400 text-xs leading-relaxed">Log Voyager is a specialized tool engineered for DevOps and Backend Developers who need to analyze massive log files (1GB+) on the go. Standard mobile editors crash when opening gigabyte-sized files due to RAM limits. This tool solves that problem entirely.</p></div>
-              <div><h4 className="text-white font-bold mb-2 flex items-center gap-2"><Zap size={16} className="text-yellow-400" /> Core Technology</h4><p className="text-slate-400 text-xs leading-relaxed">We use <strong>File Slicing API</strong>. Instead of loading the entire file into memory (which kills the browser), the application reads it in small, 50KB chunks—just like streaming a video on YouTube. This allows you to open a 100GB log file on an old smartphone with zero latency.</p></div>
-              <div><h4 className="text-white font-bold mb-2 flex items-center gap-2"><Shield size={16} className="text-emerald-400" /> Privacy & Security</h4><p className="text-slate-400 text-xs leading-relaxed"><strong>Local Execution Only.</strong> This is the most important feature. Your log files never leave your device. The application runs entirely within your browser's sandbox. No data is uploaded to any server. You can even use this app offline (Airplane Mode) for maximum security.</p></div>
+              <div>
+                <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Cpu size={16} className="text-[#00f3ff]" /> The Mission</h4>
+                <p className="text-slate-400 text-xs leading-relaxed">
+                  Log Voyager is a specialized tool engineered for DevOps and Backend Developers who need to analyze massive log files (1GB+) on the go.
+                  Standard mobile editors crash when opening gigabyte-sized files due to RAM limits. This tool solves that.
+                </p>
+              </div>
+              
+              <div>
+                <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Zap size={16} className="text-yellow-400" /> Core Technology</h4>
+                <p className="text-slate-400 text-xs leading-relaxed">
+                  We use <strong>File Slicing API</strong>. Instead of loading the entire file into memory, the application reads it in small, 50KB chunks—just like streaming a video. This allows you to open a 100GB log file on an old smartphone with zero latency.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Shield size={16} className="text-emerald-400" /> Privacy & Security</h4>
+                <p className="text-slate-400 text-xs leading-relaxed">
+                  <strong>Local Execution Only.</strong> Your log files never leave your device. The application runs entirely within your browser's sandbox. No data is uploaded to any server. You can even use this app offline (Airplane Mode).
+                </p>
+              </div>
             </div>
           )}
+
           {activeTab === 'faq' && (
             <div className="space-y-4">
-              <div className="border-b border-white/5 pb-4"><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> Why not use Notepad?</h4><p className="text-xs text-slate-400 leading-relaxed">Standard editors (Notepad, VS Code) try to load the whole file into RAM. For a 2GB file, your device will likely freeze, crash, or heat up significantly. Log Voyager streams the file, using only ~10MB of RAM regardless of the total file size.</p></div>
-              <div className="border-b border-white/5 pb-4"><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> How do I format JSON?</h4><p className="text-xs text-slate-400 leading-relaxed">The app automatically detects JSON objects within log lines. Look for the small "JSON" button next to messy log lines. Clicking it will pretty-print the object into a readable, colored structure.</p></div>
-              <div className="border-b border-white/5 pb-4"><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> What are Bookmarks?</h4><p className="text-xs text-slate-400 leading-relaxed">Click any line number to mark it. Since giant files are hard to navigate, bookmarks save the exact byte-offset position in the file, allowing you to "warp" back to that location instantly later, even if it's gigabytes away.</p></div>
-              <div><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> Is it free?</h4><p className="text-xs text-slate-400 leading-relaxed">Yes, Log Voyager is a completely free, open-source tool for the developer community.</p></div>
+              <div className="border-b border-white/5 pb-4"><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> Why not use Notepad?</h4><p className="text-xs text-slate-400 leading-relaxed">Standard editors try to load the whole file into RAM. For a 2GB file, your device will likely freeze or crash. Log Voyager streams the file, using only ~10MB of RAM regardless of file size.</p></div>
+              <div className="border-b border-white/5 pb-4"><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> How do I format JSON?</h4><p className="text-xs text-slate-400 leading-relaxed">The app automatically detects JSON objects within log lines. Look for the "JSON" button next to messy lines. Clicking it will pretty-print the object.</p></div>
+              <div className="border-b border-white/5 pb-4"><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> What are Bookmarks?</h4><p className="text-xs text-slate-400 leading-relaxed">Click any line number to mark it. Since giant files are hard to navigate, bookmarks save the exact byte-offset position, allowing you to "warp" back to that location instantly later.</p></div>
+              <div><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> Is it free?</h4><p className="text-xs text-slate-400 leading-relaxed">Yes, Log Voyager is a free, open-source tool for the developer community.</p></div>
             </div>
           )}
         </div>
         <div className="p-4 bg-[#161b22] border-t border-white/10 text-center flex flex-col items-center gap-2">
-          <a href="https://github.com/hsr88/log-voyager" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"><Github size={20} /></a>
+          <a href="https://github.com/hsr88/log-voyager" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full">
+            <Github size={20} />
+          </a>
           <p className="text-[10px] text-slate-500 font-mono">&copy; 2025 logvoyager.cc</p>
         </div>
       </div>
@@ -168,7 +186,7 @@ const InfoModal = ({ onClose }: { onClose: () => void }) => {
   );
 };
 
-// --- Komponent: Paste Modal (Fallback) ---
+// --- Komponent: Paste Modal ---
 const PasteModal = ({ onClose, onPaste }: { onClose: () => void, onPaste: (text: string) => void }) => {
   const [text, setText] = useState('');
   return (
@@ -182,6 +200,7 @@ const PasteModal = ({ onClose, onPaste }: { onClose: () => void, onPaste: (text:
   );
 };
 
+// --- Komponenty Wyświetlania ---
 const Minimap = ({ lines, bookmarks, offset }: { lines: string[], bookmarks: Map<number, BookmarkData>, offset: number }) => (
   <div className="w-3 h-full bg-[#050505] border-l border-white/5 flex flex-col shrink-0 py-1 gap-[1px] overflow-hidden opacity-80">
     {lines.map((line, i) => {
@@ -244,14 +263,18 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [percentage, setPercentage] = useState(0);
+  
   const [bookmarks, setBookmarks] = useState<Map<number, BookmarkData>>(new Map());
   const [showBookmarksList, setShowBookmarksList] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [pendingScrollLine, setPendingScrollLine] = useState<number | null>(null);
   const [showInfoModal, setShowInfoModal] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  
   const [showPasteModal, setShowPasteModal] = useState(false);
   const [isStyleReady, setIsStyleReady] = useState(false);
+
+  // --- Nowe Stany (Quality of Life) ---
   const [showSettings, setShowSettings] = useState(false);
   const [useRegex, setUseRegex] = useState(false);
   const [settings, setSettings] = useState({ fontSize: 'xs', lineWrap: true });
@@ -262,6 +285,25 @@ export default function App() {
   useEffect(() => {
     if (document.querySelector('script[src="https://cdn.tailwindcss.com"]')) { setIsStyleReady(true); return; }
     const script = document.createElement('script'); script.src = "https://cdn.tailwindcss.com"; script.async = true; script.onload = () => setIsStyleReady(true); document.head.appendChild(script);
+  }, []);
+
+  useEffect(() => {
+    // --- OBSŁUGA "OTWÓRZ ZA POMOCĄ" (ANDROID) - ZAKOMENTOWANA DLA WEB ---
+    /*
+    try {
+      if (SendIntent) {
+        SendIntent.checkSendIntentReceived().then((result: any) => {
+          if (result && result.url) {
+            fetch(result.url).then(res => res.blob()).then(blob => {
+                const fileName = result.title ? decodeURIComponent(result.title) : "external_file.log";
+                const f = new File([blob], fileName, { type: result.type || "text/plain" });
+                handleFile(f);
+              }).catch(console.error);
+          }
+        }).catch(() => {});
+      }
+    } catch (e) {} 
+    */
   }, []);
 
   useEffect(() => { const saved = localStorage.getItem('log_history_v2'); if (saved) setHistory(JSON.parse(saved)); }, []);
@@ -275,7 +317,7 @@ export default function App() {
   };
 
   const handlePasteClick = async () => {
-    try { const text = await navigator.clipboard.readText(); if (!text) { alert('Clipboard is empty'); return; } processPastedText(text); } catch (err) { console.warn("Clipboard access denied, switching to manual mode."); setShowPasteModal(true); }
+    try { const text = await navigator.clipboard.readText(); if (!text) { alert('Clipboard is empty'); return; } processPastedText(text); } catch (err) { console.warn("Clipboard access denied"); setShowPasteModal(true); }
   };
 
   const processPastedText = (text: string) => { const blob = new Blob([text], { type: 'text/plain' }); const f = new File([blob], "clipboard_content.log", { type: "text/plain", lastModified: Date.now() }); handleFile(f); setShowPasteModal(false); };
@@ -295,10 +337,22 @@ export default function App() {
   };
 
   const handleFile = (f: File) => { setFile(f); setFileSize(f.size); setBookmarks(new Map()); addToHistory(f); setTimeout(() => readChunk(0, f), 100); };
+  
   const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => { if (!file) return; const val = parseFloat(e.target.value); const newOffset = Math.floor((val / 100) * file.size); setPercentage(val); readChunk(newOffset, file); };
   const toggleBookmark = (lineNum: number, content: string) => { const newBookmarks = new Map(bookmarks); if (newBookmarks.has(lineNum)) newBookmarks.delete(lineNum); else newBookmarks.set(lineNum, { lineNum, content: content.length > 50 ? content.substring(0, 50) + '...' : content, chunkOffset: currentOffset }); setBookmarks(newBookmarks); };
   const jumpToBookmark = (bookmark: BookmarkData) => { if (bookmark.chunkOffset === currentOffset) { const element = document.getElementById(`line-${bookmark.lineNum}`); if (element) { element.scrollIntoView({ behavior: 'smooth', block: 'center' }); element.classList.add('animate-flash'); setTimeout(() => element.classList.remove('animate-flash'), 1500); } } else { readChunk(bookmark.chunkOffset); setPendingScrollLine(bookmark.lineNum); } setShowBookmarksList(false); };
-  const handleExportView = () => { const content = filteredLines.join('\n'); const blob = new Blob([content], { type: 'text/plain' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `voyager_export_${new Date().getTime()}.log`; a.click(); URL.revokeObjectURL(url); };
+  
+  // Eksport widocznych linii
+  const handleExportView = () => {
+    const content = filteredLines.join('\n');
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `voyager_export_${new Date().getTime()}.log`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const filteredLines = useMemo(() => {
     if (!focusMode || !searchTerm) return lines;
@@ -311,16 +365,38 @@ export default function App() {
   return (
     <div className="bg-[#050505] text-slate-300 font-jetbrains h-[100dvh] overflow-hidden flex flex-col tech-grid relative">
       <style>{styles}</style>
+
+      {/* --- TOP BAR --- */}
       <div className="glass-panel h-14 flex items-center justify-between px-4 shrink-0 z-20">
         <div className="flex items-center gap-3">
           <button onClick={() => setShowInfoModal(true)} className="p-1.5 hover:bg-white/10 rounded-lg text-slate-400 hover:text-white transition-colors"><Menu size={20} /></button>
-          <div className="flex items-center gap-3"><div className="w-8 h-8 rounded bg-gradient-to-br from-[#00f3ff] to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.3)]"><Box size={18} className="text-white" /></div><div><h1 className="text-sm font-bold text-white tracking-wider neon-text">LOG VOYAGER <span className="text-[9px] bg-[#ff00ff] text-white px-1 rounded ml-1">PRO</span></h1>{file && <p className="text-[10px] text-[#00f3ff] font-mono">{file.name} ({formatBytes(fileSize)})</p>}</div></div>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded bg-gradient-to-br from-[#00f3ff] to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.3)]"><Box size={18} className="text-white" /></div>
+            <div>
+               <h1 className="text-sm font-bold text-white tracking-wider neon-text">LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1 rounded ml-1">Log Files Analyzer</span></h1>
+               {file && <p className="text-[10px] text-[#00f3ff] font-mono">{file.name} ({formatBytes(fileSize)})</p>}
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-2">{file && (<button onClick={() => setShowSettings(true)} className="p-1.5 hover:bg-white/10 rounded-lg text-slate-400 hover:text-white transition-colors" title="View Settings"><Settings size={20} /></button>)}{file && <button onClick={() => setFile(null)} className="text-white/50 hover:text-white transition-colors"><X size={20} /></button>}</div>
+        <div className="flex items-center gap-2">
+          {file && (
+            <button 
+              onClick={() => setShowSettings(true)}
+              className="p-1.5 hover:bg-white/10 rounded-lg text-slate-400 hover:text-white transition-colors"
+              title="View Settings"
+            >
+              <Settings size={20} />
+            </button>
+          )}
+          {file && <button onClick={() => setFile(null)} className="text-white/50 hover:text-white transition-colors"><X size={20} /></button>}
+        </div>
       </div>
+
       {showInfoModal && <InfoModal onClose={() => setShowInfoModal(false)} />}
       {showPasteModal && <PasteModal onClose={() => setShowPasteModal(false)} onPaste={processPastedText} />}
       {showSettings && <SettingsModal onClose={() => setShowSettings(false)} settings={settings} onUpdate={setSettings} />}
+
+      {/* --- MAIN CONTENT --- */}
       <div className="flex-1 overflow-hidden relative flex">
         {file ? (
           <>
@@ -328,7 +404,16 @@ export default function App() {
               <div className="p-3 z-10 space-y-2">
                 <div className="glass-panel rounded-lg p-2 flex flex-col gap-2">
                   <div className="flex gap-2">
-                    <div className="flex-1 flex items-center gap-2 bg-black/40 rounded px-2 border border-white/5 relative"><Search size={14} className="text-[#00f3ff]" /><input className="bg-transparent border-none outline-none text-xs w-full py-2 text-white placeholder-white/30" placeholder={useRegex ? "REGEX SEARCH..." : "SEARCH..."} value={searchTerm} onChange={e => setSearchTerm(e.target.value)} /><button onClick={() => setUseRegex(!useRegex)} className={`text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors ${useRegex ? 'border-[#00f3ff] text-[#00f3ff] bg-[#00f3ff]/10' : 'border-slate-700 text-slate-600 hover:text-slate-400'}`} title="Toggle Regex Search">.*</button></div>
+                    <div className="flex-1 flex items-center gap-2 bg-black/40 rounded px-2 border border-white/5 relative">
+                      <Search size={14} className="text-[#00f3ff]" />
+                      <input 
+                        className="bg-transparent border-none outline-none text-xs w-full py-2 text-white placeholder-white/30" 
+                        placeholder={useRegex ? "REGEX SEARCH..." : "SEARCH..."} 
+                        value={searchTerm} 
+                        onChange={e => setSearchTerm(e.target.value)} 
+                      />
+                      <button onClick={() => setUseRegex(!useRegex)} className={`text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors ${useRegex ? 'border-[#00f3ff] text-[#00f3ff] bg-[#00f3ff]/10' : 'border-slate-700 text-slate-600 hover:text-slate-400'}`} title="Toggle Regex Search">.*</button>
+                    </div>
                     {filteredLines.length > 0 && searchTerm && (<button onClick={handleExportView} className="px-3 rounded border border-white/10 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all" title="Export Current View"><Download size={14} /></button>)}
                     <button onClick={() => setFocusMode(!focusMode)} disabled={!searchTerm} className={`px-3 rounded border flex items-center gap-2 transition-all ${focusMode ? 'bg-[#00f3ff]/20 border-[#00f3ff] text-[#00f3ff]' : 'bg-white/5 border-white/10 text-slate-400'}`}>{focusMode ? <Eye size={14} /> : <EyeOff size={14} />}</button>
                   </div>
