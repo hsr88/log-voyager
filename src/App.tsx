@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   FileText, Search, UploadCloud, Zap, Bug, FileJson, 
@@ -15,6 +16,15 @@ import {
  * - Dodano: Eksport aktualnego widoku do pliku.
  * - Zachowano: Pełne opisy FAQ/About, Paste, Bookmarks, Warp.
  */
+=======
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  FileText, Search, UploadCloud, Zap, Bug, FileJson, 
+  X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, Shield, Cpu, HelpCircle, History, Clipboard, Check, Github, Box
+} from 'lucide-react';
+
+
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
 
@@ -44,7 +54,11 @@ const styles = `
   }
 
   /* Custom Scrollbar */
+<<<<<<< HEAD
   ::-webkit-scrollbar { width: 6px; height: 6px; }
+=======
+  ::-webkit-scrollbar { width: 6px; }
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
   ::-webkit-scrollbar-track { background: #050505; }
   ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
@@ -86,6 +100,7 @@ interface HistoryItem {
   date: string;
 }
 
+<<<<<<< HEAD
 // --- Komponent: Settings Modal ---
 const SettingsModal = ({ onClose, settings, onUpdate }: any) => {
   return (
@@ -126,6 +141,9 @@ const SettingsModal = ({ onClose, settings, onUpdate }: any) => {
 };
 
 // --- Komponent: Info Modal (FULL TEXT RESTORED) ---
+=======
+// --- Komponent: Info Modal ---
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
 const InfoModal = ({ onClose }: { onClose: () => void }) => {
   const [activeTab, setActiveTab] = useState<'about' | 'faq'>('about');
   return (
@@ -165,21 +183,33 @@ const InfoModal = ({ onClose }: { onClose: () => void }) => {
                 <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Cpu size={16} className="text-[#00f3ff]" /> The Mission</h4>
                 <p className="text-slate-400 text-xs leading-relaxed">
                   Log Voyager is a specialized tool engineered for DevOps and Backend Developers who need to analyze massive log files (1GB+) on the go.
+<<<<<<< HEAD
                   Standard mobile editors crash when opening gigabyte-sized files due to RAM limits. This tool solves that problem entirely.
+=======
+                  Standard mobile editors crash when opening gigabyte-sized files due to RAM limits. This tool solves that.
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
                 </p>
               </div>
               
               <div>
                 <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Zap size={16} className="text-yellow-400" /> Core Technology</h4>
                 <p className="text-slate-400 text-xs leading-relaxed">
+<<<<<<< HEAD
                   We use <strong>File Slicing API</strong>. Instead of loading the entire file into memory (which kills the browser), the application reads it in small, 50KB chunks—just like streaming a video on YouTube. This allows you to open a 100GB log file on an old smartphone with zero latency.
+=======
+                  We use <strong>File Slicing API</strong>. Instead of loading the entire file into memory, the application reads it in small, 50KB chunks—just like streaming a video. This allows you to open a 100GB log file on an old smartphone with zero latency.
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
                 </p>
               </div>
 
               <div>
                 <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Shield size={16} className="text-emerald-400" /> Privacy & Security</h4>
                 <p className="text-slate-400 text-xs leading-relaxed">
+<<<<<<< HEAD
                   <strong>Local Execution Only.</strong> This is the most important feature. Your log files never leave your device. The application runs entirely within your browser's sandbox. No data is uploaded to any server. You can even use this app offline (Airplane Mode) for maximum security.
+=======
+                  <strong>Local Execution Only.</strong> Your log files never leave your device. The application runs entirely within your browser's sandbox. No data is uploaded to any server. You can even use this app offline (Airplane Mode).
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
                 </p>
               </div>
             </div>
@@ -190,25 +220,41 @@ const InfoModal = ({ onClose }: { onClose: () => void }) => {
               <div className="border-b border-white/5 pb-4">
                 <h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> Why not use Notepad?</h4>
                 <p className="text-xs text-slate-400 leading-relaxed">
+<<<<<<< HEAD
                   Standard editors (Notepad, VS Code) try to load the whole file into RAM. For a 2GB file, your device will likely freeze, crash, or heat up significantly. Log Voyager streams the file, using only ~10MB of RAM regardless of the total file size.
+=======
+                  Standard editors try to load the whole file into RAM. For a 2GB file, your device will likely freeze or crash. Log Viewer streams the file, using only ~10MB of RAM regardless of file size.
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
                 </p>
               </div>
               <div className="border-b border-white/5 pb-4">
                 <h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> How do I format JSON?</h4>
                 <p className="text-xs text-slate-400 leading-relaxed">
+<<<<<<< HEAD
                   The app automatically detects JSON objects within log lines. Look for the small "JSON" button next to messy log lines. Clicking it will pretty-print the object into a readable, colored structure.
+=======
+                  The app automatically detects JSON objects within log lines. Look for the "JSON" button next to messy lines. Clicking it will pretty-print the object.
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
                 </p>
               </div>
               <div className="border-b border-white/5 pb-4">
                 <h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> What are Bookmarks?</h4>
                 <p className="text-xs text-slate-400 leading-relaxed">
+<<<<<<< HEAD
                   Click any line number to mark it. Since giant files are hard to navigate, bookmarks save the exact byte-offset position in the file, allowing you to "warp" back to that location instantly later, even if it's gigabytes away.
+=======
+                  Click any line number to mark it. Since giant files are hard to navigate, bookmarks save the exact byte-offset position, allowing you to "warp" back to that location instantly later.
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
                 </p>
               </div>
               <div>
                 <h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> Is it free?</h4>
                 <p className="text-xs text-slate-400 leading-relaxed">
+<<<<<<< HEAD
                   Yes, Log Voyager is a completely free, open-source tool for the developer community.
+=======
+                  Yes, Log Voyager is a free, open-source tool for the developer community.
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
                 </p>
               </div>
             </div>
@@ -280,6 +326,7 @@ const Minimap = ({ lines, bookmarks, offset }: { lines: string[], bookmarks: Map
   </div>
 );
 
+<<<<<<< HEAD
 const LogLine = ({ content, number, highlight, isBookmarked, onToggleBookmark, id, settings, useRegex }: any) => {
   const level = getLogLevel(content);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -311,6 +358,17 @@ const LogLine = ({ content, number, highlight, isBookmarked, onToggleBookmark, i
     });
   };
 
+=======
+const LogLine = ({ content, number, highlight, isBookmarked, onToggleBookmark, id }: any) => {
+  const level = getLogLevel(content);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const jsonMatch = content.match(/(\{.*\})/);
+  const renderContent = () => {
+    if (!highlight) return <span className="text-slate-400">{content}</span>;
+    const parts = content.split(new RegExp(`(${highlight})`, 'gi'));
+    return parts.map((part: string, i: number) => part.toLowerCase() === highlight.toLowerCase() ? <span key={i} className="bg-[#00f3ff] text-black font-bold px-1 rounded-sm">{part}</span> : <span key={i} className="text-slate-400">{part}</span>);
+  };
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
   const formatJson = () => { try { return JSON.stringify(JSON.parse(jsonMatch[0]), null, 2); } catch (e) { return null; } };
   
   let lineStyle = 'border-l-2 border-transparent hover:bg-white/5';
@@ -319,6 +377,7 @@ const LogLine = ({ content, number, highlight, isBookmarked, onToggleBookmark, i
   else if (level === 'warn') { lineStyle = 'border-l-2 border-orange-400 bg-orange-400/5 hover:bg-orange-400/10'; numStyle = 'text-orange-400 cursor-pointer'; }
   if (isBookmarked) { lineStyle += ' bg-[#ff00ff]/10'; numStyle = 'text-[#ff00ff] font-bold cursor-pointer'; }
 
+<<<<<<< HEAD
   // Dynamiczne klasy wyglądu
   const fontSizeClass = settings.fontSize === 'xs' ? 'text-[10px] md:text-xs' : settings.fontSize === 'sm' ? 'text-xs md:text-sm' : 'text-sm md:text-base';
   const wrapClass = settings.lineWrap ? 'whitespace-pre-wrap break-all' : 'whitespace-nowrap';
@@ -330,6 +389,15 @@ const LogLine = ({ content, number, highlight, isBookmarked, onToggleBookmark, i
         {renderContent()}
         {jsonMatch && (<div className="inline-block ml-2"><button onClick={() => setIsExpanded(!isExpanded)} className="text-[9px] uppercase font-bold text-[#00f3ff] hover:text-white border border-[#00f3ff]/30 px-1.5 rounded hover:bg-[#00f3ff]/20 transition-all">{isExpanded ? 'RAW' : 'JSON'}</button></div>)}
         {isExpanded && <pre className="mt-2 p-3 bg-black/80 rounded border border-white/10 text-[#00f3ff] overflow-x-auto shadow-2xl whitespace-pre">{formatJson() || "Invalid JSON"}</pre>}
+=======
+  return (
+    <div id={id} className={`flex text-[11px] md:text-xs font-jetbrains leading-relaxed py-0.5 ${lineStyle} transition-colors group`}>
+      <div className={`w-12 shrink-0 text-right pr-3 select-none flex justify-end gap-1 ${numStyle}`} onClick={() => onToggleBookmark(number, content)}>{isBookmarked && <Bookmark size={10} className="mt-0.5 fill-current" />}{number}</div>
+      <div className="break-all flex-1 min-w-0">
+        {renderContent()}
+        {jsonMatch && (<div className="inline-block ml-2"><button onClick={() => setIsExpanded(!isExpanded)} className="text-[9px] uppercase font-bold text-[#00f3ff] hover:text-white border border-[#00f3ff]/30 px-1.5 rounded hover:bg-[#00f3ff]/20 transition-all">{isExpanded ? 'RAW' : 'JSON'}</button></div>)}
+        {isExpanded && <pre className="mt-2 p-3 bg-black/80 rounded border border-white/10 text-[#00f3ff] overflow-x-auto shadow-2xl">{formatJson() || "Invalid JSON"}</pre>}
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
       </div>
     </div>
   );
@@ -353,6 +421,7 @@ export default function App() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   
   const [showPasteModal, setShowPasteModal] = useState(false);
+<<<<<<< HEAD
   const [isStyleReady, setIsStyleReady] = useState(false);
 
   // --- Nowe Stany (Quality of Life) ---
@@ -362,10 +431,14 @@ export default function App() {
     fontSize: 'xs', // xs, sm, base
     lineWrap: true
   });
+=======
+  const [isStyleReady, setIsStyleReady] = useState(false); // State dla Preloadera
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+<<<<<<< HEAD
   useEffect(() => {
     if (document.querySelector('script[src="https://cdn.tailwindcss.com"]')) { setIsStyleReady(true); return; }
     const script = document.createElement('script'); script.src = "https://cdn.tailwindcss.com"; script.async = true; script.onload = () => setIsStyleReady(true); document.head.appendChild(script);
@@ -392,6 +465,26 @@ export default function App() {
 
   useEffect(() => { const saved = localStorage.getItem('log_history_v2'); if (saved) setHistory(JSON.parse(saved)); }, []);
 
+=======
+  // --- CDN FIX + PRELOADER ---
+  useEffect(() => {
+    if (document.querySelector('script[src="https://cdn.tailwindcss.com"]')) {
+      setIsStyleReady(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = "https://cdn.tailwindcss.com";
+    script.async = true;
+    script.onload = () => setIsStyleReady(true);
+    document.head.appendChild(script);
+  }, []);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('log_history_v2');
+    if (saved) setHistory(JSON.parse(saved));
+  }, []);
+
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
   const addToHistory = (f: File) => {
     const newEntry: HistoryItem = { name: f.name, size: formatBytes(f.size), date: new Date().toLocaleDateString() };
     const filtered = history.filter(h => h.name !== f.name);
@@ -401,6 +494,7 @@ export default function App() {
   };
 
   const handlePasteClick = async () => {
+<<<<<<< HEAD
     try { const text = await navigator.clipboard.readText(); if (!text) { alert('Clipboard is empty'); return; } processPastedText(text); } catch (err) { console.warn("Clipboard access denied"); setShowPasteModal(true); }
   };
 
@@ -415,11 +509,64 @@ export default function App() {
     reader.onload = (e) => {
       const text = e.target?.result as string; if (!text) return; let newLines = text.split('\n'); if (offset > 0) newLines.shift(); if (offset + CHUNK_SIZE < fileToRead.size) newLines.pop();
       setLines(newLines); setCurrentOffset(offset); setPercentage((offset / fileToRead.size) * 100); setIsLoading(false);
+=======
+    try {
+      const text = await navigator.clipboard.readText();
+      if (!text) { 
+        alert('Clipboard is empty'); 
+        return; 
+      }
+      processPastedText(text);
+    } catch (err) {
+      console.warn("Clipboard access denied, switching to manual mode.");
+      setShowPasteModal(true);
+    }
+  };
+
+  const processPastedText = (text: string) => {
+    const blob = new Blob([text], { type: 'text/plain' });
+    const f = new File([blob], "clipboard_content.log", { type: "text/plain", lastModified: Date.now() });
+    handleFile(f);
+    setShowPasteModal(false);
+  };
+
+  useEffect(() => {
+    if (!isLoading && pendingScrollLine !== null) {
+      setTimeout(() => {
+        const element = document.getElementById(`line-${pendingScrollLine}`);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          element.classList.add('animate-flash');
+          setTimeout(() => element.classList.remove('animate-flash'), 1500);
+        }
+        setPendingScrollLine(null);
+      }, 100);
+    }
+  }, [lines, isLoading, pendingScrollLine]);
+
+  const readChunk = (offset: number, fileToRead: File | null = file) => {
+    if (!fileToRead) { setIsLoading(false); return; }
+    setIsLoading(true);
+    const reader = new FileReader();
+    const blob = fileToRead.slice(offset, offset + CHUNK_SIZE);
+    
+    reader.onload = (e) => {
+      const text = e.target?.result as string;
+      if (!text) return;
+      let newLines = text.split('\n');
+      if (offset > 0) newLines.shift();
+      if (offset + CHUNK_SIZE < fileToRead.size) newLines.pop();
+      setLines(newLines);
+      setCurrentOffset(offset);
+      setPercentage((offset / fileToRead.size) * 100);
+      setIsLoading(false);
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
       if (pendingScrollLine === null && bottomRef.current?.parentElement) bottomRef.current.parentElement.scrollTop = 0;
     };
     reader.readAsText(blob);
   };
 
+<<<<<<< HEAD
   const handleFile = (f: File) => { setFile(f); setFileSize(f.size); setBookmarks(new Map()); addToHistory(f); setTimeout(() => readChunk(0, f), 100); };
   
   const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => { if (!file) return; const val = parseFloat(e.target.value); const newOffset = Math.floor((val / 100) * file.size); setPercentage(val); readChunk(newOffset, file); };
@@ -453,6 +600,29 @@ export default function App() {
   }, [lines, focusMode, searchTerm, useRegex]);
 
   if (!isStyleReady) { return <div style={{ backgroundColor: '#050505', height: '100vh', width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00f3ff', fontFamily: 'monospace', fontSize: '14px', letterSpacing: '2px' }}>LOG VOYAGER...</div>; }
+=======
+  const handleFile = (f: File) => {
+    setFile(f);
+    setFileSize(f.size);
+    setBookmarks(new Map());
+    addToHistory(f);
+    setTimeout(() => readChunk(0, f), 100);
+  };
+
+  const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => { if (!file) return; const val = parseFloat(e.target.value); const newOffset = Math.floor((val / 100) * file.size); setPercentage(val); readChunk(newOffset, file); };
+  const toggleBookmark = (lineNum: number, content: string) => { const newBookmarks = new Map(bookmarks); if (newBookmarks.has(lineNum)) newBookmarks.delete(lineNum); else newBookmarks.set(lineNum, { lineNum, content: content.length > 50 ? content.substring(0, 50) + '...' : content, chunkOffset: currentOffset }); setBookmarks(newBookmarks); };
+  const jumpToBookmark = (bookmark: BookmarkData) => { if (bookmark.chunkOffset === currentOffset) { const element = document.getElementById(`line-${bookmark.lineNum}`); if (element) { element.scrollIntoView({ behavior: 'smooth', block: 'center' }); element.classList.add('animate-flash'); setTimeout(() => element.classList.remove('animate-flash'), 1500); } } else { readChunk(bookmark.chunkOffset); setPendingScrollLine(bookmark.lineNum); } setShowBookmarksList(false); };
+  const filteredLines = focusMode && searchTerm ? lines.filter(l => l.toLowerCase().includes(searchTerm.toLowerCase())) : lines;
+
+  // --- PRELOADER GUARD ---
+  if (!isStyleReady) {
+    return (
+      <div style={{ backgroundColor: '#050505', height: '100vh', width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00f3ff', fontFamily: 'monospace', fontSize: '14px', letterSpacing: '2px' }}>
+        LOG VOYAGER...
+      </div>
+    );
+  }
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
 
   return (
     <div className="bg-[#050505] text-slate-300 font-jetbrains h-[100dvh] overflow-hidden flex flex-col tech-grid relative">
@@ -470,6 +640,7 @@ export default function App() {
             </div>
           </div>
         </div>
+<<<<<<< HEAD
         <div className="flex items-center gap-2">
           {file && (
             <button 
@@ -482,11 +653,17 @@ export default function App() {
           )}
           {file && <button onClick={() => setFile(null)} className="text-white/50 hover:text-white transition-colors"><X size={20} /></button>}
         </div>
+=======
+        {file && <button onClick={() => setFile(null)} className="text-white/50 hover:text-white transition-colors"><X size={20} /></button>}
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
       </div>
 
       {showInfoModal && <InfoModal onClose={() => setShowInfoModal(false)} />}
       {showPasteModal && <PasteModal onClose={() => setShowPasteModal(false)} onPaste={processPastedText} />}
+<<<<<<< HEAD
       {showSettings && <SettingsModal onClose={() => setShowSettings(false)} settings={settings} onUpdate={setSettings} />}
+=======
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
 
       {/* --- MAIN CONTENT --- */}
       <div className="flex-1 overflow-hidden relative flex">
@@ -496,6 +673,7 @@ export default function App() {
               <div className="p-3 z-10 space-y-2">
                 <div className="glass-panel rounded-lg p-2 flex flex-col gap-2">
                   <div className="flex gap-2">
+<<<<<<< HEAD
                     <div className="flex-1 flex items-center gap-2 bg-black/40 rounded px-2 border border-white/5 relative">
                       <Search size={14} className="text-[#00f3ff]" />
                       <input 
@@ -521,6 +699,9 @@ export default function App() {
                       </button>
                     )}
 
+=======
+                    <div className="flex-1 flex items-center gap-2 bg-black/40 rounded px-2 border border-white/5"><Search size={14} className="text-[#00f3ff]" /><input className="bg-transparent border-none outline-none text-xs w-full py-2 text-white placeholder-white/30" placeholder="SEARCH..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} /></div>
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
                     <button onClick={() => setFocusMode(!focusMode)} disabled={!searchTerm} className={`px-3 rounded border flex items-center gap-2 transition-all ${focusMode ? 'bg-[#00f3ff]/20 border-[#00f3ff] text-[#00f3ff]' : 'bg-white/5 border-white/10 text-slate-400'}`}>{focusMode ? <Eye size={14} /> : <EyeOff size={14} />}</button>
                   </div>
                   <div className="flex items-center gap-3 px-1"><span className="text-[10px] text-[#00f3ff] w-8 font-bold">{percentage.toFixed(0)}%</span><input type="range" min="0" max="100" step="0.1" value={percentage} onChange={handleSlider} className="flex-1 h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-[#00f3ff]" /></div>
@@ -537,7 +718,11 @@ export default function App() {
                 )}
               </div>
               <div className="flex-1 overflow-y-auto relative scrollbar-hide px-2">
+<<<<<<< HEAD
                 {isLoading ? <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px] z-20"><div className="flex flex-col items-center gap-2"><div className="w-12 h-1 border-t border-[#00f3ff] animate-ping" /><span className="text-xs text-[#00f3ff] tracking-widest animate-pulse">WARPING...</span></div></div> : <div className="pb-10">{filteredLines.length > 0 ? filteredLines.map((line, i) => { const originalIndex = Math.floor(currentOffset/50) + i; return <LogLine key={i} id={`line-${originalIndex}`} content={line} number={originalIndex} highlight={searchTerm} isBookmarked={bookmarks.has(originalIndex)} onToggleBookmark={toggleBookmark} settings={settings} useRegex={useRegex} />; }) : <div className="text-center py-10 text-slate-500 text-xs">{focusMode ? 'No matches found.' : 'End of chunk.'}</div>}</div>}
+=======
+                {isLoading ? <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px] z-20"><div className="flex flex-col items-center gap-2"><div className="w-12 h-1 border-t border-[#00f3ff] animate-ping" /><span className="text-xs text-[#00f3ff] tracking-widest animate-pulse">WARPING...</span></div></div> : <div className="pb-10">{filteredLines.length > 0 ? filteredLines.map((line, i) => { const originalIndex = Math.floor(currentOffset/50) + i; return <LogLine key={i} id={`line-${originalIndex}`} content={line} number={originalIndex} highlight={searchTerm} isBookmarked={bookmarks.has(originalIndex)} onToggleBookmark={toggleBookmark} />; }) : <div className="text-center py-10 text-slate-500 text-xs">{focusMode ? 'No matches found.' : 'End of chunk.'}</div>}</div>}
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
                 <div ref={bottomRef} />
               </div>
             </div>

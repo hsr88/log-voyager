@@ -10,11 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@capacitor/android": "^8.0.0",
     "@capacitor/cli": "^8.0.0",
     "@capacitor/core": "^8.0.0",
     "@tailwindcss/postcss": "^4.1.17",
     "capacitor-plugin-send-intent": "^0.0.2",
+=======
+    "@tailwindcss/postcss": "^4.1.17",
+>>>>>>> 94317b0e0e76f2a10180898e122dcf64a021544e
     "lucide-react": "^0.556.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
