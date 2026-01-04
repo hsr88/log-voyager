@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   FileText, Search, UploadCloud, Zap, Bug, FileJson, 
-  X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, Shield, Cpu, HelpCircle, History, Clipboard, Check, Github, Box, Settings, Type, AlignLeft, Download
+  X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, Shield, Cpu, HelpCircle, History, Clipboard, Check, Github, Box, Settings, Type, AlignLeft, Download, Coffee
 } from 'lucide-react';
 
 // --- BUILD FIX: Zakomentowano import, który powodował błąd na Vercel/Web ---
 // import { SendIntent } from 'capacitor-plugin-send-intent';
 
 /**
- * LOG VOYAGER - PLATINUM CLEAN
- * - Usunięto martwy kod (generateDemoLog, nieużywane importy).
- * - Zawiera: Regex, Settings, Export, Paste, History, Full FAQ/About.
+ * LOG VOYAGER - KO-FI EDITION
+ * - Dodano przycisk "Buy me a Coffee" w sekcji ABOUT (Info Modal).
+ * - Linkuje do: https://ko-fi.com/hsr
  */
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
@@ -122,12 +122,14 @@ const SettingsModal = ({ onClose, settings, onUpdate }: any) => {
   );
 };
 
-// --- Komponent: Info Modal ---
+// --- Komponent: Info Modal (WITH KO-FI BUTTON) ---
 const InfoModal = ({ onClose }: { onClose: () => void }) => {
   const [activeTab, setActiveTab] = useState<'about' | 'faq'>('about');
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 font-jetbrains">
       <div className="bg-[#0d1117] w-full max-w-md rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col max-h-[85vh]">
+        
+        {/* Header */}
         <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#161b22]">
           <h3 className="font-bold text-white tracking-wider flex items-center gap-2">
             <Box size={18} className="text-[#00f3ff]" /> 
@@ -135,10 +137,24 @@ const InfoModal = ({ onClose }: { onClose: () => void }) => {
           </h3>
           <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors"><X size={20} /></button>
         </div>
+
+        {/* Tabs */}
         <div className="flex border-b border-white/10">
-          <button onClick={() => setActiveTab('about')} className={`flex-1 py-3 text-xs font-bold tracking-widest transition-colors ${activeTab === 'about' ? 'text-[#00f3ff] bg-[#00f3ff]/5 border-b-2 border-[#00f3ff]' : 'text-slate-500 hover:text-slate-300'}`}>ABOUT</button>
-          <button onClick={() => setActiveTab('faq')} className={`flex-1 py-3 text-xs font-bold tracking-widest transition-colors ${activeTab === 'faq' ? 'text-[#ff00ff] bg-[#ff00ff]/5 border-b-2 border-[#ff00ff]' : 'text-slate-500 hover:text-slate-300'}`}>FAQ</button>
+          <button 
+            onClick={() => setActiveTab('about')}
+            className={`flex-1 py-3 text-xs font-bold tracking-widest transition-colors ${activeTab === 'about' ? 'text-[#00f3ff] bg-[#00f3ff]/5 border-b-2 border-[#00f3ff]' : 'text-slate-500 hover:text-slate-300'}`}
+          >
+            ABOUT
+          </button>
+          <button 
+            onClick={() => setActiveTab('faq')}
+            className={`flex-1 py-3 text-xs font-bold tracking-widest transition-colors ${activeTab === 'faq' ? 'text-[#ff00ff] bg-[#ff00ff]/5 border-b-2 border-[#ff00ff]' : 'text-slate-500 hover:text-slate-300'}`}
+          >
+            FAQ
+          </button>
         </div>
+
+        {/* Content */}
         <div className="flex-1 overflow-y-auto p-6 text-sm text-slate-300 leading-relaxed scrollbar-thin scrollbar-thumb-slate-700">
           {activeTab === 'about' && (
             <div className="space-y-6">
@@ -146,35 +162,50 @@ const InfoModal = ({ onClose }: { onClose: () => void }) => {
                 <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Cpu size={16} className="text-[#00f3ff]" /> The Mission</h4>
                 <p className="text-slate-400 text-xs leading-relaxed">
                   Log Voyager is a specialized tool engineered for DevOps and Backend Developers who need to analyze massive log files (1GB+) on the go.
-                  Standard mobile editors crash when opening gigabyte-sized files due to RAM limits. This tool solves that.
+                  Standard mobile editors crash when opening gigabyte-sized files due to RAM limits. This tool solves that problem entirely.
                 </p>
               </div>
               
               <div>
                 <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Zap size={16} className="text-yellow-400" /> Core Technology</h4>
                 <p className="text-slate-400 text-xs leading-relaxed">
-                  We use <strong>File Slicing API</strong>. Instead of loading the entire file into memory, the application reads it in small, 50KB chunks—just like streaming a video. This allows you to open a 100GB log file on an old smartphone with zero latency.
+                  We use <strong>File Slicing API</strong>. Instead of loading the entire file into memory (which kills the browser), the application reads it in small, 50KB chunks—just like streaming a video on YouTube. This allows you to open a 100GB log file on an old smartphone with zero latency.
                 </p>
               </div>
 
               <div>
                 <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Shield size={16} className="text-emerald-400" /> Privacy & Security</h4>
                 <p className="text-slate-400 text-xs leading-relaxed">
-                  <strong>Local Execution Only.</strong> Your log files never leave your device. The application runs entirely within your browser's sandbox. No data is uploaded to any server. You can even use this app offline (Airplane Mode).
+                  <strong>Local Execution Only.</strong> This is the most important feature. Your log files never leave your device. The application runs entirely within your browser's sandbox. No data is uploaded to any server. You can even use this app offline (Airplane Mode) for maximum security.
                 </p>
+              </div>
+
+              {/* KO-FI BUTTON */}
+              <div className="mt-8 pt-6 border-t border-white/10 text-center">
+                 <p className="text-xs text-slate-400 mb-3">If this tool saved your production deployment:</p>
+                 <a 
+                   href="https://ko-fi.com/hsr" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   className="inline-flex items-center gap-2 bg-[#FF5E5B] hover:bg-[#ff403d] text-white px-6 py-2.5 rounded-full font-bold text-xs shadow-[0_0_15px_rgba(255,94,91,0.4)] transition-all transform hover:scale-105"
+                 >
+                   <Coffee size={16} className="fill-white" /> Buy me a Coffee
+                 </a>
               </div>
             </div>
           )}
 
           {activeTab === 'faq' && (
             <div className="space-y-4">
-              <div className="border-b border-white/5 pb-4"><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> Why not use Notepad?</h4><p className="text-xs text-slate-400 leading-relaxed">Standard editors try to load the whole file into RAM. For a 2GB file, your device will likely freeze or crash. Log Voyager streams the file, using only ~10MB of RAM regardless of file size.</p></div>
-              <div className="border-b border-white/5 pb-4"><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> How do I format JSON?</h4><p className="text-xs text-slate-400 leading-relaxed">The app automatically detects JSON objects within log lines. Look for the "JSON" button next to messy lines. Clicking it will pretty-print the object.</p></div>
-              <div className="border-b border-white/5 pb-4"><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> What are Bookmarks?</h4><p className="text-xs text-slate-400 leading-relaxed">Click any line number to mark it. Since giant files are hard to navigate, bookmarks save the exact byte-offset position, allowing you to "warp" back to that location instantly later.</p></div>
-              <div><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> Is it free?</h4><p className="text-xs text-slate-400 leading-relaxed">Yes, Log Voyager is a free, open-source tool for the developer community.</p></div>
+              <div className="border-b border-white/5 pb-4"><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> Why not use Notepad?</h4><p className="text-xs text-slate-400 leading-relaxed">Standard editors (Notepad, VS Code) try to load the whole file into RAM. For a 2GB file, your device will likely freeze, crash, or heat up significantly. Log Voyager streams the file, using only ~10MB of RAM regardless of the total file size.</p></div>
+              <div className="border-b border-white/5 pb-4"><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> How do I format JSON?</h4><p className="text-xs text-slate-400 leading-relaxed">The app automatically detects JSON objects within log lines. Look for the small "JSON" button next to messy log lines. Clicking it will pretty-print the object into a readable, colored structure.</p></div>
+              <div className="border-b border-white/5 pb-4"><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> What are Bookmarks?</h4><p className="text-xs text-slate-400 leading-relaxed">Click any line number to mark it. Since giant files are hard to navigate, bookmarks save the exact byte-offset position in the file, allowing you to "warp" back to that location instantly later, even if it's gigabytes away.</p></div>
+              <div><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> Is it free?</h4><p className="text-xs text-slate-400 leading-relaxed">Yes, Log Voyager is a completely free, open-source tool for the developer community.</p></div>
             </div>
           )}
         </div>
+
+        {/* Footer */}
         <div className="p-4 bg-[#161b22] border-t border-white/10 text-center flex flex-col items-center gap-2">
           <a href="https://github.com/hsr88/log-voyager" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full">
             <Github size={20} />
@@ -186,15 +217,38 @@ const InfoModal = ({ onClose }: { onClose: () => void }) => {
   );
 };
 
-// --- Komponent: Paste Modal ---
+// --- Komponent: Paste Modal (Fallback) ---
 const PasteModal = ({ onClose, onPaste }: { onClose: () => void, onPaste: (text: string) => void }) => {
   const [text, setText] = useState('');
+  
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 font-jetbrains">
       <div className="bg-[#0d1117] w-full max-w-lg rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col h-[60vh]">
-        <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#161b22]"><h3 className="font-bold text-white tracking-wider flex items-center gap-2"><Clipboard size={18} className="text-[#00f3ff]" /> PASTE LOG</h3><button onClick={onClose} className="text-slate-400 hover:text-white"><X size={20} /></button></div>
-        <div className="flex-1 p-4 bg-[#050505]"><textarea className="w-full h-full bg-[#111] text-slate-300 font-mono text-xs p-3 rounded border border-white/10 outline-none focus:border-[#00f3ff] resize-none placeholder-slate-600" placeholder="Paste your log content here (Ctrl+V)..." value={text} onChange={(e) => setText(e.target.value)} autoFocus /></div>
-        <div className="p-4 bg-[#161b22] border-t border-white/10 flex justify-end gap-3"><button onClick={onClose} className="text-slate-400 hover:text-white text-xs font-bold px-4 py-2">CANCEL</button><button onClick={() => { if(text) onPaste(text); }} disabled={!text} className={`bg-[#00f3ff] hover:bg-[#00c2cc] text-black font-bold px-6 py-2 rounded text-xs transition-all flex items-center gap-2 ${!text && 'opacity-50 cursor-not-allowed'}`}><Check size={14} /> ANALYZE</button></div>
+        <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#161b22]">
+          <h3 className="font-bold text-white tracking-wider flex items-center gap-2">
+            <Clipboard size={18} className="text-[#00f3ff]" /> PASTE LOG
+          </h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-white"><X size={20} /></button>
+        </div>
+        <div className="flex-1 p-4 bg-[#050505]">
+          <textarea 
+            className="w-full h-full bg-[#111] text-slate-300 font-mono text-xs p-3 rounded border border-white/10 outline-none focus:border-[#00f3ff] resize-none placeholder-slate-600"
+            placeholder="Browser blocked auto-paste. Please press Ctrl+V (or Cmd+V) here to paste your log content..."
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            autoFocus
+          />
+        </div>
+        <div className="p-4 bg-[#161b22] border-t border-white/10 flex justify-end gap-3">
+          <button onClick={onClose} className="text-slate-400 hover:text-white text-xs font-bold px-4 py-2">CANCEL</button>
+          <button 
+            onClick={() => { if(text) onPaste(text); }}
+            disabled={!text}
+            className={`bg-[#00f3ff] hover:bg-[#00c2cc] text-black font-bold px-6 py-2 rounded text-xs transition-all flex items-center gap-2 ${!text && 'opacity-50 cursor-not-allowed'}`}
+          >
+            <Check size={14} /> ANALYZE
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -207,7 +261,10 @@ const Minimap = ({ lines, bookmarks, offset }: { lines: string[], bookmarks: Map
       const globalIndex = Math.floor(offset / 50) + i;
       const level = getLogLevel(line);
       let color = 'bg-slate-800';
-      if (bookmarks.has(globalIndex)) color = 'bg-[#ff00ff] shadow-[0_0_4px_#ff00ff] z-10'; else if (level === 'error') color = 'bg-red-500'; else if (level === 'warn') color = 'bg-orange-400'; else if (level === 'info') color = 'bg-blue-500/30';
+      if (bookmarks.has(globalIndex)) color = 'bg-[#ff00ff] shadow-[0_0_4px_#ff00ff] z-10'; 
+      else if (level === 'error') color = 'bg-red-500';
+      else if (level === 'warn') color = 'bg-orange-400';
+      else if (level === 'info') color = 'bg-blue-500/30';
       return <div key={i} className={`h-[2px] w-full ${color}`} />;
     })}
   </div>
@@ -373,7 +430,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded bg-gradient-to-br from-[#00f3ff] to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.3)]"><Box size={18} className="text-white" /></div>
             <div>
-               <h1 className="text-sm font-bold text-white tracking-wider neon-text">LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1 rounded ml-1">Log Files Analyzer</span></h1>
+               <h1 className="text-sm font-bold text-white tracking-wider neon-text">LOG VOYAGER <span className="text-[9px] bg-[#ff00ff] text-white px-1 rounded ml-1">PRO</span></h1>
                {file && <p className="text-[10px] text-[#00f3ff] font-mono">{file.name} ({formatBytes(fileSize)})</p>}
             </div>
           </div>
@@ -412,9 +469,23 @@ export default function App() {
                         value={searchTerm} 
                         onChange={e => setSearchTerm(e.target.value)} 
                       />
-                      <button onClick={() => setUseRegex(!useRegex)} className={`text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors ${useRegex ? 'border-[#00f3ff] text-[#00f3ff] bg-[#00f3ff]/10' : 'border-slate-700 text-slate-600 hover:text-slate-400'}`} title="Toggle Regex Search">.*</button>
+                      {/* REGEX TOGGLE */}
+                      <button 
+                        onClick={() => setUseRegex(!useRegex)}
+                        className={`text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors ${useRegex ? 'border-[#00f3ff] text-[#00f3ff] bg-[#00f3ff]/10' : 'border-slate-700 text-slate-600 hover:text-slate-400'}`}
+                        title="Toggle Regex Search"
+                      >
+                        .*
+                      </button>
                     </div>
-                    {filteredLines.length > 0 && searchTerm && (<button onClick={handleExportView} className="px-3 rounded border border-white/10 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all" title="Export Current View"><Download size={14} /></button>)}
+                    
+                    {/* DOWNLOAD FILTERED VIEW */}
+                    {filteredLines.length > 0 && searchTerm && (
+                      <button onClick={handleExportView} className="px-3 rounded border border-white/10 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all" title="Export Current View">
+                        <Download size={14} />
+                      </button>
+                    )}
+
                     <button onClick={() => setFocusMode(!focusMode)} disabled={!searchTerm} className={`px-3 rounded border flex items-center gap-2 transition-all ${focusMode ? 'bg-[#00f3ff]/20 border-[#00f3ff] text-[#00f3ff]' : 'bg-white/5 border-white/10 text-slate-400'}`}>{focusMode ? <Eye size={14} /> : <EyeOff size={14} />}</button>
                   </div>
                   <div className="flex items-center gap-3 px-1"><span className="text-[10px] text-[#00f3ff] w-8 font-bold">{percentage.toFixed(0)}%</span><input type="range" min="0" max="100" step="0.1" value={percentage} onChange={handleSlider} className="flex-1 h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-[#00f3ff]" /></div>
@@ -423,7 +494,12 @@ export default function App() {
                   <button onClick={() => setShowBookmarksList(!showBookmarksList)} className={`glass-panel px-3 py-1.5 rounded text-[10px] flex items-center gap-2 transition-all ${showBookmarksList ? 'bg-[#ff00ff]/20 border-[#ff00ff] text-white' : 'text-slate-400 hover:bg-white/10'}`}><Bookmark size={10} className={`${bookmarks.size > 0 ? 'text-[#ff00ff] fill-current' : ''}`} /><span>{bookmarks.size} MARKED</span>{showBookmarksList ? <ArrowDown size={10}/> : <ArrowUp size={10}/>}</button>
                   {bookmarks.size > 0 && (<button onClick={() => setBookmarks(new Map())} className="glass-panel px-3 py-1.5 rounded text-[10px] hover:bg-red-500/20 text-slate-400 hover:text-red-400"><Trash2 size={10} /></button>)}
                 </div>
-                {showBookmarksList && (<div className="absolute top-[110px] left-3 right-3 glass-panel border border-[#ff00ff]/30 rounded-xl z-30 max-h-64 overflow-y-auto shadow-[0_10px_40px_rgba(0,0,0,0.8)] animate-in fade-in zoom-in-95 duration-200"><div className="p-2 sticky top-0 bg-[#0d1117]/95 backdrop-blur border-b border-white/10 text-[10px] font-bold text-[#ff00ff] uppercase tracking-wider mb-1 flex justify-between"><span>Warp Destinations</span><span className="text-slate-500">{bookmarks.size} locs</span></div>{bookmarks.size === 0 ? <div className="p-4 text-center text-xs text-slate-500 italic">No bookmarks yet.</div> : Array.from(bookmarks.values()).sort((a,b) => a.lineNum - b.lineNum).map((bkm) => (<div key={bkm.lineNum} onClick={() => jumpToBookmark(bkm)} className="p-2 border-b border-white/5 hover:bg-[#ff00ff]/10 cursor-pointer group flex gap-3 items-center"><div className="flex flex-col items-end w-12 shrink-0"><span className="text-[#ff00ff] font-bold text-xs">#{bkm.lineNum}</span>{bkm.chunkOffset !== currentOffset && (<span className="text-[9px] text-slate-500 flex items-center gap-0.5"><MapPin size={8}/> WARP</span>)}</div><span className="text-[10px] text-slate-300 font-mono truncate opacity-70 group-hover:opacity-100">{bkm.content}</span></div>))}</div>)}
+                {showBookmarksList && (
+                   <div className="absolute top-[110px] left-3 right-3 glass-panel border border-[#ff00ff]/30 rounded-xl z-30 max-h-64 overflow-y-auto shadow-[0_10px_40px_rgba(0,0,0,0.8)] animate-in fade-in zoom-in-95 duration-200">
+                     <div className="p-2 sticky top-0 bg-[#0d1117]/95 backdrop-blur border-b border-white/10 text-[10px] font-bold text-[#ff00ff] uppercase tracking-wider mb-1 flex justify-between"><span>Warp Destinations</span><span className="text-slate-500">{bookmarks.size} locs</span></div>
+                     {bookmarks.size === 0 ? <div className="p-4 text-center text-xs text-slate-500 italic">No bookmarks yet.</div> : Array.from(bookmarks.values()).sort((a,b) => a.lineNum - b.lineNum).map((bkm) => (<div key={bkm.lineNum} onClick={() => jumpToBookmark(bkm)} className="p-2 border-b border-white/5 hover:bg-[#ff00ff]/10 cursor-pointer group flex gap-3 items-center"><div className="flex flex-col items-end w-12 shrink-0"><span className="text-[#ff00ff] font-bold text-xs">#{bkm.lineNum}</span>{bkm.chunkOffset !== currentOffset && (<span className="text-[9px] text-slate-500 flex items-center gap-0.5"><MapPin size={8}/> WARP</span>)}</div><span className="text-[10px] text-slate-300 font-mono truncate opacity-70 group-hover:opacity-100">{bkm.content}</span></div>))}
+                   </div>
+                )}
               </div>
               <div className="flex-1 overflow-y-auto relative scrollbar-hide px-2">
                 {isLoading ? <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px] z-20"><div className="flex flex-col items-center gap-2"><div className="w-12 h-1 border-t border-[#00f3ff] animate-ping" /><span className="text-xs text-[#00f3ff] tracking-widest animate-pulse">WARPING...</span></div></div> : <div className="pb-10">{filteredLines.length > 0 ? filteredLines.map((line, i) => { const originalIndex = Math.floor(currentOffset/50) + i; return <LogLine key={i} id={`line-${originalIndex}`} content={line} number={originalIndex} highlight={searchTerm} isBookmarked={bookmarks.has(originalIndex)} onToggleBookmark={toggleBookmark} settings={settings} useRegex={useRegex} />; }) : <div className="text-center py-10 text-slate-500 text-xs">{focusMode ? 'No matches found.' : 'End of chunk.'}</div>}</div>}
@@ -433,18 +509,29 @@ export default function App() {
             <Minimap lines={lines} bookmarks={bookmarks} offset={currentOffset} />
           </>
         ) : (
+          /* --- EMPTY STATE / DASHBOARD --- */
           <div className="flex-1 flex flex-col items-center justify-center p-6 text-center z-10 overflow-y-auto">
             <div className="max-w-xs w-full glass-panel rounded-2xl p-6 border-t border-t-[#00f3ff]/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)] mb-6">
               <div className="mb-4 relative"><div className="absolute inset-0 bg-[#00f3ff] blur-[40px] opacity-10 rounded-full"></div><UploadCloud size={48} className="text-[#00f3ff] mx-auto relative z-10 drop-shadow-[0_0_10px_rgba(0,243,255,0.5)]" /></div>
               <h2 className="text-xl font-bold text-white mb-2 tracking-tight">LOG VOYAGER</h2>
               <p className="text-xs text-slate-400 mb-6 leading-relaxed">Drop huge log files here.<br/>Local processing. Zero latency.</p>
-              <div className="grid grid-cols-3 gap-2 mb-6"><div className="bg-white/5 p-2 rounded border border-white/5 flex flex-col items-center gap-1"><Zap size={14} className="text-[#00f3ff]" /><span className="text-[9px] font-bold text-slate-300">INSTANT</span></div><div className="bg-white/5 p-2 rounded border border-white/5 flex flex-col items-center gap-1"><Bug size={14} className="text-[#ff00ff]" /><span className="text-[9px] font-bold text-slate-300">DEBUG</span></div><div className="bg-white/5 p-2 rounded border border-white/5 flex flex-col items-center gap-1"><FileJson size={14} className="text-yellow-400" /><span className="text-[9px] font-bold text-slate-300">JSON</span></div></div>
+              
+              <div className="grid grid-cols-3 gap-2 mb-6">
+                 <div className="bg-white/5 p-2 rounded border border-white/5 flex flex-col items-center gap-1"><Zap size={14} className="text-[#00f3ff]" /><span className="text-[9px] font-bold text-slate-300">INSTANT</span></div>
+                 <div className="bg-white/5 p-2 rounded border border-white/5 flex flex-col items-center gap-1"><Bug size={14} className="text-[#ff00ff]" /><span className="text-[9px] font-bold text-slate-300">DEBUG</span></div>
+                 <div className="bg-white/5 p-2 rounded border border-white/5 flex flex-col items-center gap-1"><FileJson size={14} className="text-yellow-400" /><span className="text-[9px] font-bold text-slate-300">JSON</span></div>
+              </div>
+
               <div className="space-y-3">
                 <button onClick={() => fileInputRef.current?.click()} className="w-full bg-[#00f3ff] hover:bg-[#00c2cc] text-black font-bold py-3 rounded-lg text-sm transition-all hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] flex items-center justify-center gap-2"><FileText size={16} /> SELECT FILE</button>
                 <button onClick={handlePasteClick} className="w-full bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold py-3 rounded-lg text-sm transition-all flex items-center justify-center gap-2"><Clipboard size={16} className="text-[#ff00ff]" /> PASTE CLIPBOARD</button>
               </div>
             </div>
-            <div className="w-full max-w-xs"><div className="flex items-center gap-2 text-slate-500 text-[10px] uppercase font-bold mb-3 px-2 tracking-widest"><History size={10} /> Recent Sessions</div>{history.length === 0 ? <div className="glass-panel rounded-xl p-4 text-center"><p className="text-slate-600 text-[10px] italic">No local history found.</p></div> : <div className="glass-panel rounded-xl overflow-hidden text-left">{history.map((h, i) => (<div key={i} className="p-3 border-b border-white/5 last:border-0 flex justify-between items-center group hover:bg-white/5 transition-colors"><div className="min-w-0"><div className="text-xs text-slate-300 truncate font-mono mb-0.5">{h.name}</div><div className="text-[9px] text-[#00f3ff]/70 flex items-center gap-2"><span>{h.date}</span><span>•</span><span>{h.size}</span></div></div></div>))}</div>}</div>
+
+            <div className="w-full max-w-xs">
+               <div className="flex items-center gap-2 text-slate-500 text-[10px] uppercase font-bold mb-3 px-2 tracking-widest"><History size={10} /> Recent Sessions</div>
+               {history.length === 0 ? <div className="glass-panel rounded-xl p-4 text-center"><p className="text-slate-600 text-[10px] italic">No local history found.</p></div> : <div className="glass-panel rounded-xl overflow-hidden text-left">{history.map((h, i) => (<div key={i} className="p-3 border-b border-white/5 last:border-0 flex justify-between items-center group hover:bg-white/5 transition-colors"><div className="min-w-0"><div className="text-xs text-slate-300 truncate font-mono mb-0.5">{h.name}</div><div className="text-[9px] text-[#00f3ff]/70 flex items-center gap-2"><span>{h.date}</span><span>•</span><span>{h.size}</span></div></div></div>))}</div>}
+            </div>
           </div>
         )}
       </div>
