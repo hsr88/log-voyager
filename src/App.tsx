@@ -210,7 +210,7 @@ const InfoModal = ({ onClose }: { onClose: () => void }) => {
           <a href="https://github.com/hsr88/log-voyager" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full">
             <Github size={20} />
           </a>
-          <p className="text-[10px] text-slate-500 font-mono">&copy; 2025 logvoyager.cc</p>
+          <p className="text-[10px] text-slate-500 font-mono">&copy; 2026 logvoyager.cc</p>
         </div>
       </div>
     </div>
@@ -430,7 +430,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded bg-gradient-to-br from-[#00f3ff] to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.3)]"><Box size={18} className="text-white" /></div>
             <div>
-               <h1 className="text-sm font-bold text-white tracking-wider neon-text">LOG VOYAGER <span className="text-[9px] bg-[#ff00ff] text-white px-1 rounded ml-1">PRO</span></h1>
+              <h1 className="text-sm font-bold text-white tracking-wider neon-text">LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1 rounded ml-1">Log Files Analyzer</span></h1>
                {file && <p className="text-[10px] text-[#00f3ff] font-mono">{file.name} ({formatBytes(fileSize)})</p>}
             </div>
           </div>
