@@ -2,6 +2,9 @@
 
 The missing tool for DevOps and Backend Developers. Analyze gigabyte-sized log files instantly in your browser without crashing your device.
 
+![1764963938364](https://github.com/user-attachments/assets/910d1ed8-abd5-43c2-9e57-85102be09188)
+
+
 🔴 Live Demo
 
 Use the application instantly (no installation required):
