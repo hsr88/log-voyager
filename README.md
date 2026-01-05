@@ -97,7 +97,7 @@ It does not send analytics or file content to any external server.
 
 It uses standard HTML5 File APIs strictly within the browser context.
 
-<script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'G2G11RAU3K');kofiwidget2.draw();</script> 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G11RAU3K)
 
 ```
 © 2025-26 logvoyager.cc | Created by hsr88
