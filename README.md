@@ -1,3 +1,4 @@
+[![GitHub stars](https://img.shields.io/github/stars/hsr88/log-voyager?style=social)](https://github.com/hsr88/log-voyager)
 🚀 Log Voyager
 
 The missing tool for DevOps and Backend Developers. Analyze gigabyte-sized log files instantly in your browser without crashing your device.
