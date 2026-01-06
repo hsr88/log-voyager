@@ -13,11 +13,7 @@ import type { BookmarkData, HistoryItem } from './types';
 // --- BUILD FIX: Zakomentowano import, który powodował błąd na Vercel/Web ---
 // import { SendIntent } from 'capacitor-plugin-send-intent';
 
-/**
- * LOG VOYAGER - KO-FI EDITION
- * - Dodano przycisk "Buy me a Coffee" w sekcji ABOUT (Info Modal).
- * - Linkuje do: https://ko-fi.com/hsr
- */
+
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
 
