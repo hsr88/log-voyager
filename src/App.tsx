@@ -10,9 +10,6 @@ import { InfoModal, SettingsModal, PasteModal } from './components/Modals';
 import { formatBytes } from './utils/helpers';
 import type { BookmarkData, HistoryItem } from './types';
 
-// --- BUILD FIX: Zakomentowano import, który powodował błąd na Vercel/Web ---
-// import { SendIntent } from 'capacitor-plugin-send-intent';
-
 
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
