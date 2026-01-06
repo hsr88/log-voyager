@@ -1,4 +1,4 @@
-import React from 'react';
+
 import type { BookmarkData } from '../types';
 import { getLogLevel } from '../utils/helpers';
 
