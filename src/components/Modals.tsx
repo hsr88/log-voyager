@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     X, Settings, Type, AlignLeft, Box, Cpu, Zap, Shield, Coffee, HelpCircle, Github, Clipboard, Check
 } from 'lucide-react';
