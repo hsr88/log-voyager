@@ -15,17 +15,15 @@ Use the application instantly (no installation required):
 
 ⚡ Key Features
 
-Infinity Scroll Engine: Open files larger than 10GB instantly. The app uses advanced File Slicing API to read only the visible chunks of data into memory (RAM).
-
-Privacy First: 100% Local Execution. Your log files never leave your device. They are processed within the browser sandbox. No data is uploaded to any cloud.
-
-JSON Prettifier: Automatically detects JSON objects in log lines and formats them into readable trees with a single click.
-
-Warp Jump Bookmarks: Mark important lines and "warp" between them instantly, even if they are gigabytes apart.
-
-Focus Mode: Filter out noise and display only lines matching your search query.
-
-Zero Install: Works on Desktop, Mobile (Android/iOS), and Tablets. Ideal for emergency debugging on the go.
+* **🔍 Smart Search 2.0:**
+    * **Case Sensitivity:** Toggle precision search (e.g., match "Error" but ignore "error").
+    * **Navigation:** Jump between matches instantly using Next/Prev buttons.
+    * **Search History:** Auto-saves your last 10 queries for quick access.
+* **⚡ Infinity Scroll Engine:** Open files larger than **10GB** instantly using File Slicing API.
+* **🛡️ Privacy First:** 100% Local Execution. Files never leave your device.
+* **🎨 JSON Prettifier:** Automatically detects and formats JSON objects.
+* **📍 Warp Jump Bookmarks:** Mark important lines and "warp" between them instantly.
+* **📱 Zero Install:** Works on Desktop, Mobile (Android/iOS), and Tablets.
 
 🛠️ How It Works
 
