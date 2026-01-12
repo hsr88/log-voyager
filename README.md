@@ -1,8 +1,10 @@
 [![GitHub stars](https://img.shields.io/github/stars/hsr88/log-voyager?style=social)](https://github.com/hsr88/log-voyager)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # 🚀 Log Voyager
 
-The missing tool for DevOps and Backend Developers. Analyze gigabyte-sized log files instantly in your browser without crashing your device.
+## The missing tool for DevOps and Backend Developers. Analyze gigabyte-sized log files instantly in your browser without crashing your device.
+> __🔒 100% Client-Side & Offline. Your logs never leave your device. No server upload.__
 
 ![1764963938364](https://github.com/user-attachments/assets/910d1ed8-abd5-43c2-9e57-85102be09188)
 
