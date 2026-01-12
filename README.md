@@ -51,7 +51,7 @@ Quick Start
 
 Clone the repository:
 ```
-git clone [https://github.com/hsr88/log-voyager.git](https://github.com/hsr88/log-voyager.git)
+git clone https://github.com/hsr88/log-voyager.git
 cd log-voyager
 ```
 
