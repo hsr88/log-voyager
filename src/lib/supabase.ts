@@ -85,9 +85,13 @@ export async function fetchRemoteBookmarks(fileSignature: string): Promise<Remot
 }
 
 export async function saveRemoteBookmark(fileSignature: string, lineNum: number, chunkOffset: number, content: string): Promise<void> {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
     const { error } = await supabase
         .from('bookmarks')
         .insert({
+            user_id: user.id,
             file_signature: fileSignature,
             line_number: lineNum,
             chunk_offset: chunkOffset,
