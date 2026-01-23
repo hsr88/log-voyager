@@ -3,7 +3,8 @@ import {
     FileText, Zap, Shield, Check, Github, ArrowRight,
     Terminal, Share2, Bug
 } from 'lucide-react';
-import { signInWithGithub } from './lib/auth';
+import { signInWithGithub, getUserProfile } from './lib/auth';
+import { supabase } from './lib/supabase';
 import { AuthModal } from './components/AuthModal';
 
 /**
@@ -61,14 +62,15 @@ const styles = `
 export default function LandingPage() {
     // State for AuthModal
     const [showAuthModal, setShowAuthModal] = useState(false);
+    const [user, setUser] = useState<any>(null);
 
-
-    // Watch for auth state change - if user logs in after clicking upgrade, continue flow
+    // Watch for auth state change
     useEffect(() => {
-        // We'll need a way to check if user is logged in. 
-        // Ideally LandingPage should receive user state or we verify via supabase
-        // For now, let's assume if AuthModal closes and we have pendingUpgrade, we try again?
-        // Or simpler: User clicks login, logs in, modal closes. They click upgrade again.
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session?.user) {
+                getUserProfile(session.user).then(setUser);
+            }
+        });
     }, []);
 
     const handleUpgrade = async () => {
@@ -91,8 +93,6 @@ export default function LandingPage() {
             <style>{styles}</style>
 
             {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
-
-            {/* ... rest of JSX ... */}
 
             {/* --- NAVBAR --- */}
             <nav className="fixed top-0 w-full z-50 glass-card border-b-0 border-b-white/5">
@@ -121,13 +121,25 @@ export default function LandingPage() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => signInWithGithub()}
-                            className="hidden md:flex items-center gap-2 text-sm font-bold text-white hover:text-[#00f3ff] transition-colors"
-                        >
-                            <Github size={16} /> Log In
-                        </button>
-                        <a href="/app" className="btn-primary px-6 py-2.5 rounded-full text-sm font-bold tracking-wide">
+                        {user ? (
+                            <div className="hidden md:flex items-center gap-3">
+                                <div className="text-right">
+                                    <div className="text-xs font-bold text-white">{user.email || 'User'}</div>
+                                    <div className="text-[10px] text-[#00f3ff] uppercase tracking-wider">{user.subscription_tier === 'pro' ? 'PRO PLAN' : 'FREE PLAN'}</div>
+                                </div>
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#00f3ff] to-blue-600 flex items-center justify-center text-xs font-bold text-black border border-white/20">
+                                    {(user.email || 'U').charAt(0).toUpperCase()}
+                                </div>
+                            </div>
+                        ) : (
+                            <button
+                                onClick={() => signInWithGithub()}
+                                className="hidden md:flex items-center gap-2 text-sm font-bold text-white hover:text-[#00f3ff] transition-colors"
+                            >
+                                <Github size={16} /> Log In
+                            </button>
+                        )}
+                        <a href="/app" className="btn-primary px-6 py-2.5 rounded-full text-sm font-bold tracking-wide shadow-[0_0_15px_rgba(0,243,255,0.3)] hover:shadow-[0_0_25px_rgba(0,243,255,0.5)]">
                             OPEN APP
                         </a>
                     </div>
