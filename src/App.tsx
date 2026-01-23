@@ -268,15 +268,19 @@ export default function App() {
                 {isAuthLoading ? (
                   <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
                 ) : user ? (
-                  <div className="flex items-center gap-2 bg-white/5 px-2 py-1 rounded-lg border border-white/5">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#00f3ff] to-blue-600 flex items-center justify-center text-[10px] font-bold text-black">
+                  <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/20 transition-all group">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#00f3ff] to-blue-600 flex items-center justify-center text-xs font-bold text-black shadow-lg">
                       {user.email.charAt(0).toUpperCase()}
                     </div>
-                    <div className="flex flex-col text-right hidden sm:flex">
-                      <span className="text-[10px] text-white font-bold">{user.subscription_tier === 'pro' ? 'PRO PLAN' : 'FREE PLAN'}</span>
-                      <span className="text-[8px] text-slate-400">{user.email}</span>
+                    <div className="flex flex-col text-left hidden sm:flex">
+                      <span className="text-[10px] text-white font-bold">{user.subscription_tier === 'pro' ? '⭐ PRO' : 'FREE'}</span>
+                      <span className="text-[8px] text-slate-400 max-w-[120px] truncate">{user.email}</span>
                     </div>
-                    <button onClick={signOut} className="p-1 hover:text-red-400 text-slate-500 transition-colors" title="Sign Out">
+                    <button
+                      onClick={signOut}
+                      className="ml-1 p-1.5 hover:bg-red-500/20 rounded text-slate-400 hover:text-red-400 transition-all group-hover:opacity-100 opacity-70"
+                      title="Sign Out"
+                    >
                       <LogOut size={14} />
                     </button>
                   </div>
