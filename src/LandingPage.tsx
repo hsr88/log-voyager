@@ -75,7 +75,7 @@ export default function LandingPage() {
 
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium">
                         <a href="#features" className="hover:text-white transition-colors">Features</a>
-                        <a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a>
+                        <a href="/how-it-works" className="hover:text-white transition-colors">How it Works</a>
                         <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
                         <a href="https://github.com/hsr88/log-voyager" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
                             <Github size={18} /> GitHub
