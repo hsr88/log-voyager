@@ -11,11 +11,42 @@ interface ShareModalProps {
     offset?: number;
 }
 
-export function ShareModal({ onClose, lines, filename, bookmarks, offset }: ShareModalProps) {
+import { Crown } from 'lucide-react';
+
+export function ShareModal({ onClose, lines, filename, bookmarks, offset, subscriptionTier }: ShareModalProps & { subscriptionTier?: 'free' | 'pro' }) {
     const [isLoading, setIsLoading] = useState(false);
     const [generatedLink, setGeneratedLink] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
+
+    // Block sharing for free users
+    if (subscriptionTier !== 'pro') {
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+                <div className="glass-panel border border-[#00f3ff]/30 rounded-xl w-full max-w-sm p-6 text-center relative overflow-hidden">
+                    <button onClick={onClose} className="absolute top-2 right-2 text-slate-400 hover:text-white"><X size={20} /></button>
+
+                    <div className="w-16 h-16 bg-[#00f3ff]/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#00f3ff]/30 shadow-[0_0_30px_rgba(0,243,255,0.2)]">
+                        <Crown size={32} className="text-[#00f3ff]" />
+                    </div>
+
+                    <h2 className="text-xl font-bold text-white mb-2">Upgrade to Pro</h2>
+                    <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+                        Sharing incidents is a premium feature.<br />
+                        Upgrade to collaborate with your team.
+                    </p>
+
+                    <button className="w-full btn-primary py-3 rounded-lg font-bold bg-[#00f3ff] hover:bg-[#00c2cc] text-black transition-all shadow-[0_0_20px_rgba(0,243,255,0.3)] hover:shadow-[0_0_30px_rgba(0,243,255,0.5)]">
+                        Unlock Pro Features
+                    </button>
+
+                    <button onClick={onClose} className="mt-4 text-xs text-slate-500 hover:text-white underline decoration-dashed">
+                        Maybe later
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     // --- FILTER LOGIC ---
     let contentToShare = "";
