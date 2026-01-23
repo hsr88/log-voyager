@@ -17,6 +17,7 @@ import { isGzip, decompressGzip } from './utils/decompression';
 import { getUserProfile, signOut } from './lib/auth';
 import type { UserProfile } from './lib/auth';
 import { supabase } from './lib/supabase';
+import { authLog } from './lib/auth-debug';
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
 
@@ -96,29 +97,47 @@ export default function App() {
 
   // Check auth on mount
   useEffect(() => {
-    getUserProfile()
-      .then(profile => {
-        setUser(profile);
-      })
-      .catch(error => {
-        console.error('Auth initialization error:', error);
-        setUser(null);
-      })
-      .finally(() => {
-        setIsAuthLoading(false);
-      });
+    let isMounted = true;
+    authLog('App mounted: initializing auth...');
+
+    const initAuth = async () => {
+      try {
+        const profile = await getUserProfile();
+        if (isMounted) {
+          authLog('Initial profile fetch complete', profile);
+          setUser(profile);
+        }
+      } catch (error) {
+        authLog('Initial profile fetch error', error);
+      } finally {
+        if (isMounted) {
+          setIsAuthLoading(false);
+        }
+      }
+    };
+
+    initAuth();
 
     // Listen for auth state changes
-    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, _session) => {
-      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      authLog(`Auth state changed: ${event}`, session?.user?.email);
+
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
         const profile = await getUserProfile();
-        setUser(profile);
+        if (isMounted) {
+          setUser(profile);
+          setIsAuthLoading(false); // Ensure loading is cleared on successful event
+        }
       } else if (event === 'SIGNED_OUT') {
-        setUser(null);
+        if (isMounted) {
+          setUser(null);
+          setIsAuthLoading(false);
+        }
       }
     });
 
     return () => {
+      isMounted = false;
       authListener.subscription.unsubscribe();
     };
   }, []);

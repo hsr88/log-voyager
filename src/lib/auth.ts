@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { authLog } from './auth-debug';
 
 export interface UserProfile {
     id: string;
@@ -7,8 +8,25 @@ export interface UserProfile {
 }
 
 export async function getUserProfile(): Promise<UserProfile | null> {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return null;
+    authLog('getUserProfile called');
+
+    // First try to get the current user session
+    let { data: { user }, error: userError } = await supabase.auth.getUser();
+
+    // If getUser fails, try getSession as a backup (sometimes more reliable during initialization)
+    if (!user || userError) {
+        authLog('auth.getUser() returned no user or error, trying getSession()', userError);
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        user = session?.user ?? null;
+        if (sessionError) authLog('auth.getSession() error', sessionError);
+    }
+
+    if (!user) {
+        authLog('No valid user found in Supabase auth');
+        return null;
+    }
+
+    authLog(`Checking profile in DB for user: ${user.email} (${user.id})`);
 
     // Fetch profile from 'profiles' table
     const { data, error } = await supabase
@@ -18,16 +36,22 @@ export async function getUserProfile(): Promise<UserProfile | null> {
         .single();
 
     if (error && error.code !== 'PGRST116') {
-        console.error('Error fetching profile:', error);
-        return null; // Return null on error
+        authLog('Error fetching profile from database', error);
+        // Fallback to basic profile if DB fails but user is authenticated
+        return {
+            id: user.id,
+            email: user.email || '',
+            subscription_tier: 'free'
+        };
     }
 
     if (data) {
+        authLog('Profile found in database', data);
         return data as UserProfile;
     }
 
     // Profile doesn't exist yet - create it (fallback if trigger didn't fire)
-    console.log('Profile not found, creating one...');
+    authLog('Profile not found in DB, attempting to create one...');
     const { data: newProfile, error: insertError } = await supabase
         .from('profiles')
         .insert({
@@ -39,8 +63,8 @@ export async function getUserProfile(): Promise<UserProfile | null> {
         .single();
 
     if (insertError) {
-        console.error('Error creating profile:', insertError);
-        // Return fallback profile even if insert fails
+        authLog('Error creating profile in database', insertError);
+        // Return fallback profile even if insert fails, so the user stays logged in
         return {
             id: user.id,
             email: user.email || '',
@@ -48,11 +72,14 @@ export async function getUserProfile(): Promise<UserProfile | null> {
         };
     }
 
+    authLog('Successfully created new profile', newProfile);
     return newProfile as UserProfile;
 }
 
 const getRedirectURL = () => {
-    return import.meta.env.VITE_PUBLIC_URL || window.location.origin;
+    const url = import.meta.env.VITE_PUBLIC_URL || window.location.origin;
+    authLog(`Auth redirect URL: ${url}`);
+    return url;
 };
 
 export async function signInWithMagicLink(email: string) {
