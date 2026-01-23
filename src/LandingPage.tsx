@@ -6,6 +6,7 @@ import {
 import { signInWithGithub, getUserProfile } from './lib/auth';
 import { supabase } from './lib/supabase';
 import { AuthModal } from './components/AuthModal';
+import { CookieBanner } from './components/CookieBanner';
 
 /**
  * LOG VOYAGER - SAAS LANDING PAGE
@@ -91,6 +92,8 @@ export default function LandingPage() {
     return (
         <div className="min-h-screen text-slate-300 font-sans tech-bg selection:bg-[#00f3ff] selection:text-black overflow-x-hidden">
             <style>{styles}</style>
+
+            <CookieBanner />
 
             {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
 
@@ -311,7 +314,7 @@ export default function LandingPage() {
                     </div>
 
                     <div className="text-slate-500 text-sm">
-                        &copy; 2026 logvoyager.cc • Built by <a href="https://github.com/hsr88" className="text-slate-400 hover:text-white transition-colors">hsr88</a>
+                        &copy; 2026 logvoyager.cc • Built by <a href="https://github.com/hsr88" className="text-slate-400 hover:text-white transition-colors">hsr88</a> • <a href="/privacy" className="text-slate-400 hover:text-white transition-colors">Privacy Policy</a>
                     </div>
 
                     <div className="flex gap-4">
