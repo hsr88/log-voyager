@@ -305,10 +305,13 @@ export default function App() {
         <div className="glass-panel h-14 flex items-center justify-between px-4 shrink-0 z-20">
           <div className="flex items-center gap-3">
             <button onClick={() => setShowInfoModal(true)} className="p-1.5 hover:bg-white/10 rounded-lg text-slate-400 hover:text-white transition-colors"><Menu size={20} /></button>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded bg-gradient-to-br from-[#00f3ff] to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.3)]"><img src="/LV.png" alt="LV" className="w-5 h-5" /></div>
+            <div className="flex items-center gap-3 group cursor-pointer">
+              <div className="relative">
+                <div className="absolute inset-0 bg-[#00f3ff] blur-lg opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                <img src="/LV.png" alt="LV" className="w-8 h-8 object-contain relative z-10 brightness-125 filter drop-shadow-[0_0_8px_rgba(0,243,255,0.5)] transition-transform duration-500 group-hover:scale-110" />
+              </div>
               <div>
-                <h1 className="text-sm font-bold text-white tracking-wider neon-text">LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1 rounded ml-1">Log Files Analyzer</span></h1>
+                <h1 className="text-sm font-bold text-white tracking-wider group-hover:text-[#00f3ff] transition-colors duration-300 neon-text">LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1 rounded ml-1">Log Files Analyzer</span></h1>
                 {file && <p className="text-[10px] text-[#00f3ff] font-mono">{file.name} ({formatBytes(fileSize)})</p>}
               </div>
             </div>
