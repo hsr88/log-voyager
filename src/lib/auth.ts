@@ -34,13 +34,15 @@ export async function getUserProfile(): Promise<UserProfile | null> {
     };
 }
 
-// ... imports
+const getRedirectURL = () => {
+    return import.meta.env.VITE_PUBLIC_URL || window.location.origin;
+};
 
 export async function signInWithMagicLink(email: string) {
     return await supabase.auth.signInWithOtp({
         email,
         options: {
-            emailRedirectTo: window.location.origin
+            emailRedirectTo: getRedirectURL()
         }
     });
 }
@@ -49,7 +51,7 @@ export async function signInWithGithub() {
     return await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-            redirectTo: window.location.origin
+            redirectTo: getRedirectURL()
         }
     });
 }
@@ -58,7 +60,7 @@ export async function signInWithGoogle() {
     return await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: window.location.origin
+            redirectTo: getRedirectURL()
         }
     });
 }
