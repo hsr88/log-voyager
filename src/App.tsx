@@ -98,41 +98,57 @@ export default function App() {
   // Check auth on mount
   useEffect(() => {
     let isMounted = true;
+    let isFetching = false;
     authLog('App mounted: initializing auth...');
 
-    const initAuth = async () => {
+    const fetchProfile = async (reason: string) => {
+      if (isFetching) {
+        authLog(`Already fetching profile, skipping request from: ${reason}`);
+        return;
+      }
+
+      isFetching = true;
       try {
         const profile = await getUserProfile();
         if (isMounted) {
-          authLog('Initial profile fetch complete', profile);
+          authLog(`Profile fetch complete (${reason})`, profile);
           setUser(profile);
-        }
-      } catch (error) {
-        authLog('Initial profile fetch error', error);
-      } finally {
-        if (isMounted) {
           setIsAuthLoading(false);
         }
+      } catch (error: any) {
+        if (error.name === 'AbortError' || error.message?.includes('aborted')) {
+          authLog(`Profile fetch aborted (${reason}) - normal behavior during rapid changes`);
+          // Don't clear loading or set user to null on abort
+        } else {
+          authLog(`Profile fetch error (${reason})`, error);
+          if (isMounted) {
+            setUser(null);
+            setIsAuthLoading(false);
+          }
+        }
+      } finally {
+        isFetching = false;
       }
     };
 
-    initAuth();
+    // Initial check
+    fetchProfile('initial_mount');
 
     // Listen for auth state changes
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       authLog(`Auth state changed: ${event}`, session?.user?.email);
 
-      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
-        const profile = await getUserProfile();
-        if (isMounted) {
-          setUser(profile);
-          setIsAuthLoading(false); // Ensure loading is cleared on successful event
-        }
+      // We only re-fetch if it's a significant event
+      if (['SIGNED_IN', 'TOKEN_REFRESHED', 'USER_UPDATED', 'MFA_CHALLENGE'].includes(event)) {
+        fetchProfile(`auth_event_${event}`);
       } else if (event === 'SIGNED_OUT') {
         if (isMounted) {
           setUser(null);
           setIsAuthLoading(false);
         }
+      } else if (event === 'INITIAL_SESSION') {
+        // If we already have a user or are fetching, INITIAL_SESSION is redundant
+        if (!user) fetchProfile('initial_session');
       }
     });
 

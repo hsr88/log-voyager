@@ -10,70 +10,79 @@ export interface UserProfile {
 export async function getUserProfile(): Promise<UserProfile | null> {
     authLog('getUserProfile called');
 
-    // First try to get the current user session
-    let { data: { user }, error: userError } = await supabase.auth.getUser();
+    try {
+        // First try to get the current user session
+        let { data: { user }, error: userError } = await supabase.auth.getUser();
 
-    // If getUser fails, try getSession as a backup (sometimes more reliable during initialization)
-    if (!user || userError) {
-        authLog('auth.getUser() returned no user or error, trying getSession()', userError);
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        user = session?.user ?? null;
-        if (sessionError) authLog('auth.getSession() error', sessionError);
-    }
+        // If getUser fails (not due to abort), try getSession as a backup
+        if (!user || (userError && userError.name !== 'AbortError')) {
+            if (userError) authLog('auth.getUser() error', userError);
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            user = session?.user ?? null;
+            if (sessionError) authLog('auth.getSession() error', sessionError);
+        }
 
-    if (!user) {
-        authLog('No valid user found in Supabase auth');
+        if (!user) {
+            authLog('No valid user found in Supabase auth');
+            return null;
+        }
+
+        authLog(`Checking profile in DB for user: ${user.email} (${user.id})`);
+
+        // Fetch profile from 'profiles' table
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single();
+
+        if (error && error.code !== 'PGRST116') {
+            authLog('Error fetching profile from database', error);
+            // Fallback to basic profile if DB fails but user is authenticated
+            return {
+                id: user.id,
+                email: user.email || '',
+                subscription_tier: 'free'
+            };
+        }
+
+        if (data) {
+            authLog('Profile found in database', data);
+            return data as UserProfile;
+        }
+
+        // Profile doesn't exist yet - create it (fallback if trigger didn't fire)
+        authLog('Profile not found in DB, attempting to create one...');
+        const { data: newProfile, error: insertError } = await supabase
+            .from('profiles')
+            .insert({
+                id: user.id,
+                email: user.email || '',
+                subscription_tier: 'free'
+            })
+            .select()
+            .single();
+
+        if (insertError) {
+            authLog('Error creating profile in database', insertError);
+            // Return fallback profile even if insert fails, so the user stays logged in
+            return {
+                id: user.id,
+                email: user.email || '',
+                subscription_tier: 'free'
+            };
+        }
+
+        authLog('Successfully created new profile', newProfile);
+        return newProfile as UserProfile;
+    } catch (err: any) {
+        if (err.name === 'AbortError' || err.message?.includes('aborted')) {
+            authLog('getUserProfile aborted - throwing to let caller handle serialization');
+            throw err;
+        }
+        authLog('Unexpected error in getUserProfile', err);
         return null;
     }
-
-    authLog(`Checking profile in DB for user: ${user.email} (${user.id})`);
-
-    // Fetch profile from 'profiles' table
-    const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-    if (error && error.code !== 'PGRST116') {
-        authLog('Error fetching profile from database', error);
-        // Fallback to basic profile if DB fails but user is authenticated
-        return {
-            id: user.id,
-            email: user.email || '',
-            subscription_tier: 'free'
-        };
-    }
-
-    if (data) {
-        authLog('Profile found in database', data);
-        return data as UserProfile;
-    }
-
-    // Profile doesn't exist yet - create it (fallback if trigger didn't fire)
-    authLog('Profile not found in DB, attempting to create one...');
-    const { data: newProfile, error: insertError } = await supabase
-        .from('profiles')
-        .insert({
-            id: user.id,
-            email: user.email || '',
-            subscription_tier: 'free'
-        })
-        .select()
-        .single();
-
-    if (insertError) {
-        authLog('Error creating profile in database', insertError);
-        // Return fallback profile even if insert fails, so the user stays logged in
-        return {
-            id: user.id,
-            email: user.email || '',
-            subscription_tier: 'free'
-        };
-    }
-
-    authLog('Successfully created new profile', newProfile);
-    return newProfile as UserProfile;
 }
 
 const getRedirectURL = () => {
