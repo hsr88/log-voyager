@@ -26,12 +26,29 @@ export async function getUserProfile(): Promise<UserProfile | null> {
         return data as UserProfile;
     }
 
-    // Fallback if profile row doesn't exist yet (should be created by trigger, but just in case)
-    return {
-        id: user.id,
-        email: user.email || '',
-        subscription_tier: 'free' // Default to free
-    };
+    // Profile doesn't exist yet - create it (fallback if trigger didn't fire)
+    console.log('Profile not found, creating one...');
+    const { data: newProfile, error: insertError } = await supabase
+        .from('profiles')
+        .insert({
+            id: user.id,
+            email: user.email || '',
+            subscription_tier: 'free'
+        })
+        .select()
+        .single();
+
+    if (insertError) {
+        console.error('Error creating profile:', insertError);
+        // Return fallback profile even if insert fails
+        return {
+            id: user.id,
+            email: user.email || '',
+            subscription_tier: 'free'
+        };
+    }
+
+    return newProfile as UserProfile;
 }
 
 const getRedirectURL = () => {
