@@ -17,7 +17,7 @@ import type { BookmarkData, HistoryItem } from './types';
 import { isGzip, decompressGzip } from './utils/decompression';
 import { getUserProfile, signOut } from './lib/auth';
 import type { UserProfile } from './lib/auth';
-import { supabase } from './lib/supabase';
+import { supabase, fetchRemoteBookmarks, saveRemoteBookmark, deleteRemoteBookmark } from './lib/supabase';
 import { authLog } from './lib/auth-debug';
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
@@ -240,10 +240,49 @@ export default function App() {
     }
 
     setTimeout(() => readChunk(0, f), 100);
+
+    // FETCH REMOTE BOOKMARKS (Pro)
+    if (userRef.current?.subscription_tier === 'pro') {
+      const signature = `${f.name}_${f.size}`;
+      fetchRemoteBookmarks(signature).then(remotes => {
+        if (remotes.length > 0) {
+          const map = new Map<number, BookmarkData>();
+          remotes.forEach(r => map.set(r.line_number, {
+            lineNum: r.line_number,
+            content: r.content,
+            chunkOffset: r.chunk_offset
+          }));
+          // Merge with any local bookmarks? No, replace or merge. Let's replace for now.
+          setBookmarks(map);
+          authLog(`Loaded ${remotes.length} remote bookmarks for ${f.name}`);
+        }
+      });
+    }
   };
 
   const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => { if (!file) return; const val = parseFloat(e.target.value); const newOffset = Math.floor((val / 100) * file.size); setPercentage(val); readChunk(newOffset, file); };
-  const toggleBookmark = (lineNum: number, content: string) => { const newBookmarks = new Map(bookmarks); if (newBookmarks.has(lineNum)) newBookmarks.delete(lineNum); else newBookmarks.set(lineNum, { lineNum, content: content.length > 50 ? content.substring(0, 50) + '...' : content, chunkOffset: currentOffset }); setBookmarks(newBookmarks); };
+
+  const toggleBookmark = (lineNum: number, content: string) => {
+    const newBookmarks = new Map(bookmarks);
+    let isAdd = false;
+    if (newBookmarks.has(lineNum)) {
+      newBookmarks.delete(lineNum);
+    } else {
+      newBookmarks.set(lineNum, { lineNum, content: content.length > 200 ? content.substring(0, 200) + '...' : content, chunkOffset: currentOffset });
+      isAdd = true;
+    }
+    setBookmarks(newBookmarks);
+
+    // Sync to Cloud (Pro)
+    if (user?.subscription_tier === 'pro' && file) {
+      const signature = `${file.name}_${file.size}`;
+      if (isAdd) {
+        saveRemoteBookmark(signature, lineNum, currentOffset, content.length > 200 ? content.substring(0, 200) + '...' : content);
+      } else {
+        deleteRemoteBookmark(signature, lineNum);
+      }
+    }
+  };
   const jumpToBookmark = (bookmark: BookmarkData) => { if (bookmark.chunkOffset === currentOffset) { const element = document.getElementById(`line-${bookmark.lineNum}`); if (element) { element.scrollIntoView({ behavior: 'smooth', block: 'center' }); element.classList.add('animate-flash'); setTimeout(() => element.classList.remove('animate-flash'), 1500); } } else { readChunk(bookmark.chunkOffset); setPendingScrollLine(bookmark.lineNum); } setShowBookmarksList(false); };
 
   const handleExportView = () => {
