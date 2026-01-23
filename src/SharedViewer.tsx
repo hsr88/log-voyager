@@ -79,7 +79,7 @@ export default function SharedViewer() {
             <div className="h-14 border-b border-white/10 bg-[#0d1117] flex items-center justify-between px-4 shrink-0 z-20">
                 <div className="flex items-center gap-3">
                     <Link to="/" className="w-8 h-8 rounded bg-gradient-to-br from-[#00f3ff] to-blue-600 flex items-center justify-center hover:opacity-80 transition-opacity">
-                        <img src="/LV.png" alt="Log Voyager" className="w-5 h-5" />
+                        <img src="/lv_new.png" alt="Log Voyager" className="w-5 h-5" />
                     </Link>
                     <div>
                         <div className="flex items-center gap-2">
