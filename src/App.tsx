@@ -101,10 +101,18 @@ export default function App() {
     let isFetching = false;
     authLog('App mounted: initializing auth...');
 
+    // Failsafe timeout: ensure loading screen disappears after 5 seconds max
+    const failsafe = setTimeout(() => {
+      if (isMounted && isAuthLoading) {
+        authLog('Failsafe triggered: forcing isAuthLoading to false after 5s');
+        setIsAuthLoading(false);
+      }
+    }, 5000);
+
     const fetchProfile = async (reason: string) => {
+      // If we're already fetching, we'll track it
       if (isFetching) {
-        authLog(`Already fetching profile, skipping request from: ${reason}`);
-        return;
+        authLog(`Note: Request from ${reason} overlaps with existing fetch.`);
       }
 
       isFetching = true;
@@ -116,15 +124,18 @@ export default function App() {
           setIsAuthLoading(false);
         }
       } catch (error: any) {
-        if (error.name === 'AbortError' || error.message?.includes('aborted')) {
-          authLog(`Profile fetch aborted (${reason}) - normal behavior during rapid changes`);
-          // Don't clear loading or set user to null on abort
+        const isAbort = error.name === 'AbortError' || error.message?.includes('aborted');
+
+        if (isAbort) {
+          authLog(`Profile fetch aborted (${reason}) - clearing loading state regardless`);
         } else {
           authLog(`Profile fetch error (${reason})`, error);
-          if (isMounted) {
-            setUser(null);
-            setIsAuthLoading(false);
-          }
+        }
+
+        if (isMounted) {
+          // Even on abort, we MUST clear loading state so the app isn't stuck
+          if (!user) setUser(null);
+          setIsAuthLoading(false);
         }
       } finally {
         isFetching = false;
@@ -136,24 +147,23 @@ export default function App() {
 
     // Listen for auth state changes
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      authLog(`Auth state changed: ${event}`, session?.user?.email);
+      authLog(`Auth state changed event: ${event}`, session?.user?.email);
 
-      // We only re-fetch if it's a significant event
-      if (['SIGNED_IN', 'TOKEN_REFRESHED', 'USER_UPDATED', 'MFA_CHALLENGE'].includes(event)) {
+      if (['SIGNED_IN', 'TOKEN_REFRESHED', 'USER_UPDATED'].includes(event)) {
         fetchProfile(`auth_event_${event}`);
       } else if (event === 'SIGNED_OUT') {
         if (isMounted) {
           setUser(null);
           setIsAuthLoading(false);
         }
-      } else if (event === 'INITIAL_SESSION') {
-        // If we already have a user or are fetching, INITIAL_SESSION is redundant
-        if (!user) fetchProfile('initial_session');
+      } else if (event === 'INITIAL_SESSION' && !user) {
+        fetchProfile('initial_session');
       }
     });
 
     return () => {
       isMounted = false;
+      clearTimeout(failsafe);
       authListener.subscription.unsubscribe();
     };
   }, []);
@@ -224,9 +234,6 @@ export default function App() {
     setTimeout(() => readChunk(0, f), 100);
   };
 
-  // ... existing code ...
-
-
   const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => { if (!file) return; const val = parseFloat(e.target.value); const newOffset = Math.floor((val / 100) * file.size); setPercentage(val); readChunk(newOffset, file); };
   const toggleBookmark = (lineNum: number, content: string) => { const newBookmarks = new Map(bookmarks); if (newBookmarks.has(lineNum)) newBookmarks.delete(lineNum); else newBookmarks.set(lineNum, { lineNum, content: content.length > 50 ? content.substring(0, 50) + '...' : content, chunkOffset: currentOffset }); setBookmarks(newBookmarks); };
   const jumpToBookmark = (bookmark: BookmarkData) => { if (bookmark.chunkOffset === currentOffset) { const element = document.getElementById(`line-${bookmark.lineNum}`); if (element) { element.scrollIntoView({ behavior: 'smooth', block: 'center' }); element.classList.add('animate-flash'); setTimeout(() => element.classList.remove('animate-flash'), 1500); } } else { readChunk(bookmark.chunkOffset); setPendingScrollLine(bookmark.lineNum); } setShowBookmarksList(false); };
@@ -249,7 +256,6 @@ export default function App() {
   }, [lines, focusMode, searchTerm, useRegex, caseSensitive]);
 
   // --- Smart Search Navigation ---
-  // Calculates indices of matches within the current chunk (lines)
   const matchIndices = useMemo(() => {
     if (!searchTerm) return [];
     return lines.map((line, i) => {
@@ -283,8 +289,6 @@ export default function App() {
       setTimeout(() => element.classList.remove('animate-flash'), 1500);
     }
   };
-
-
 
   return (
     <>
