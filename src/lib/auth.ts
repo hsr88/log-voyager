@@ -34,15 +34,32 @@ export async function getUserProfile(): Promise<UserProfile | null> {
     };
 }
 
+// ... imports
+
+export async function signInWithMagicLink(email: string) {
+    return await supabase.auth.signInWithOtp({
+        email,
+        options: {
+            emailRedirectTo: window.location.origin
+        }
+    });
+}
+
 export async function signInWithGithub() {
     return await supabase.auth.signInWithOAuth({
-        provider: 'github'
+        provider: 'github',
+        options: {
+            redirectTo: window.location.origin
+        }
     });
 }
 
 export async function signInWithGoogle() {
     return await supabase.auth.signInWithOAuth({
-        provider: 'google'
+        provider: 'google',
+        options: {
+            redirectTo: window.location.origin
+        }
     });
 }
 
