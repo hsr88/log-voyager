@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   FileText, Search, UploadCloud, Zap, Bug, FileJson,
@@ -11,16 +11,88 @@ import Minimap from './components/Minimap';
 import { InfoModal, SettingsModal, PasteModal } from './components/Modals';
 import { ShareModal } from './components/ShareModal';
 import { formatBytes } from './utils/helpers';
+import type { BookmarkData, HistoryItem } from './types';
 import { isGzip, decompressGzip } from './utils/decompression';
-import { getUserProfile, signInWithGithub, signOut, UserProfile } from './lib/auth';
-import { User, LogOut, Github } from 'lucide-react';
+import { getUserProfile, signInWithGithub, signOut } from './lib/auth';
+import type { UserProfile } from './lib/auth';
+import { supabase } from './lib/supabase';
+import { LogOut, Github } from 'lucide-react';
 
 // ... existing imports ... 
+
+const CHUNK_SIZE = 50 * 1024; // 50KB
+
+// --- Styl CSS ---
+const styles = `
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+  
+  .font-jetbrains { font-family: 'JetBrains Mono', monospace; }
+  
+  .tech-grid {
+    background-color: #050505;
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  }
+  
+  .glass-panel {
+    background: rgba(20, 20, 25, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  .neon-text {
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #050505; }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
+  
+  @keyframes highlight-fade {
+    0% { background-color: rgba(0, 243, 255, 0.3); }
+    100% { background-color: transparent; }
+  }
+  .animate-flash { animation: highlight-fade 1.5s ease-out; }
+`;
+
 
 // --- GŁÓWNA APLIKACJA ---
 export default function App() {
   const [file, setFile] = useState<File | null>(null);
-  // ... existing states ...
+  const [lines, setLines] = useState<string[]>([]);
+  const [fileSize, setFileSize] = useState(0);
+  const [currentOffset, setCurrentOffset] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [percentage, setPercentage] = useState(0);
+
+  const [bookmarks, setBookmarks] = useState<Map<number, BookmarkData>>(new Map());
+  const [showBookmarksList, setShowBookmarksList] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
+  const [pendingScrollLine, setPendingScrollLine] = useState<number | null>(null);
+  const [showInfoModal, setShowInfoModal] = useState(false);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+
+  const [showPasteModal, setShowPasteModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+
+
+  // --- Nowe Stany (Quality of Life & Smart Search) ---
+  const [showSettings, setShowSettings] = useState(false);
+  const [useRegex, setUseRegex] = useState(false);
+  const [caseSensitive, setCaseSensitive] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [currentMatchIndex, setCurrentMatchIndex] = useState(-1);
+  const [settings, setSettings] = useState({ fontSize: 'xs', lineWrap: true });
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
@@ -32,7 +104,7 @@ export default function App() {
     });
 
     // Listen for auth state changes
-    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, _session) => {
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
         const profile = await getUserProfile();
         setUser(profile);
@@ -45,6 +117,45 @@ export default function App() {
       authListener.subscription.unsubscribe();
     };
   }, []);
+
+  useEffect(() => { const saved = localStorage.getItem('log_history_v2'); if (saved) setHistory(JSON.parse(saved)); }, []);
+  useEffect(() => { const saved = localStorage.getItem('search_history'); if (saved) setSearchHistory(JSON.parse(saved)); }, []);
+
+  const addToHistory = (f: File) => {
+    const newEntry: HistoryItem = { name: f.name, size: formatBytes(f.size), date: new Date().toLocaleDateString() };
+    const filtered = history.filter(h => h.name !== f.name);
+    const newHistory = [newEntry, ...filtered].slice(0, 5);
+    setHistory(newHistory);
+    localStorage.setItem('log_history_v2', JSON.stringify(newHistory));
+  };
+
+  const saveSearchTerm = (term: string) => {
+    if (!term) return;
+    const prev = searchHistory.filter(t => t !== term);
+    const newHist = [term, ...prev].slice(0, 10);
+    setSearchHistory(newHist);
+    localStorage.setItem('search_history', JSON.stringify(newHist));
+  };
+
+  const handlePasteClick = async () => {
+    try { const text = await navigator.clipboard.readText(); if (!text) { alert('Clipboard is empty'); return; } processPastedText(text); } catch (err) { console.warn("Clipboard access denied"); setShowPasteModal(true); }
+  };
+
+  const processPastedText = (text: string) => { const blob = new Blob([text], { type: 'text/plain' }); const f = new File([blob], "clipboard_content.log", { type: "text/plain", lastModified: Date.now() }); handleFile(f); setShowPasteModal(false); };
+
+  useEffect(() => { if (!isLoading && pendingScrollLine !== null) { setTimeout(() => { const element = document.getElementById(`line-${pendingScrollLine}`); if (element) { element.scrollIntoView({ behavior: 'smooth', block: 'center' }); element.classList.add('animate-flash'); setTimeout(() => element.classList.remove('animate-flash'), 1500); } setPendingScrollLine(null); }, 100); } }, [lines, isLoading, pendingScrollLine]);
+
+  const readChunk = (offset: number, fileToRead: File | null = file) => {
+    if (!fileToRead) { setIsLoading(false); return; } setIsLoading(true);
+    const reader = new FileReader();
+    const blob = fileToRead.slice(offset, offset + CHUNK_SIZE);
+    reader.onload = (e) => {
+      const text = e.target?.result as string; if (!text) return; let newLines = text.split('\n'); if (offset > 0) newLines.shift(); if (offset + CHUNK_SIZE < fileToRead.size) newLines.pop();
+      setLines(newLines); setCurrentOffset(offset); setPercentage((offset / fileToRead.size) * 100); setIsLoading(false);
+      if (pendingScrollLine === null && bottomRef.current?.parentElement) bottomRef.current.parentElement.scrollTop = 0;
+    };
+    reader.readAsText(blob);
+  };
 
 
   const handleFile = async (f: File) => {

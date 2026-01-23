@@ -36,19 +36,13 @@ export async function getUserProfile(): Promise<UserProfile | null> {
 
 export async function signInWithGithub() {
     return await supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-            redirectTo: window.location.origin
-        }
+        provider: 'github'
     });
 }
 
 export async function signInWithGoogle() {
     return await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-            redirectTo: window.location.origin
-        }
+        provider: 'google'
     });
 }
 
