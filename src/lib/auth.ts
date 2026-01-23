@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { authLog } from './auth-debug';
+import type { User } from '@supabase/supabase-js';
 
 export interface UserProfile {
     id: string;
@@ -7,23 +8,33 @@ export interface UserProfile {
     subscription_tier: 'free' | 'pro';
 }
 
-export async function getUserProfile(): Promise<UserProfile | null> {
-    authLog('getUserProfile called');
+/**
+ * Fetches the user profile from the database.
+ * @param providedUser Optional user object to avoid redundant supabase.auth calls.
+ */
+export async function getUserProfile(providedUser?: User | null): Promise<UserProfile | null> {
+    authLog('getUserProfile called', providedUser ? `(user provided: ${providedUser.email})` : '(no user provided)');
 
     try {
-        // First try to get the current user session
-        let { data: { user }, error: userError } = await supabase.auth.getUser();
+        let user = providedUser;
 
-        // If getUser fails (not due to abort), try getSession as a backup
-        if (!user || (userError && userError.name !== 'AbortError')) {
-            if (userError) authLog('auth.getUser() error', userError);
-            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-            user = session?.user ?? null;
-            if (sessionError) authLog('auth.getSession() error', sessionError);
+        // If no user provided, try to fetch it
+        if (!user) {
+            const { data: { user: fetchedUser }, error: userError } = await supabase.auth.getUser();
+            user = fetchedUser;
+
+            if (!user || userError) {
+                if (userError && userError.name !== 'AbortError') {
+                    authLog('auth.getUser() error', userError);
+                    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                    user = session?.user ?? null;
+                    if (sessionError) authLog('auth.getSession() error', sessionError);
+                }
+            }
         }
 
         if (!user) {
-            authLog('No valid user found in Supabase auth');
+            authLog('No valid user found in session');
             return null;
         }
 
@@ -65,7 +76,6 @@ export async function getUserProfile(): Promise<UserProfile | null> {
 
         if (insertError) {
             authLog('Error creating profile in database', insertError);
-            // Return fallback profile even if insert fails, so the user stays logged in
             return {
                 id: user.id,
                 email: user.email || '',
@@ -77,8 +87,11 @@ export async function getUserProfile(): Promise<UserProfile | null> {
         return newProfile as UserProfile;
     } catch (err: any) {
         if (err.name === 'AbortError' || err.message?.includes('aborted')) {
-            authLog('getUserProfile aborted - throwing to let caller handle serialization');
-            throw err;
+            authLog('getUserProfile aborted silently');
+            // We throw a custom shaped error that the UI can recognize as "don't logout"
+            const abort = new Error('Auth fetch aborted');
+            abort.name = 'AbortError';
+            throw abort;
         }
         authLog('Unexpected error in getUserProfile', err);
         return null;

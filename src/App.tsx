@@ -95,69 +95,75 @@ export default function App() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
+  // We use references for logic-only flags to avoid stale closure issues
+  const userRef = useRef<UserProfile | null>(null);
+  const fetchingRef = useRef<string | null>(null);
+
   // Check auth on mount
   useEffect(() => {
     let isMounted = true;
-    let isFetching = false;
-    authLog('App mounted: initializing auth...');
+    authLog('App mounted: initializing auth listener...');
 
     // Failsafe timeout: ensure loading screen disappears after 5 seconds max
     const failsafe = setTimeout(() => {
       if (isMounted && isAuthLoading) {
-        authLog('Failsafe triggered: forcing isAuthLoading to false after 5s');
+        authLog('Failsafe triggered: forcing isAuthLoading to false');
         setIsAuthLoading(false);
       }
     }, 5000);
 
-    const fetchProfile = async (reason: string) => {
-      // If we're already fetching, we'll track it
-      if (isFetching) {
-        authLog(`Note: Request from ${reason} overlaps with existing fetch.`);
+    const syncUser = async (reason: string, supabaseUser?: any) => {
+      // Avoid redundant fetches for the same user if we already HAVE the profile
+      if (userRef.current && supabaseUser && userRef.current.id === supabaseUser.id) {
+        authLog(`Ignoring redundant fetch for ${reason} - profile already active.`);
+        return;
       }
 
-      isFetching = true;
+      fetchingRef.current = reason;
       try {
-        const profile = await getUserProfile();
-        if (isMounted) {
-          authLog(`Profile fetch complete (${reason})`, profile);
+        const profile = await getUserProfile(supabaseUser);
+        if (isMounted && fetchingRef.current === reason) {
+          authLog(`Sync successful (${reason})`, profile);
+          userRef.current = profile;
           setUser(profile);
           setIsAuthLoading(false);
         }
       } catch (error: any) {
         const isAbort = error.name === 'AbortError' || error.message?.includes('aborted');
-
         if (isAbort) {
-          authLog(`Profile fetch aborted (${reason}) - clearing loading state regardless`);
+          authLog(`Sync aborted silently (${reason}).`);
         } else {
-          authLog(`Profile fetch error (${reason})`, error);
-        }
-
-        if (isMounted) {
-          // Even on abort, we MUST clear loading state so the app isn't stuck
-          if (!user) setUser(null);
-          setIsAuthLoading(false);
+          authLog(`Sync error (${reason})`, error);
+          if (isMounted && fetchingRef.current === reason) {
+            userRef.current = null;
+            setUser(null);
+            setIsAuthLoading(false);
+          }
         }
       } finally {
-        isFetching = false;
+        if (fetchingRef.current === reason) fetchingRef.current = null;
       }
     };
 
-    // Initial check
-    fetchProfile('initial_mount');
+    // Initialize: First check current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!isMounted) return;
+      authLog('Initial session check', session?.user?.email);
+      syncUser('initial_session', session?.user);
+    });
 
     // Listen for auth state changes
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
       authLog(`Auth state changed event: ${event}`, session?.user?.email);
 
       if (['SIGNED_IN', 'TOKEN_REFRESHED', 'USER_UPDATED'].includes(event)) {
-        fetchProfile(`auth_event_${event}`);
+        syncUser(`auth_event_${event}`, session?.user);
       } else if (event === 'SIGNED_OUT') {
         if (isMounted) {
+          userRef.current = null;
           setUser(null);
           setIsAuthLoading(false);
         }
-      } else if (event === 'INITIAL_SESSION' && !user) {
-        fetchProfile('initial_session');
       }
     });
 
