@@ -64,11 +64,18 @@ export default function LandingPage() {
             {/* --- NAVBAR --- */}
             <nav className="fixed top-0 w-full z-50 glass-card border-b-0 border-b-white/5">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#00f3ff] to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.3)]">
-                            <img src="/LV.png" alt="Log Voyager" className="w-6 h-6" />
+                    <div className="flex items-center gap-3 group cursor-pointer">
+                        <div className="relative">
+                            <div className="absolute inset-0 bg-[#00f3ff] blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                            <img 
+                                src="/LV.png" 
+                                alt="Log Voyager" 
+                                className="w-10 h-10 object-contain relative z-10 brightness-125 filter drop-shadow-[0_0_8px_rgba(0,243,255,0.5)] transition-transform duration-500 group-hover:scale-110" 
+                            />
                         </div>
-                        <span className="font-bold text-xl text-white tracking-wider">LOG VOYAGER</span>
+                        <span className="font-bold text-xl text-white tracking-wider group-hover:neon-text-blue transition-all duration-300">
+                            LOG VOYAGER
+                        </span>
                     </div>
 
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium">
