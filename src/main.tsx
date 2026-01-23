@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.tsx'
 import LandingPage from './LandingPage.tsx'
 import SharedViewer from './SharedViewer.tsx'
+import HowItWorks from './HowItWorks.tsx'
 
 // Sprawdzamy, czy włączony jest tryb Landing Page (tylko na produkcji/SaaS)
 const showLanding = import.meta.env.VITE_SHOW_LANDING === 'true';
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')!).render(
         {showLanding ? (
           <>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/app" element={<App />} />
             <Route path="/s/:id" element={<SharedViewer />} />
           </>
