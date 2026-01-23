@@ -31,7 +31,7 @@ export default function HowItWorks() {
     };
 
     return (
-        <div className="min-h-screen text-slate-300 font-sans tech-bg selection:bg-[#00f3ff] selection:text-black overflow-x-hidden">
+        <div className="min-h-screen text-slate-300 font-sans bg-[#050505] tech-bg selection:bg-[#00f3ff] selection:text-black overflow-x-hidden">
             <style>{styles}</style>
 
             {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
@@ -43,7 +43,7 @@ export default function HowItWorks() {
                         <div className="relative">
                             <div className="absolute inset-0 bg-[#00f3ff] blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
                             <img
-                                src="/LV.png"
+                                src="/lv_new.png"
                                 alt="Log Voyager"
                                 className="w-10 h-10 object-contain relative z-10 brightness-125 filter drop-shadow-[0_0_8px_rgba(0,243,255,0.5)] transition-transform duration-500 group-hover:scale-110"
                             />
@@ -225,7 +225,7 @@ export default function HowItWorks() {
             <footer className="border-t border-white/10 bg-[#020202] py-12">
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-2">
-                        <img src="/LV.png" alt="Logo" className="w-6 h-6 rounded opacity-80" />
+                        <img src="/lv_new.png" alt="Logo" className="w-6 h-6 rounded opacity-80" />
                         <span className="font-bold text-white tracking-wider">LOG VOYAGER</span>
                     </div>
                     <div className="text-slate-500 text-sm">

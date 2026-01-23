@@ -310,7 +310,7 @@ export default function App() {
             <div className="flex items-center gap-3 group cursor-pointer">
               <div className="relative">
                 <div className="absolute inset-0 bg-[#00f3ff] blur-lg opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-                <img src="/LV.png" alt="LV" className="w-8 h-8 object-contain relative z-10 brightness-125 filter drop-shadow-[0_0_8px_rgba(0,243,255,0.5)] transition-transform duration-500 group-hover:scale-110" />
+                <img src="/lv_new.png" alt="LV" className="w-8 h-8 object-contain relative z-10 brightness-125 filter drop-shadow-[0_0_8px_rgba(0,243,255,0.5)] transition-transform duration-500 group-hover:scale-110" />
               </div>
               <div>
                 <h1 className="text-sm font-bold text-white tracking-wider group-hover:text-[#00f3ff] transition-colors duration-300 neon-text">LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1 rounded ml-1">Log Files Analyzer</span></h1>
