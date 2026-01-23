@@ -122,15 +122,6 @@ export async function signInWithGithub() {
     });
 }
 
-export async function signInWithGoogle() {
-    return await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-            redirectTo: getRedirectURL()
-        }
-    });
-}
-
 export async function signOut() {
     return await supabase.auth.signOut();
 }

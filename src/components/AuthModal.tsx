@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { X, Mail, Github, Chrome, Loader2, ArrowRight } from 'lucide-react';
-import { signInWithGithub, signInWithGoogle, signInWithMagicLink } from '../lib/auth';
+import { X, Mail, Github, Loader2, ArrowRight } from 'lucide-react';
+import { signInWithGithub, signInWithMagicLink } from '../lib/auth';
 
 interface AuthModalProps {
     onClose: () => void;
@@ -29,12 +29,11 @@ export function AuthModal({ onClose }: AuthModalProps) {
         }
     };
 
-    const handleSocialLogin = async (provider: 'github' | 'google') => {
+    const handleSocialLogin = async (provider: 'github') => {
         setIsLoading(true);
         setError(null);
         try {
             if (provider === 'github') await signInWithGithub();
-            if (provider === 'google') await signInWithGoogle();
         } catch (err: any) {
             console.error(err);
             setError(err.message || 'Login failed');
@@ -76,14 +75,6 @@ export function AuthModal({ onClose }: AuthModalProps) {
                             >
                                 <Github size={18} />
                                 Continue with GitHub
-                            </button>
-                            <button
-                                onClick={() => handleSocialLogin('google')}
-                                disabled={isLoading}
-                                className="w-full py-2.5 rounded-lg bg-white text-black hover:bg-slate-100 font-medium flex items-center justify-center gap-3 transition-all disabled:opacity-50"
-                            >
-                                <Chrome size={18} className="text-blue-500" />
-                                Continue with Google
                             </button>
                         </div>
 
