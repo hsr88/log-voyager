@@ -124,7 +124,7 @@ export default function LandingPage() {
                             <FileText size={20} /> Open Local File
                         </a>
                         <a href="#pricing" className="btn-secondary px-8 py-4 rounded-lg text-lg font-bold flex items-center gap-2 w-full md:w-auto justify-center hover:bg-white/10">
-                            Start Free Trial <ArrowRight size={20} />
+                            Try Pro  <ArrowRight size={20} />
                         </a>
                     </div>
 
@@ -224,7 +224,7 @@ export default function LandingPage() {
                                 <li className="flex items-center gap-3 text-slate-300"><Check size={16} className="text-[#00f3ff]" /> Open Unlimited File Size</li>
                                 <li className="flex items-center gap-3 text-slate-300"><Check size={16} className="text-[#00f3ff]" /> Local Processing (Privacy)</li>
                                 <li className="flex items-center gap-3 text-slate-300"><Check size={16} className="text-[#00f3ff]" /> JSON Prettifier & Regex</li>
-                                <li className="flex items-center gap-3 text-slate-300"><Check size={16} className="text-[#00f3ff]" /> Android App (Basic)</li>
+                                <li className="flex items-center gap-3 text-slate-300"><Check size={16} className="text-[#00f3ff]" /> GZIP file support</li>
                             </ul>
                             <a href="/app" className="btn-secondary w-full py-3 rounded-lg text-center font-bold">Use Now</a>
                         </div>
@@ -246,7 +246,7 @@ export default function LandingPage() {
                                 <li className="flex items-center gap-3 text-white"><Check size={16} className="text-[#ff00ff]" /> Team Workspace (Coming Soon)</li>
                                 <li className="flex items-center gap-3 text-white"><Check size={16} className="text-[#ff00ff]" /> Priority Support</li>
                             </ul>
-                            <button className="btn-primary w-full py-3 rounded-lg text-center font-bold">Start 14-Day Free Trial</button>
+                            <button className="btn-primary w-full py-3 rounded-lg text-center font-bold">Buy Pro</button>
                         </div>
                     </div>
                 </div>
@@ -261,7 +261,7 @@ export default function LandingPage() {
                     </div>
 
                     <div className="text-slate-500 text-sm">
-                        &copy; 2025 logvoyager.cc • Built by <a href="https://github.com/hsr88" className="text-slate-400 hover:text-white transition-colors">hsr88</a>
+                        &copy; 2026 logvoyager.cc • Built by <a href="https://github.com/hsr88" className="text-slate-400 hover:text-white transition-colors">hsr88</a>
                     </div>
 
                     <div className="flex gap-4">
