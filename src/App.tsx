@@ -1,24 +1,22 @@
-
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   FileText, Search, UploadCloud, Zap, Bug, FileJson,
   Share2,
-  X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, History, Clipboard, Box, Settings, Download, ChevronDown, ChevronUp, CaseSensitive
+  X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, History, Clipboard, Box, Settings, Download, ChevronDown, ChevronUp, CaseSensitive,
+  LogOut, User
 } from 'lucide-react';
 
 import LogLine from './components/LogLine';
 import Minimap from './components/Minimap';
 import { InfoModal, SettingsModal, PasteModal } from './components/Modals';
 import { ShareModal } from './components/ShareModal';
+import { AuthModal } from './components/AuthModal';
 import { formatBytes } from './utils/helpers';
 import type { BookmarkData, HistoryItem } from './types';
 import { isGzip, decompressGzip } from './utils/decompression';
-import { getUserProfile, signInWithGithub, signOut } from './lib/auth';
+import { getUserProfile, signOut } from './lib/auth';
 import type { UserProfile } from './lib/auth';
 import { supabase } from './lib/supabase';
-import { LogOut, Github } from 'lucide-react';
-
-// ... existing imports ... 
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
 
@@ -60,7 +58,6 @@ const styles = `
   .animate-flash { animation: highlight-fade 1.5s ease-out; }
 `;
 
-
 // --- GŁÓWNA APLIKACJA ---
 export default function App() {
   const [file, setFile] = useState<File | null>(null);
@@ -80,6 +77,7 @@ export default function App() {
 
   const [showPasteModal, setShowPasteModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
 
   // --- Nowe Stany (Quality of Life & Smart Search) ---
@@ -284,10 +282,10 @@ export default function App() {
                   </div>
                 ) : (
                   <button
-                    onClick={signInWithGithub}
+                    onClick={() => setShowAuthModal(true)}
                     className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded text-xs text-white transition-all"
                   >
-                    <Github size={14} />
+                    <User size={14} />
                     <span>Login</span>
                   </button>
                 )}
@@ -431,6 +429,7 @@ export default function App() {
       {showInfoModal && <InfoModal onClose={() => setShowInfoModal(false)} />}
       {showPasteModal && <PasteModal onClose={() => setShowPasteModal(false)} onPaste={processPastedText} />}
       {showShareModal && file && <ShareModal onClose={() => setShowShareModal(false)} lines={lines} filename={file.name} bookmarks={bookmarks} offset={currentOffset} subscriptionTier={user?.subscription_tier} />}
+      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
       {showSettings && <SettingsModal onClose={() => setShowSettings(false)} settings={settings} onUpdate={setSettings} />}
     </>
   );
