@@ -96,10 +96,17 @@ export default function App() {
 
   // Check auth on mount
   useEffect(() => {
-    getUserProfile().then(profile => {
-      setUser(profile);
-      setIsAuthLoading(false);
-    });
+    getUserProfile()
+      .then(profile => {
+        setUser(profile);
+      })
+      .catch(error => {
+        console.error('Auth initialization error:', error);
+        setUser(null);
+      })
+      .finally(() => {
+        setIsAuthLoading(false);
+      });
 
     // Listen for auth state changes
     const { data: authListener } = supabase.auth.onAuthStateChange(async (event, _session) => {
