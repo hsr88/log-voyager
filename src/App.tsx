@@ -11,6 +11,7 @@ import Minimap from './components/Minimap';
 import { InfoModal, SettingsModal, PasteModal } from './components/Modals';
 import { ShareModal } from './components/ShareModal';
 import { AuthModal } from './components/AuthModal';
+import { UpgradeModal } from './components/UpgradeModal';
 import { formatBytes } from './utils/helpers';
 import type { BookmarkData, HistoryItem } from './types';
 import { isGzip, decompressGzip } from './utils/decompression';
@@ -79,6 +80,7 @@ export default function App() {
   const [showPasteModal, setShowPasteModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
 
   // --- Nowe Stany (Quality of Life & Smart Search) ---
@@ -353,7 +355,13 @@ export default function App() {
             {/* SAAS FEATURE: SHARE INCIDENT */}
             {file && import.meta.env.VITE_SHOW_LANDING === 'true' && (
               <button
-                onClick={() => setShowShareModal(true)}
+                onClick={() => {
+                  if (user?.subscription_tier !== 'pro') {
+                    setShowUpgradeModal(true);
+                  } else {
+                    setShowShareModal(true);
+                  }
+                }}
                 className="btn-primary px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 text-black bg-[#00f3ff] hover:bg-[#00c2cc] shadow-[0_0_15px_rgba(0,243,255,0.3)] transition-all"
                 title="Share Incident Link"
               >
@@ -489,6 +497,7 @@ export default function App() {
       {showPasteModal && <PasteModal onClose={() => setShowPasteModal(false)} onPaste={processPastedText} />}
       {showShareModal && file && <ShareModal onClose={() => setShowShareModal(false)} lines={lines} filename={file.name} bookmarks={bookmarks} offset={currentOffset} subscriptionTier={user?.subscription_tier} />}
       {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+      {showUpgradeModal && <UpgradeModal onClose={() => setShowUpgradeModal(false)} userEmail={user?.email} userId={user?.id} />}
       {showSettings && <SettingsModal onClose={() => setShowSettings(false)} settings={settings} onUpdate={setSettings} />}
     </>
   );

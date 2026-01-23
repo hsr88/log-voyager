@@ -1,56 +1,56 @@
+import { useState } from 'react';
 import {
     Search, Shield, Share2, Smartphone, Github, ArrowRight,
     Database, Cpu, Layers, Globe
 } from 'lucide-react';
 import { signInWithGithub } from './lib/auth';
 
-const styles = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
-  
-  .font-sans { font-family: 'Inter', sans-serif; }
-  .font-mono { font-family: 'JetBrains Mono', monospace; }
-  
-  .tech-bg {
-    background-color: #050505;
-    background-image: 
-      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
-  
-  .glass-card {
-    background: rgba(20, 20, 25, 0.7);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
+// ... imports ...
+import { AuthModal } from './components/AuthModal';
 
-  .neon-text-blue { text-shadow: 0 0 15px rgba(0, 243, 255, 0.5); color: #00f3ff; }
-  .btn-primary {
-    background: #00f3ff;
-    color: #000;
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
-    transition: all 0.3s ease;
-  }
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 30px rgba(0, 243, 255, 0.6);
-  }
+const styles = `
+// ... styles ...
 `;
 
 export default function HowItWorks() {
+    const [showAuthModal, setShowAuthModal] = useState(false);
+
+    const handleUpgrade = async () => {
+        const { data: { session } } = await import('./lib/supabase').then(m => m.supabase.auth.getSession());
+
+        if (!session?.user) {
+            setShowAuthModal(true);
+            return;
+        }
+
+        const checkoutUrl = "https://hsr.lemonsqueezy.com/checkout/buy/62ffccbc-fe92-4e0b-a870-b53422ef162a";
+        const urlToCheck = new URL(checkoutUrl);
+        urlToCheck.searchParams.append('checkout[custom][user_id]', session.user.id);
+        urlToCheck.searchParams.append('checkout[email]', session.user.email || '');
+        window.open(urlToCheck.toString(), '_blank');
+    };
+
     return (
         <div className="min-h-screen text-slate-300 font-sans tech-bg selection:bg-[#00f3ff] selection:text-black overflow-x-hidden">
             <style>{styles}</style>
 
+            {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+
             {/* --- NAVBAR --- */}
             <nav className="fixed top-0 w-full z-50 glass-card border-b-0 border-b-white/5">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <a href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                            {/* Logo from public/LV.png */}
-                            <img src="/LV.png" alt="Log Voyager Logo" className="w-10 h-10 rounded-lg shadow-[0_0_15px_rgba(0,243,255,0.3)]" />
-                            <span className="font-bold text-xl text-white tracking-wider">LOG VOYAGER</span>
-                        </a>
+                    <div className="flex items-center gap-3 group cursor-pointer">
+                        <div className="relative">
+                            <div className="absolute inset-0 bg-[#00f3ff] blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                            <img
+                                src="/LV.png"
+                                alt="Log Voyager"
+                                className="w-10 h-10 object-contain relative z-10 brightness-125 filter drop-shadow-[0_0_8px_rgba(0,243,255,0.5)] transition-transform duration-500 group-hover:scale-110"
+                            />
+                        </div>
+                        <span className="font-bold text-xl text-white tracking-wider group-hover:neon-text-blue transition-all duration-300">
+                            LOG VOYAGER
+                        </span>
                     </div>
 
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium">
@@ -188,9 +188,9 @@ export default function HowItWorks() {
                                 However, for teams and power users, the Pro plan unlocks collaboration features
                                 that save hours of back-and-forth communication.
                             </p>
-                            <a href="/app" className="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold">
+                            <button onClick={handleUpgrade} className="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold">
                                 Start Pro  <ArrowRight size={18} />
-                            </a>
+                            </button>
                         </div>
 
                         <div className="flex-1 space-y-4">

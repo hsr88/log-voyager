@@ -1,8 +1,10 @@
+import { useState, useEffect } from 'react';
 import {
     FileText, Zap, Shield, Check, Github, ArrowRight,
     Terminal, Share2, Bug
 } from 'lucide-react';
 import { signInWithGithub } from './lib/auth';
+import { AuthModal } from './components/AuthModal';
 
 /**
  * LOG VOYAGER - SAAS LANDING PAGE
@@ -57,9 +59,40 @@ const styles = `
 `;
 
 export default function LandingPage() {
+    // State for AuthModal
+    const [showAuthModal, setShowAuthModal] = useState(false);
+
+
+    // Watch for auth state change - if user logs in after clicking upgrade, continue flow
+    useEffect(() => {
+        // We'll need a way to check if user is logged in. 
+        // Ideally LandingPage should receive user state or we verify via supabase
+        // For now, let's assume if AuthModal closes and we have pendingUpgrade, we try again?
+        // Or simpler: User clicks login, logs in, modal closes. They click upgrade again.
+    }, []);
+
+    const handleUpgrade = async () => {
+        const { data: { session } } = await import('./lib/supabase').then(m => m.supabase.auth.getSession());
+
+        if (!session?.user) {
+            setShowAuthModal(true);
+            return;
+        }
+
+        const checkoutUrl = "https://hsr.lemonsqueezy.com/checkout/buy/62ffccbc-fe92-4e0b-a870-b53422ef162a";
+        const urlToCheck = new URL(checkoutUrl);
+        urlToCheck.searchParams.append('checkout[custom][user_id]', session.user.id);
+        urlToCheck.searchParams.append('checkout[email]', session.user.email || '');
+        window.open(urlToCheck.toString(), '_blank');
+    };
+
     return (
         <div className="min-h-screen text-slate-300 font-sans tech-bg selection:bg-[#00f3ff] selection:text-black overflow-x-hidden">
             <style>{styles}</style>
+
+            {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+
+            {/* ... rest of JSX ... */}
 
             {/* --- NAVBAR --- */}
             <nav className="fixed top-0 w-full z-50 glass-card border-b-0 border-b-white/5">
@@ -67,10 +100,10 @@ export default function LandingPage() {
                     <div className="flex items-center gap-3 group cursor-pointer">
                         <div className="relative">
                             <div className="absolute inset-0 bg-[#00f3ff] blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-                            <img 
-                                src="/LV.png" 
-                                alt="Log Voyager" 
-                                className="w-10 h-10 object-contain relative z-10 brightness-125 filter drop-shadow-[0_0_8px_rgba(0,243,255,0.5)] transition-transform duration-500 group-hover:scale-110" 
+                            <img
+                                src="/LV.png"
+                                alt="Log Voyager"
+                                className="w-10 h-10 object-contain relative z-10 brightness-125 filter drop-shadow-[0_0_8px_rgba(0,243,255,0.5)] transition-transform duration-500 group-hover:scale-110"
                             />
                         </div>
                         <span className="font-bold text-xl text-white tracking-wider group-hover:neon-text-blue transition-all duration-300">
@@ -128,9 +161,9 @@ export default function LandingPage() {
                         <a href="/app" className="btn-primary px-8 py-4 rounded-lg text-lg font-bold flex items-center gap-2 w-full md:w-auto justify-center">
                             <FileText size={20} /> Open Local File
                         </a>
-                        <a href="#pricing" className="btn-secondary px-8 py-4 rounded-lg text-lg font-bold flex items-center gap-2 w-full md:w-auto justify-center hover:bg-white/10">
+                        <button onClick={handleUpgrade} className="btn-secondary px-8 py-4 rounded-lg text-lg font-bold flex items-center gap-2 w-full md:w-auto justify-center hover:bg-white/10">
                             Try Pro  <ArrowRight size={20} />
-                        </a>
+                        </button>
                     </div>
 
                     <div className="mt-12 text-sm text-slate-500 font-mono">
@@ -251,7 +284,7 @@ export default function LandingPage() {
                                 <li className="flex items-center gap-3 text-white"><Check size={16} className="text-[#ff00ff]" /> Team Workspace (Coming Soon)</li>
                                 <li className="flex items-center gap-3 text-white"><Check size={16} className="text-[#ff00ff]" /> Priority Support</li>
                             </ul>
-                            <button className="btn-primary w-full py-3 rounded-lg text-center font-bold">Buy Pro</button>
+                            <button onClick={handleUpgrade} className="btn-primary w-full py-3 rounded-lg text-center font-bold">Buy Pro</button>
                         </div>
                     </div>
                 </div>
