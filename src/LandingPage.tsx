@@ -143,7 +143,7 @@ export default function LandingPage() {
                             <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
                             <div className="ml-4 text-[10px] text-slate-500 font-mono">logvoyager.cc — production_error.log (8.5 GB)</div>
                         </div>
-                        <img src="https://via.placeholder.com/1200x600.png?text=App+Screenshot+Here" alt="App Interface" className="w-full opacity-90" />
+                        <img src="/scrree.png" alt="App Interface" className="w-full opacity-90" />
 
                         {/* Fake UI Overlay for effect */}
                         <div className="absolute top-1/4 left-1/4 bg-[#050505]/90 border border-[#ff00ff]/50 p-4 rounded-lg shadow-[0_0_30px_rgba(255,0,255,0.2)] backdrop-blur-md">
