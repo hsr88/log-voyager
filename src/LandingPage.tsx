@@ -4,6 +4,7 @@ import {
     FileText, Zap, Shield, Users, Check, Github, ArrowRight,
     Terminal, Activity, Lock, Share2, Box, Bug
 } from 'lucide-react';
+import { signInWithGithub } from './lib/auth';
 
 /**
  * LOG VOYAGER - SAAS LANDING PAGE
@@ -82,7 +83,12 @@ export default function LandingPage() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <a href="/app" className="hidden md:block text-sm font-bold text-white hover:text-[#00f3ff] transition-colors">Log In</a>
+                        <button
+                            onClick={() => signInWithGithub()}
+                            className="hidden md:flex items-center gap-2 text-sm font-bold text-white hover:text-[#00f3ff] transition-colors"
+                        >
+                            <Github size={16} /> Log In
+                        </button>
                         <a href="/app" className="btn-primary px-6 py-2.5 rounded-full text-sm font-bold tracking-wide">
                             OPEN APP
                         </a>
