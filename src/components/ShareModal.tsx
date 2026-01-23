@@ -7,18 +7,44 @@ interface ShareModalProps {
     onClose: () => void;
     lines: string[];
     filename: string;
-    selection?: { start: number; end: number }; // Future use for range selection
+    bookmarks?: Map<number, any>;
+    offset?: number;
 }
 
-export function ShareModal({ onClose, lines, filename }: ShareModalProps) {
+export function ShareModal({ onClose, lines, filename, bookmarks, offset }: ShareModalProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [generatedLink, setGeneratedLink] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
 
-    // Na razie bierzemy max 1000 linii dla bezpieczeństwa
-    const contentToShare = lines.slice(0, 1000).join('\n');
-    const lineCount = lines.length > 1000 ? 1000 : lines.length;
+    // --- FILTER LOGIC ---
+    let contentToShare = "";
+    let lineCount = 0;
+
+    // 1. If bookmarks exist, share ONLY bookmarked lines (sorted)
+    if (bookmarks && bookmarks.size > 0 && offset !== undefined) {
+        // Filter lines from the current chunk that are bookmarked
+        // Global Line Index = offset + localIndex
+        const bookmarkedLines = lines
+            .map((line, index) => ({ line, index: offset + index }))
+            .filter(item => bookmarks.has(item.index));
+
+        if (bookmarkedLines.length > 0) {
+            contentToShare = bookmarkedLines.map(item => item.line).join('\n');
+            lineCount = bookmarkedLines.length;
+        } else {
+            // Fallback: Bookmarks might be in another chunk, not visible here.
+            // For MVP, we only support sharing visible bookmarks or fallback to full view.
+            // Let's fallback to full view but maybe show a warning? 
+            // Actually, let's just stick to "Current View" if no visible bookmarks found.
+            contentToShare = lines.slice(0, 1000).join('\n');
+            lineCount = lines.length > 1000 ? 1000 : lines.length;
+        }
+    } else {
+        // 2. Default: Share current view (max 1000 lines)
+        contentToShare = lines.slice(0, 1000).join('\n');
+        lineCount = lines.length > 1000 ? 1000 : lines.length;
+    }
 
     const handleShare = async () => {
         setIsLoading(true);

@@ -344,7 +344,7 @@ export default function App() {
 
       {showInfoModal && <InfoModal onClose={() => setShowInfoModal(false)} />}
       {showPasteModal && <PasteModal onClose={() => setShowPasteModal(false)} onPaste={processPastedText} />}
-      {showShareModal && file && <ShareModal onClose={() => setShowShareModal(false)} lines={lines} filename={file.name} />}
+      {showShareModal && file && <ShareModal onClose={() => setShowShareModal(false)} lines={lines} filename={file.name} bookmarks={bookmarks} offset={currentOffset} />}
       {showSettings && <SettingsModal onClose={() => setShowSettings(false)} settings={settings} onUpdate={setSettings} />}
     </>
   );
