@@ -1,8 +1,6 @@
-// @ts-nocheck
-import React from 'react';
 import {
-    FileText, Zap, Shield, Users, Check, Github, ArrowRight,
-    Terminal, Activity, Lock, Share2, Box, Bug
+    FileText, Zap, Shield, Check, Github, ArrowRight,
+    Terminal, Share2, Bug
 } from 'lucide-react';
 import { signInWithGithub } from './lib/auth';
 
@@ -68,7 +66,7 @@ export default function LandingPage() {
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#00f3ff] to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.3)]">
-                            <Box size={24} className="text-white" />
+                            <img src="/LV.png" alt="Log Voyager" className="w-6 h-6" />
                         </div>
                         <span className="font-bold text-xl text-white tracking-wider">LOG VOYAGER</span>
                     </div>
@@ -256,7 +254,7 @@ export default function LandingPage() {
             <footer className="border-t border-white/10 bg-[#020202] py-12">
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-2">
-                        <Box size={20} className="text-[#00f3ff]" />
+                        <img src="/LV.png" alt="Logo" className="w-5 h-5 opacity-80" />
                         <span className="font-bold text-white tracking-wider">LOG VOYAGER</span>
                     </div>
 

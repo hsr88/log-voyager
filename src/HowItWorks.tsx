@@ -189,7 +189,7 @@ export default function HowItWorks() {
                                 that save hours of back-and-forth communication.
                             </p>
                             <a href="/app" className="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold">
-                                Start Pro Trial <ArrowRight size={18} />
+                                Start Pro  <ArrowRight size={18} />
                             </a>
                         </div>
 
