@@ -265,8 +265,8 @@ export default function LandingPage() {
                     </div>
 
                     <div className="flex gap-4">
-                        <a href="#" className="text-slate-500 hover:text-[#00f3ff] transition-colors"><Github size={20} /></a>
-                        <a href="#" className="text-slate-500 hover:text-[#00f3ff] transition-colors"><Terminal size={20} /></a>
+                        <a href="https://github.com/hsr88/log-voyager" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-[#00f3ff] transition-colors"><Github size={20} /></a>
+                        <a href="https://hsr.in.net/" target="_blank" rel="noopener noreferrer " className="text-slate-500 hover:text-[#00f3ff] transition-colors"><Terminal size={20} /></a>
                     </div>
                 </div>
             </footer>
