@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getSnippet } from './lib/supabase';
 import type { LogSnippet } from './lib/supabase';
-import { Loader2, AlertTriangle, Box } from 'lucide-react';
+import { Loader2, AlertTriangle } from 'lucide-react';
 import LogLine from './components/LogLine';
 import Minimap from './components/Minimap';
 
@@ -79,7 +79,7 @@ export default function SharedViewer() {
             <div className="h-14 border-b border-white/10 bg-[#0d1117] flex items-center justify-between px-4 shrink-0 z-20">
                 <div className="flex items-center gap-3">
                     <Link to="/" className="w-8 h-8 rounded bg-gradient-to-br from-[#00f3ff] to-blue-600 flex items-center justify-center hover:opacity-80 transition-opacity">
-                        <Box size={18} className="text-white" />
+                        <img src="/LV.png" alt="Log Voyager" className="w-5 h-5" />
                     </Link>
                     <div>
                         <div className="flex items-center gap-2">

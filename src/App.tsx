@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   FileText, Search, UploadCloud, Zap, Bug, FileJson,
   Share2,
-  X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, History, Clipboard, Box, Settings, Download, ChevronDown, ChevronUp, CaseSensitive,
+  X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, History, Clipboard, Settings, Download, ChevronDown, ChevronUp, CaseSensitive,
   LogOut, User
 } from 'lucide-react';
 
@@ -306,7 +306,7 @@ export default function App() {
           <div className="flex items-center gap-3">
             <button onClick={() => setShowInfoModal(true)} className="p-1.5 hover:bg-white/10 rounded-lg text-slate-400 hover:text-white transition-colors"><Menu size={20} /></button>
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded bg-gradient-to-br from-[#00f3ff] to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.3)]"><Box size={18} className="text-white" /></div>
+              <div className="w-8 h-8 rounded bg-gradient-to-br from-[#00f3ff] to-blue-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,243,255,0.3)]"><img src="/LV.png" alt="LV" className="w-5 h-5" /></div>
               <div>
                 <h1 className="text-sm font-bold text-white tracking-wider neon-text">LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1 rounded ml-1">Log Files Analyzer</span></h1>
                 {file && <p className="text-[10px] text-[#00f3ff] font-mono">{file.name} ({formatBytes(fileSize)})</p>}
