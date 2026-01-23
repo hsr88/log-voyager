@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { X, Github, Loader2 } from 'lucide-react';
 import { signInWithGithub } from '../lib/auth';
 
