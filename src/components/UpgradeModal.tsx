@@ -10,7 +10,7 @@ export function UpgradeModal({ onClose, userEmail, userId }: UpgradeModalProps) 
 
     const handleUpgrade = () => {
         // Construct checkout URL with user_id in custom data
-        const checkoutUrl = "https://hsr.lemonsqueezy.com/checkout/buy/62ffccbc-fe92-4e0b-a870-b53422ef162a";
+        const checkoutUrl = "https://hsr.lemonsqueezy.com/checkout/buy/a23eb1ca-8e3f-4c1a-b301-3789aa360e76";
         const urlToCheck = new URL(checkoutUrl);
 
         // Pass user ID to LemonSqueezy custom data

@@ -23,7 +23,7 @@ export default function HowItWorks() {
             return;
         }
 
-        const checkoutUrl = "https://hsr.lemonsqueezy.com/checkout/buy/62ffccbc-fe92-4e0b-a870-b53422ef162a";
+        const checkoutUrl = "https://hsr.lemonsqueezy.com/checkout/buy/a23eb1ca-8e3f-4c1a-b301-3789aa360e76";
         const urlToCheck = new URL(checkoutUrl);
         urlToCheck.searchParams.append('checkout[custom][user_id]', session.user.id);
         urlToCheck.searchParams.append('checkout[email]', session.user.email || '');
