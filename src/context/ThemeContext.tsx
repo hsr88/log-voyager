@@ -24,16 +24,16 @@ const darkTheme: Theme = {
 
 const lightTheme: Theme = {
   name: 'light',
-  background: '#f8fafc',
-  foreground: '#1e293b',
-  accent: '#0284c7',
+  background: '#e2e8f0',  // Slate-200 - przyciemniony szary
+  foreground: '#334155',  // Slate-700 - mniej kontrastu
+  accent: '#0ea5e9',      // Sky-500 - łagodniejszy niebieski
   accentSecondary: '#db2777',
-  panel: 'rgba(255, 255, 255, 0.8)',
-  border: 'rgba(0, 0, 0, 0.1)',
+  panel: 'rgba(203, 213, 225, 0.7)',  // Slate-300 z przezroczystością
+  border: 'rgba(0, 0, 0, 0.08)',  // Subtelniejsze obramowania
   text: {
-    primary: '#0f172a',
-    secondary: '#475569',
-    muted: '#94a3b8',
+    primary: '#475569',   // Slate-600 - mniej agresywny
+    secondary: '#64748b', // Slate-500
+    muted: '#94a3b8',     // Slate-400
   },
   logLevels: {
     error: '#dc2626',
