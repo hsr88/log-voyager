@@ -1,24 +1,15 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   FileText, Search, UploadCloud, Zap, Bug, FileJson,
-  Share2,
-  X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, History, Clipboard, Settings, Download, ChevronDown, ChevronUp, CaseSensitive,
-  LogOut, User
+  X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, History, Clipboard, Settings, Download, ChevronDown, ChevronUp, CaseSensitive
 } from 'lucide-react';
 
 import LogLine from './components/LogLine';
 import Minimap from './components/Minimap';
 import { InfoModal, SettingsModal, PasteModal } from './components/Modals';
-import { ShareModal } from './components/ShareModal';
-import { AuthModal } from './components/AuthModal';
-import { UpgradeModal } from './components/UpgradeModal';
 import { formatBytes } from './utils/helpers';
 import type { BookmarkData, HistoryItem } from './types';
 import { isGzip, decompressGzip } from './utils/decompression';
-import { getUserProfile, signOut } from './lib/auth';
-import type { UserProfile } from './lib/auth';
-import { supabase, fetchRemoteBookmarks, saveRemoteBookmark, deleteRemoteBookmark } from './lib/supabase';
-import { authLog } from './lib/auth-debug';
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
 
@@ -78,10 +69,6 @@ export default function App() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
   const [showPasteModal, setShowPasteModal] = useState(false);
-  const [showShareModal, setShowShareModal] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-
 
   // --- Nowe Stany (Quality of Life & Smart Search) ---
   const [showSettings, setShowSettings] = useState(false);
@@ -93,88 +80,6 @@ export default function App() {
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const [isAuthLoading, setIsAuthLoading] = useState(true);
-
-  // We use references for logic-only flags to avoid stale closure issues
-  const userRef = useRef<UserProfile | null>(null);
-  const fetchingRef = useRef<string | null>(null);
-
-  // Check auth on mount
-  useEffect(() => {
-    let isMounted = true;
-    authLog('App mounted: initializing auth listener...');
-
-    // Failsafe timeout: ensure loading screen disappears after 5 seconds max
-    const failsafe = setTimeout(() => {
-      if (isMounted && isAuthLoading) {
-        authLog('Failsafe triggered: forcing isAuthLoading to false');
-        setIsAuthLoading(false);
-      }
-    }, 5000);
-
-    const syncUser = async (reason: string, supabaseUser?: any) => {
-      // Avoid redundant fetches for the same user if we already HAVE the profile
-      if (userRef.current && supabaseUser && userRef.current.id === supabaseUser.id) {
-        authLog(`Ignoring redundant fetch for ${reason} - profile already active.`);
-        return;
-      }
-
-      fetchingRef.current = reason;
-      try {
-        const profile = await getUserProfile(supabaseUser);
-        if (isMounted && fetchingRef.current === reason) {
-          authLog(`Sync successful (${reason})`, profile);
-          userRef.current = profile;
-          setUser(profile);
-          setIsAuthLoading(false);
-        }
-      } catch (error: any) {
-        const isAbort = error.name === 'AbortError' || error.message?.includes('aborted');
-        if (isAbort) {
-          authLog(`Sync aborted silently (${reason}).`);
-        } else {
-          authLog(`Sync error (${reason})`, error);
-          if (isMounted && fetchingRef.current === reason) {
-            userRef.current = null;
-            setUser(null);
-            setIsAuthLoading(false);
-          }
-        }
-      } finally {
-        if (fetchingRef.current === reason) fetchingRef.current = null;
-      }
-    };
-
-    // Initialize: First check current session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!isMounted) return;
-      authLog('Initial session check', session?.user?.email);
-      syncUser('initial_session', session?.user);
-    });
-
-    // Listen for auth state changes
-    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      authLog(`Auth state changed event: ${event}`, session?.user?.email);
-
-      if (['SIGNED_IN', 'TOKEN_REFRESHED', 'USER_UPDATED'].includes(event)) {
-        syncUser(`auth_event_${event}`, session?.user);
-      } else if (event === 'SIGNED_OUT') {
-        if (isMounted) {
-          userRef.current = null;
-          setUser(null);
-          setIsAuthLoading(false);
-        }
-      }
-    });
-
-    return () => {
-      isMounted = false;
-      clearTimeout(failsafe);
-      authListener.subscription.unsubscribe();
-    };
-  }, []);
 
   useEffect(() => { const saved = localStorage.getItem('log_history_v2'); if (saved) setHistory(JSON.parse(saved)); }, []);
   useEffect(() => { const saved = localStorage.getItem('search_history'); if (saved) setSearchHistory(JSON.parse(saved)); }, []);
@@ -240,49 +145,20 @@ export default function App() {
     }
 
     setTimeout(() => readChunk(0, f), 100);
-
-    // FETCH REMOTE BOOKMARKS (Pro)
-    if (userRef.current?.subscription_tier === 'pro') {
-      const signature = `${f.name}_${f.size}`;
-      fetchRemoteBookmarks(signature).then(remotes => {
-        if (remotes.length > 0) {
-          const map = new Map<number, BookmarkData>();
-          remotes.forEach(r => map.set(r.line_number, {
-            lineNum: r.line_number,
-            content: r.content,
-            chunkOffset: r.chunk_offset
-          }));
-          // Merge with any local bookmarks? No, replace or merge. Let's replace for now.
-          setBookmarks(map);
-          authLog(`Loaded ${remotes.length} remote bookmarks for ${f.name}`);
-        }
-      });
-    }
   };
 
   const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => { if (!file) return; const val = parseFloat(e.target.value); const newOffset = Math.floor((val / 100) * file.size); setPercentage(val); readChunk(newOffset, file); };
 
   const toggleBookmark = (lineNum: number, content: string) => {
     const newBookmarks = new Map(bookmarks);
-    let isAdd = false;
     if (newBookmarks.has(lineNum)) {
       newBookmarks.delete(lineNum);
     } else {
       newBookmarks.set(lineNum, { lineNum, content: content.length > 200 ? content.substring(0, 200) + '...' : content, chunkOffset: currentOffset });
-      isAdd = true;
     }
     setBookmarks(newBookmarks);
-
-    // Sync to Cloud (Pro)
-    if (user?.subscription_tier === 'pro' && file) {
-      const signature = `${file.name}_${file.size}`;
-      if (isAdd) {
-        saveRemoteBookmark(signature, lineNum, currentOffset, content.length > 200 ? content.substring(0, 200) + '...' : content);
-      } else {
-        deleteRemoteBookmark(signature, lineNum);
-      }
-    }
   };
+
   const jumpToBookmark = (bookmark: BookmarkData) => { if (bookmark.chunkOffset === currentOffset) { const element = document.getElementById(`line-${bookmark.lineNum}`); if (element) { element.scrollIntoView({ behavior: 'smooth', block: 'center' }); element.classList.add('animate-flash'); setTimeout(() => element.classList.remove('animate-flash'), 1500); } } else { readChunk(bookmark.chunkOffset); setPendingScrollLine(bookmark.lineNum); } setShowBookmarksList(false); };
 
   const handleExportView = () => {
@@ -352,62 +228,12 @@ export default function App() {
                 <img src="/lv_new.png" alt="LV" className="w-8 h-8 object-contain relative z-10 brightness-125 filter drop-shadow-[0_0_8px_rgba(0,243,255,0.5)] transition-transform duration-500 group-hover:scale-110" />
               </div>
               <div>
-                <h1 className="text-sm font-bold text-white tracking-wider group-hover:text-[#00f3ff] transition-colors duration-300 neon-text">LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1 rounded ml-1">Log Files Analyzer</span></h1>
+                <h1 className="text-sm font-bold text-white tracking-wider group-hover:text-[#00f3ff] transition-colors duration-300 neon-text">LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1 rounded ml-1">Open Source</span></h1>
                 {file && <p className="text-[10px] text-[#00f3ff] font-mono">{file.name} ({formatBytes(fileSize)})</p>}
               </div>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {/* AUTH UI */}
-            {import.meta.env.VITE_SHOW_LANDING === 'true' && (
-              <div className="mr-2 flex items-center">
-                {isAuthLoading ? (
-                  <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
-                ) : user ? (
-                  <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/20 transition-all group">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#00f3ff] to-blue-600 flex items-center justify-center text-xs font-bold text-black shadow-lg">
-                      {user.email.charAt(0).toUpperCase()}
-                    </div>
-                    <div className="flex flex-col text-left hidden sm:flex">
-                      <span className="text-[10px] text-white font-bold">{user.subscription_tier === 'pro' ? '⭐ PRO' : 'FREE'}</span>
-                      <span className="text-[8px] text-slate-400 max-w-[120px] truncate">{user.email}</span>
-                    </div>
-                    <button
-                      onClick={signOut}
-                      className="ml-1 p-1.5 hover:bg-red-500/20 rounded text-slate-400 hover:text-red-400 transition-all group-hover:opacity-100 opacity-70"
-                      title="Sign Out"
-                    >
-                      <LogOut size={14} />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => setShowAuthModal(true)}
-                    className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded text-xs text-white transition-all"
-                  >
-                    <User size={14} />
-                    <span>Login</span>
-                  </button>
-                )}
-              </div>
-            )}
-            {/* SAAS FEATURE: SHARE INCIDENT */}
-            {file && import.meta.env.VITE_SHOW_LANDING === 'true' && (
-              <button
-                onClick={() => {
-                  if (user?.subscription_tier !== 'pro') {
-                    setShowUpgradeModal(true);
-                  } else {
-                    setShowShareModal(true);
-                  }
-                }}
-                className="btn-primary px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 text-black bg-[#00f3ff] hover:bg-[#00c2cc] shadow-[0_0_15px_rgba(0,243,255,0.3)] transition-all"
-                title="Share Incident Link"
-              >
-                <Share2 size={14} /> SHARE
-              </button>
-            )}
-
             {file && (
               <button
                 onClick={() => setShowSettings(true)}
@@ -534,9 +360,6 @@ export default function App() {
 
       {showInfoModal && <InfoModal onClose={() => setShowInfoModal(false)} />}
       {showPasteModal && <PasteModal onClose={() => setShowPasteModal(false)} onPaste={processPastedText} />}
-      {showShareModal && file && <ShareModal onClose={() => setShowShareModal(false)} lines={lines} filename={file.name} bookmarks={bookmarks} offset={currentOffset} subscriptionTier={user?.subscription_tier} />}
-      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
-      {showUpgradeModal && <UpgradeModal onClose={() => setShowUpgradeModal(false)} userEmail={user?.email} userId={user?.id} />}
       {showSettings && <SettingsModal onClose={() => setShowSettings(false)} settings={settings} onUpdate={setSettings} />}
     </>
   );

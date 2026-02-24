@@ -12,12 +12,10 @@
   "dependencies": {
     "@capacitor/android": "^6.0.0",
     "@capacitor/core": "^6.0.0",
-    "@supabase/supabase-js": "^2.91.0",
     "capacitor-plugin-send-intent": "^0.0.2",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^7.12.0"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@capacitor/cli": "^6.0.0",
@@ -25,7 +23,6 @@
     "@tailwindcss/postcss": "^4.0.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@vercel/node": "^5.5.27",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.19",
     "eslint": "^9.9.0",
