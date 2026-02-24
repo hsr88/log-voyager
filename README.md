@@ -26,8 +26,8 @@ Use the application instantly (no installation required):
 * **🎨 JSON Prettifier:** Automatically detects and formats JSON objects.
 * **📍 Warp Jump Bookmarks:** Mark important lines and "warp" between them instantly.
 * **📱 Zero Install:** Works on Desktop, Mobile (Android/iOS), and Tablets.
-* 
-# Release v2.0.0 - Major Feature Update
+  
+# Release v2.0.0 - Major Feature Update (24.02.2026)
 
 ## 🚀 What's New
 * **Command Palette** (Ctrl+K) - quick access to all features
