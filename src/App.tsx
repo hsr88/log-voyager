@@ -27,18 +27,18 @@ const getStyles = (isDark: boolean) => `
   .font-jetbrains { font-family: 'JetBrains Mono', monospace; }
   
   .tech-grid {
-    background-color: ${isDark ? '#050505' : '#f8fafc'};
+    background-color: ${isDark ? '#050505' : '#e2e8f0'};
     background-size: 40px 40px;
     background-image: linear-gradient(to right, ${isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'} 1px, transparent 1px),
                       linear-gradient(to bottom, ${isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'} 1px, transparent 1px);
   }
   
   .glass-panel {
-    background: ${isDark ? 'rgba(20, 20, 25, 0.7)' : 'rgba(255, 255, 255, 0.8)'};
+    background: ${isDark ? 'rgba(20, 20, 25, 0.7)' : 'rgba(203, 213, 225, 0.7)'};
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'};
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border: 1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'};
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
   }
 
   .neon-text {
@@ -47,8 +47,8 @@ const getStyles = (isDark: boolean) => `
 
   /* Custom Scrollbar */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: ${isDark ? '#050505' : '#f1f5f9'}; }
-  ::-webkit-scrollbar-thumb { background: ${isDark ? '#333' : '#cbd5e1'}; border-radius: 3px; }
+  ::-webkit-scrollbar-track { background: ${isDark ? '#050505' : '#cbd5e1'}; }
+  ::-webkit-scrollbar-thumb { background: ${isDark ? '#333' : '#94a3b8'}; border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
   
   @keyframes highlight-fade {
@@ -470,7 +470,7 @@ function AppContent() {
   // --- Render ---
   return (
     <>
-      <div className={`${isDark ? 'bg-[#050505] text-slate-300' : 'bg-slate-50 text-slate-700'} font-jetbrains h-[100dvh] overflow-hidden flex flex-col tech-grid relative`}>
+      <div className={`${isDark ? 'bg-[#050505] text-slate-300' : 'bg-slate-200 text-slate-600'} font-jetbrains h-[100dvh] overflow-hidden flex flex-col tech-grid relative`}>
         <style>{getStyles(isDark)}</style>
 
         {/* --- TOP BAR --- */}
