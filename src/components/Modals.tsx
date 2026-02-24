@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import {
-    X, Settings, Type, AlignLeft, Box, Cpu, Zap, Shield, Coffee, HelpCircle, Github, Clipboard, Check
+    X, Settings, Type, AlignLeft, Box, Cpu, Zap, Shield, Coffee, HelpCircle, Github, Clipboard, Check, Keyboard, Command, 
+    Search, Eye, Bookmark, Monitor, Moon, Sun, Split, Filter, BarChart3, AlertCircle, Columns, Download, Sparkles, Layers
 } from 'lucide-react';
+import type { KeyboardShortcut } from '../types';
+import { formatShortcut } from '../hooks/useKeyboardShortcuts';
 
 // --- Komponent: Settings Modal ---
 export const SettingsModal = ({ onClose, settings, onUpdate }: any) => {
@@ -42,9 +45,71 @@ export const SettingsModal = ({ onClose, settings, onUpdate }: any) => {
     );
 };
 
+// --- Komponent: Keyboard Shortcuts Modal ---
+interface KeyboardShortcutsModalProps {
+    onClose: () => void;
+    shortcuts: KeyboardShortcut[];
+}
+
+export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({ onClose, shortcuts }) => {
+    const groupedShortcuts = shortcuts.reduce((acc, shortcut) => {
+        const category = shortcut.description.includes('search') ? 'Search' :
+                        shortcut.description.includes('bookmark') ? 'Bookmarks' :
+                        shortcut.description.includes('navigation') ? 'Navigation' :
+                        shortcut.description.includes('Export') ? 'Export' :
+                        shortcut.description.includes('Split') ? 'View' :
+                        shortcut.description.includes('Theme') ? 'View' :
+                        'General';
+        
+        if (!acc[category]) acc[category] = [];
+        acc[category].push(shortcut);
+        return acc;
+    }, {} as Record<string, KeyboardShortcut[]>);
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 font-jetbrains">
+            <div className="bg-[#0d1117] w-full max-w-lg rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
+                <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#161b22]">
+                    <h3 className="font-bold text-white tracking-wider flex items-center gap-2">
+                        <Keyboard size={18} className="text-[#00f3ff]" /> 
+                        KEYBOARD SHORTCUTS
+                    </h3>
+                    <button onClick={onClose} className="text-slate-400 hover:text-white"><X size={20} /></button>
+                </div>
+                
+                <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                    {Object.entries(groupedShortcuts).map(([category, items]) => (
+                        <div key={category}>
+                            <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-3">
+                                {category}
+                            </h4>
+                            <div className="space-y-2">
+                                {items.map((shortcut, idx) => (
+                                    <div key={idx} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
+                                        <span className="text-sm text-slate-300">{shortcut.description}</span>
+                                        <kbd className="px-2 py-1 bg-white/10 rounded text-xs text-[#00f3ff] font-mono">
+                                            {formatShortcut(shortcut)}
+                                        </kbd>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                
+                <div className="p-4 bg-[#161b22] border-t border-white/10 text-center">
+                    <p className="text-[10px] text-slate-500">
+                        Press <kbd className="px-1.5 py-0.5 bg-white/10 rounded">Ctrl+K</kbd> to open Command Palette
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 // --- Komponent: Info Modal (WITH KO-FI BUTTON) ---
 export const InfoModal = ({ onClose }: { onClose: () => void }) => {
-    const [activeTab, setActiveTab] = useState<'about' | 'faq'>('about');
+    const [activeTab, setActiveTab] = useState<'about' | 'faq' | 'shortcuts' | 'features'>('about');
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200 font-jetbrains">
             <div className="bg-[#0d1117] w-full max-w-md rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col max-h-[85vh]">
@@ -67,10 +132,22 @@ export const InfoModal = ({ onClose }: { onClose: () => void }) => {
                         ABOUT
                     </button>
                     <button
+                        onClick={() => setActiveTab('features')}
+                        className={`flex-1 py-3 text-xs font-bold tracking-widest transition-colors ${activeTab === 'features' ? 'text-yellow-400 bg-yellow-400/5 border-b-2 border-yellow-400' : 'text-slate-500 hover:text-slate-300'}`}
+                    >
+                        FEATURES
+                    </button>
+                    <button
                         onClick={() => setActiveTab('faq')}
                         className={`flex-1 py-3 text-xs font-bold tracking-widest transition-colors ${activeTab === 'faq' ? 'text-[#ff00ff] bg-[#ff00ff]/5 border-b-2 border-[#ff00ff]' : 'text-slate-500 hover:text-slate-300'}`}
                     >
                         FAQ
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('shortcuts')}
+                        className={`flex-1 py-3 text-xs font-bold tracking-widest transition-colors ${activeTab === 'shortcuts' ? 'text-[#00f3ff] bg-[#00f3ff]/5 border-b-2 border-[#00f3ff]' : 'text-slate-500 hover:text-slate-300'}`}
+                    >
+                        SHORTCUTS
                     </button>
                 </div>
 
@@ -123,6 +200,65 @@ export const InfoModal = ({ onClose }: { onClose: () => void }) => {
                             <div><h4 className="text-white font-bold mb-1 flex items-center gap-2"><HelpCircle size={14} className="text-[#ff00ff]" /> Is it free?</h4><p className="text-xs text-slate-400 leading-relaxed">Yes, Log Voyager is a completely free, open-source tool for the developer community.</p></div>
                         </div>
                     )}
+
+                    {activeTab === 'shortcuts' && (
+                        <div className="space-y-4">
+                            <div className="border-b border-white/5 pb-3">
+                                <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Command size={14} className="text-[#00f3ff]" /> Command Palette</h4>
+                                <div className="flex items-center justify-between py-1">
+                                    <span className="text-xs text-slate-400">Open Command Palette</span>
+                                    <kbd className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-[#00f3ff]">Ctrl+K</kbd>
+                                </div>
+                            </div>
+                            <div className="border-b border-white/5 pb-3">
+                                <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Zap size={14} className="text-yellow-400" /> Search & Navigation</h4>
+                                <div className="space-y-1">
+                                    <div className="flex items-center justify-between py-1">
+                                        <span className="text-xs text-slate-400">Focus search</span>
+                                        <kbd className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-[#00f3ff]">/</kbd>
+                                    </div>
+                                    <div className="flex items-center justify-between py-1">
+                                        <span className="text-xs text-slate-400">Next match</span>
+                                        <kbd className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-[#00f3ff]">Enter</kbd>
+                                    </div>
+                                    <div className="flex items-center justify-between py-1">
+                                        <span className="text-xs text-slate-400">Previous match</span>
+                                        <kbd className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-[#00f3ff]">Shift+Enter</kbd>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="border-b border-white/5 pb-3">
+                                <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Box size={14} className="text-emerald-400" /> View</h4>
+                                <div className="space-y-1">
+                                    <div className="flex items-center justify-between py-1">
+                                        <span className="text-xs text-slate-400">Toggle theme</span>
+                                        <kbd className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-[#00f3ff]">Ctrl+Shift+L</kbd>
+                                    </div>
+                                    <div className="flex items-center justify-between py-1">
+                                        <span className="text-xs text-slate-400">Toggle split view</span>
+                                        <kbd className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-[#00f3ff]">Ctrl+\\</kbd>
+                                    </div>
+                                    <div className="flex items-center justify-between py-1">
+                                        <span className="text-xs text-slate-400">Show settings</span>
+                                        <kbd className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-[#00f3ff]">Ctrl+,</kbd>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Keyboard size={14} className="text-purple-400" /> Bookmarks</h4>
+                                <div className="space-y-1">
+                                    <div className="flex items-center justify-between py-1">
+                                        <span className="text-xs text-slate-400">Toggle bookmark on line</span>
+                                        <kbd className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-[#00f3ff]">Click line #</kbd>
+                                    </div>
+                                    <div className="flex items-center justify-between py-1">
+                                        <span className="text-xs text-slate-400">Jump to bookmark</span>
+                                        <kbd className="px-2 py-0.5 bg-white/10 rounded text-[10px] text-[#00f3ff]">B (then number)</kbd>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Footer */}
@@ -168,6 +304,83 @@ export const PasteModal = ({ onClose, onPaste }: { onClose: () => void, onPaste:
                     >
                         <Check size={14} /> ANALYZE
                     </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// --- Komponent: Export Selection Modal ---
+interface ExportSelectionModalProps {
+    onClose: () => void;
+    selectedLines: { number: number; content: string }[];
+    onExport: (format: 'txt' | 'json' | 'csv') => void;
+}
+
+export const ExportSelectionModal: React.FC<ExportSelectionModalProps> = ({ 
+    onClose, 
+    selectedLines, 
+    onExport 
+}) => {
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm font-jetbrains">
+            <div className="bg-[#0d1117] w-full max-w-md rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+                <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#161b22]">
+                    <h3 className="font-bold text-white tracking-wider flex items-center gap-2">
+                        <Clipboard size={18} className="text-[#00f3ff]" /> 
+                        EXPORT SELECTION
+                    </h3>
+                    <button onClick={onClose} className="text-slate-400 hover:text-white"><X size={20} /></button>
+                </div>
+                
+                <div className="p-6 space-y-4">
+                    <div className="text-center">
+                        <div className="text-3xl font-bold text-[#00f3ff] mb-1">
+                            {selectedLines.length}
+                        </div>
+                        <div className="text-xs text-slate-500">lines selected</div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <button
+                            onClick={() => onExport('txt')}
+                            className="w-full flex items-center gap-3 p-4 rounded-lg bg-white/5 hover:bg-[#00f3ff]/10 border border-white/10 hover:border-[#00f3ff]/30 transition-all"
+                        >
+                            <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                                <span className="text-xs font-bold text-blue-400">TXT</span>
+                            </div>
+                            <div className="flex-1 text-left">
+                                <div className="text-sm text-white font-bold">Plain Text</div>
+                                <div className="text-xs text-slate-400">Export as .log or .txt file</div>
+                            </div>
+                        </button>
+
+                        <button
+                            onClick={() => onExport('json')}
+                            className="w-full flex items-center gap-3 p-4 rounded-lg bg-white/5 hover:bg-[#00f3ff]/10 border border-white/10 hover:border-[#00f3ff]/30 transition-all"
+                        >
+                            <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                                <span className="text-xs font-bold text-yellow-400">JSON</span>
+                            </div>
+                            <div className="flex-1 text-left">
+                                <div className="text-sm text-white font-bold">JSON Format</div>
+                                <div className="text-xs text-slate-400">Structured data with line numbers</div>
+                            </div>
+                        </button>
+
+                        <button
+                            onClick={() => onExport('csv')}
+                            className="w-full flex items-center gap-3 p-4 rounded-lg bg-white/5 hover:bg-[#00f3ff]/10 border border-white/10 hover:border-[#00f3ff]/30 transition-all"
+                        >
+                            <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                                <span className="text-xs font-bold text-green-400">CSV</span>
+                            </div>
+                            <div className="flex-1 text-left">
+                                <div className="text-sm text-white font-bold">CSV Spreadsheet</div>
+                                <div className="text-xs text-slate-400">For Excel or data analysis</div>
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
