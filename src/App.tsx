@@ -486,7 +486,7 @@ function AppContent() {
               </div>
               <div>
                 <h1 className="text-sm font-bold text-white tracking-wider group-hover:text-[#00f3ff] transition-colors duration-300 neon-text">
-                  LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1 rounded ml-1">Open Source</span>
+                  LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1.5 py-0.5 rounded ml-1 hidden sm:inline-block">Analyze huge log files instantly in your browser</span>
                 </h1>
                 {file && <p className="text-[10px] text-[#00f3ff] font-mono">{file.name} ({formatBytes(fileSize)})</p>}
               </div>
