@@ -26,6 +26,21 @@ Use the application instantly (no installation required):
 * **🎨 JSON Prettifier:** Automatically detects and formats JSON objects.
 * **📍 Warp Jump Bookmarks:** Mark important lines and "warp" between them instantly.
 * **📱 Zero Install:** Works on Desktop, Mobile (Android/iOS), and Tablets.
+* 
+# Release v2.0.0 - Major Feature Update
+
+## 🚀 What's New
+* **Command Palette** (Ctrl+K) - quick access to all features
+* **Keyboard Shortcuts** - vim-style bindings for power users
+* **Split View** - compare two parts of log simultaneously
+**Multi-Filter System** - multiple filters with include/exclude logic
+* **Focus Mode** - show only matching lines
+* **Export Selection** - TXT/JSON/CSV formats
+* **Dark/Light Theme** toggle
+* **Footer** with GitHub and Support links 
+* **Error Aggregation** - groups similar errors with counts
+* **Log Statistics** - visual level distribution (Error/Warn/Info/Debug)
+* **Heatmap Navigation** - visual error density on minimap
 
 # 🛠️ How It Works
 
