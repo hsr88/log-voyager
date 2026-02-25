@@ -894,7 +894,7 @@ function AppContent() {
             <div className="flex items-center gap-1 text-slate-600">
               <span>Made with</span>
               <Heart size={10} className="text-red-500 fill-red-500" />
-              <span>by hsr88</span>
+              <span>by <a href="https://x.com/hsrvibe" target="_blank" rel="noopener noreferrer" className="hover:text-[#00f3ff] transition-colors underline decoration-dotted">hsr</a></span>
             </div>
             
             <div className="flex items-center gap-3">
