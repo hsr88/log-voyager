@@ -88,56 +88,82 @@ export const BlogPost: React.FC<BlogPostProps> = ({ slug }) => {
 
   // Parse markdown content for display
   const renderMarkdown = (md: string): string => {
-    let html = md;
+    // Split content into blocks (paragraphs, tables, code blocks)
+    const blocks = md.split(/\n\n+/);
+    const processedBlocks: string[] = [];
     
-    // Process tables first (before other transformations)
-    // Match table blocks: rows starting with | and containing |
-    const tableRegex = /(\|[^\n]+\|\n\|[-:|\s]+\|\n(?:\|[^\n]+\|\n?)+)/g;
-    html = html.replace(tableRegex, (match) => {
-      const lines = match.trim().split('\n').filter(line => line.trim());
-      if (lines.length < 2) return match;
+    for (let i = 0; i < blocks.length; i++) {
+      const block = blocks[i].trim();
+      if (!block) continue;
       
-      let tableHtml = `<table style="width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.875rem; border: 1px solid ${BORDER};">`;
+      // Code blocks
+      if (block.startsWith('```')) {
+        const code = block.replace(/```(\w+)?\n?/, '').replace(/```$/, '');
+        processedBlocks.push(`<pre style="background: ${DARK_BG}; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1rem 0; border: 1px solid ${BORDER}; font-family: monospace; font-size: 0.875rem;"><code style="color: ${TEXT};">${code}</code></pre>`);
+        continue;
+      }
       
-      lines.forEach((line, index) => {
-        // Skip separator line (contains only -, |, :, space)
-        if (line.replace(/[-:|\s]/g, '').length === 0) return;
+      // Tables - check if block contains table rows
+      if (block.includes('|') && block.split('\n').every(line => line.includes('|'))) {
+        const lines = block.split('\n').filter(line => line.trim());
+        let tableHtml = `<table style="width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.875rem; border: 1px solid ${BORDER};">`;
+        let isHeader = true;
         
-        const cells = line.split('|').filter((cell, i, arr) => {
-          // Filter out empty first and last cells from split
-          if (i === 0 && cell.trim() === '') return false;
-          if (i === arr.length - 1 && cell.trim() === '') return false;
-          return true;
-        });
+        for (const line of lines) {
+          // Skip separator line
+          if (line.replace(/[-:|\s]/g, '').length === 0) continue;
+          
+          const cells = line.split('|').filter((cell, idx, arr) => {
+            if (idx === 0 && cell.trim() === '') return false;
+            if (idx === arr.length - 1 && cell.trim() === '') return false;
+            return true;
+          });
+          
+          const tag = isHeader ? 'th' : 'td';
+          const bgStyle = isHeader ? `background: ${DARK_BG}; font-weight: 600;` : '';
+          
+          tableHtml += `<tr>`;
+          cells.forEach(cell => {
+            tableHtml += `<${tag} style="${bgStyle}color: ${isHeader ? TEXT : TEXT_MUTED}; padding: 0.75rem; border: 1px solid ${BORDER}; text-align: left;">${cell.trim()}</${tag}>`;
+          });
+          tableHtml += `</tr>`;
+          isHeader = false;
+        }
         
-        const tag = index === 0 ? 'th' : 'td';
-        const bgStyle = index === 0 ? `background: ${DARK_BG};` : '';
-        
-        tableHtml += `<tr>`;
-        cells.forEach(cell => {
-          tableHtml += `<${tag} style="${bgStyle}color: ${index === 0 ? TEXT : TEXT_MUTED}; padding: 0.75rem; border: 1px solid ${BORDER}; text-align: left;">${cell.trim()}</${tag}>`;
-        });
-        tableHtml += `</tr>`;
-      });
+        tableHtml += `</table>`;
+        processedBlocks.push(tableHtml);
+        continue;
+      }
       
-      tableHtml += `</table>`;
-      return tableHtml;
-    });
+      // Headers
+      if (block.startsWith('# ')) {
+        processedBlocks.push(`<h1 style="color: ${TEXT}; font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; margin-top: 2rem;">${block.replace(/^# /, '')}</h1>`);
+        continue;
+      }
+      if (block.startsWith('## ')) {
+        processedBlocks.push(`<h2 style="color: ${TEXT}; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; margin-top: 1.5rem;">${block.replace(/^## /, '')}</h2>`);
+        continue;
+      }
+      if (block.startsWith('### ')) {
+        processedBlocks.push(`<h3 style="color: ${TEXT}; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; margin-top: 1.25rem;">${block.replace(/^### /, '')}</h3>`);
+        continue;
+      }
+      if (block.startsWith('#### ')) {
+        processedBlocks.push(`<h4 style="color: ${TEXT}; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; margin-top: 1rem;">${block.replace(/^#### /, '')}</h4>`);
+        continue;
+      }
+      
+      // Regular paragraph with inline formatting
+      let paragraph = block
+        .replace(/\*\*(.*?)\*\*/g, `<strong style="color: ${TEXT}; font-weight: 600;">$1</strong>`)
+        .replace(/`([^`]+)`/g, `<code style="background: ${CYAN}20; color: ${CYAN}; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875rem; font-family: monospace;">$1</code>`)
+        .replace(/- (.*$)/gim, `<li style="color: ${TEXT_MUTED}; margin-left: 1.5rem; margin-bottom: 0.5rem; list-style-type: disc;">$1</li>`)
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, `<a href="$2" style="color: ${CYAN}; text-decoration: underline;">$1</a>`);
+      
+      processedBlocks.push(`<p style="color: ${TEXT_MUTED}; margin-bottom: 1rem; line-height: 1.75;">${paragraph}</p>`);
+    }
     
-    // Process other markdown elements
-    return html
-      .replace(/^# (.*$)/gim, `<h1 style="color: ${TEXT}; font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; margin-top: 2rem;">$1</h1>`)
-      .replace(/^## (.*$)/gim, `<h2 style="color: ${TEXT}; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; margin-top: 1.5rem;">$1</h2>`)
-      .replace(/^### (.*$)/gim, `<h3 style="color: ${TEXT}; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; margin-top: 1.25rem;">$1</h3>`)
-      .replace(/\*\*(.*?)\*\*/g, `<strong style="color: ${TEXT}; font-weight: 600;">$1</strong>`)
-      .replace(/`([^`]+)`/g, `<code style="background: ${CYAN}20; color: ${CYAN}; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875rem; font-family: monospace;">$1</code>`)
-      .replace(/```([\s\S]*?)```/g, `<pre style="background: ${DARK_BG}; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1rem 0; border: 1px solid ${BORDER}; font-family: monospace; font-size: 0.875rem;"><code style="color: ${TEXT};">$1</code></pre>`)
-      .replace(/- (.*$)/gim, `<li style="color: ${TEXT_MUTED}; margin-left: 1.5rem; margin-bottom: 0.5rem; list-style-type: disc;">$1</li>`)
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, `<a href="$2" style="color: ${CYAN}; text-decoration: underline;">$1</a>`)
-      .replace(/\n\n/g, `</p><p style="color: ${TEXT_MUTED}; margin-bottom: 1rem; line-height: 1.75;">`)
-      .replace(/^/, `<p style="color: ${TEXT_MUTED}; margin-bottom: 1rem; line-height: 1.75;">`)
-      .replace(/$/, `</p>`)
-      .replace(/<p[^>]*>\s*<\/p>/g, '');
+    return processedBlocks.join('\n');
   };
 
   const getFallbackContent = (articleSlug: string): string => {
