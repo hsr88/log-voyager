@@ -1016,19 +1016,9 @@ function AppContent() {
               </a>
             </div>
             
-            <div className="flex items-center gap-4">
-              <a 
-                href="#/blog" 
-                className="flex items-center gap-1.5 hover:text-[#00f3ff] transition-colors"
-              >
-                <BookOpen size={12} />
-                <span>Blog</span>
-              </a>
-              <span className="text-slate-600">|</span>
-              <span className="text-slate-600 flex items-center gap-1">
-                Made with <Heart size={10} className="text-red-500 fill-red-500" /> by <a href="https://x.com/hsrvibe" target="_blank" rel="noopener noreferrer" className="hover:text-[#00f3ff] transition-colors underline decoration-dotted">hsr</a>
-              </span>
-            </div>
+            <span className="text-slate-600 flex items-center gap-1">
+              Made with <Heart size={10} className="text-red-500 fill-red-500" /> by <a href="https://x.com/hsrvibe" target="_blank" rel="noopener noreferrer" className="hover:text-[#00f3ff] transition-colors underline decoration-dotted">hsr</a>
+            </span>
             
             <div className="flex items-center gap-3">
               <button

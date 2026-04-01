@@ -40,7 +40,7 @@ export const BlogLayout: React.FC<BlogLayoutProps> = ({
           <div className="flex items-center gap-3">
             <BookOpen className="w-6 h-6" style={{ color: CYAN }} />
             <h1 style={{ color: TEXT }} className="text-xl font-bold">
-              Log Voyager <span className="opacity-60 font-normal">Blog</span>
+              Log Voyager
             </h1>
           </div>
           
