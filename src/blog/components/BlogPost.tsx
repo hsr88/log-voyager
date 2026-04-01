@@ -29,7 +29,7 @@ export const BlogPost: React.FC<BlogPostProps> = ({ slug }) => {
   useEffect(() => {
     const loadContent = async () => {
       try {
-        const response = await fetch(`/src/blog/articles/${slug}.md`);
+        const response = await fetch(`/blog-articles/${slug}.md`);
         if (response.ok) {
           const text = await response.text();
           setContent(text);
