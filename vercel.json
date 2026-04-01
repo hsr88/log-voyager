@@ -1,9 +1,28 @@
 {
   "version": 2,
   "routes": [
-    { "src": "^/sitemap\\.xml$", "dest": "/sitemap.xml", "headers": { "Content-Type": "application/xml" } },
-    { "src": "^/sitemap\\.txt$", "dest": "/sitemap.txt" },
-    { "src": "^/robots\\.txt$", "dest": "/robots.txt" },
+    { 
+      "src": "^/sitemap\\.xml$", 
+      "dest": "/sitemap.xml",
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate",
+        "Content-Type": "application/xml"
+      }
+    },
+    { 
+      "src": "^/sitemap\\.txt$", 
+      "dest": "/sitemap.txt",
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      }
+    },
+    { 
+      "src": "^/robots\\.txt$", 
+      "dest": "/robots.txt",
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      }
+    },
     { "src": "^/blog-articles/(.*)$", "dest": "/blog-articles/$1" },
     { "src": "^/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|json|webmanifest))$", "dest": "/$1" },
     { "src": "/(.*)", "dest": "/index.html" }
