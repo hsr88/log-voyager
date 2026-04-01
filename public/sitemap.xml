@@ -7,38 +7,38 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.logvoyager.cc/#/about</loc>
+    <loc>https://www.logvoyager.cc/about</loc>
     <lastmod>2026-04-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.logvoyager.cc/#/blog</loc>
+    <loc>https://www.logvoyager.cc/blog</loc>
     <lastmod>2026-04-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.logvoyager.cc/#/blog/how-to-analyze-log-files-online</loc>
-    <lastmod>2026-04-01</lastmod>
+    <loc>https://www.logvoyager.cc/blog/how-to-analyze-log-files-online</loc>
+    <lastmod>2026-01-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.logvoyager.cc/#/blog/best-free-log-file-analyzers</loc>
-    <lastmod>2026-04-01</lastmod>
+    <loc>https://www.logvoyager.cc/blog/best-free-log-file-analyzers</loc>
+    <lastmod>2026-02-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.logvoyager.cc/#/blog/online-log-reader-guide</loc>
-    <lastmod>2026-04-01</lastmod>
+    <loc>https://www.logvoyager.cc/blog/online-log-reader-guide</loc>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.logvoyager.cc/#/blog/json-log-viewer-guide</loc>
-    <lastmod>2026-04-01</lastmod>
+    <loc>https://www.logvoyager.cc/blog/json-log-viewer-guide</loc>
+    <lastmod>2026-02-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
