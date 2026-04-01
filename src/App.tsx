@@ -1086,7 +1086,7 @@ function AppContent() {
 }
 
 // --- Blog Components ---
-import { BlogIndex, BlogPost, AboutPage } from './blog';
+import { BlogIndex, BlogPost, AboutPage, NotFoundPage, blogArticles } from './blog';
 
 // --- Simple Hash Router ---
 function Router() {
@@ -1103,9 +1103,13 @@ function Router() {
     const hash = currentPath.replace('#', '') || '/';
     if (hash === '/' || hash === '') return 'app';
     if (hash === '/blog') return 'blog';
-    if (hash.startsWith('/blog/')) return 'blog-post';
+    if (hash.startsWith('/blog/')) {
+      const slug = hash.replace('/blog/', '');
+      const articleExists = blogArticles.some(a => a.slug === slug);
+      return articleExists ? 'blog-post' : '404';
+    }
     if (hash === '/about') return 'about';
-    return 'app';
+    return '404';
   };
 
   const getBlogSlug = () => {
@@ -1122,6 +1126,8 @@ function Router() {
       return <BlogPost slug={getBlogSlug()} />;
     case 'about':
       return <AboutPage />;
+    case '404':
+      return <NotFoundPage />;
     case 'app':
     default:
       return <AppContent />;

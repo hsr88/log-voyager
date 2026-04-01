@@ -567,9 +567,9 @@ Effective log analysis is a critical skill that combines technical knowledge wit
 
 ## Related Resources
 
-- [Best Free Log File Analyzers Compared](/blog/best-free-log-file-analyzers)
-- [JSON Log Analysis Guide](/blog/json-log-viewer-guide)
-- [Online Log Reader Complete Guide](/blog/online-log-reader-guide)
+- [Best Free Log File Analyzers Compared](#/blog/best-free-log-file-analyzers)
+- [JSON Log Analysis Guide](#/blog/json-log-viewer-guide)
+- [Online Log Reader Complete Guide](#/blog/online-log-reader-guide)
 
 ## FAQ
 

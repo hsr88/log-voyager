@@ -467,9 +467,9 @@ While cloud-based tools have their place in enterprise environments with specifi
 
 ## Related Guides
 
-- [How to Analyze Log Files Online](/blog/how-to-analyze-log-files-online)
-- [Best Free Log File Analyzers](/blog/best-free-log-file-analyzers)
-- [JSON Log Analysis Guide](/blog/json-log-viewer-guide)
+- [How to Analyze Log Files Online](#/blog/how-to-analyze-log-files-online)
+- [Best Free Log File Analyzers](#/blog/best-free-log-file-analyzers)
+- [JSON Log Analysis Guide](#/blog/json-log-viewer-guide)
 
 ## FAQ
 
