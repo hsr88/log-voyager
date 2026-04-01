@@ -838,7 +838,113 @@ function AppContent() {
                 </div>
               </div>
 
-              <div className="w-full max-w-xs">
+              {/* SEO Content Section */}
+              <div className="w-full max-w-3xl mt-8 px-4">
+                <div className="glass-panel rounded-2xl p-8 border border-white/10">
+                  <h2 className="text-2xl font-bold text-white mb-4 text-center">
+                    Free <span className="text-[#00f3ff]">Online Log File Analyzer</span> for Massive Files
+                  </h2>
+                  
+                  <p className="text-slate-400 text-sm leading-relaxed mb-6 text-center max-w-2xl mx-auto">
+                    Log Voyager is a <strong className="text-slate-300">free log file analyzer online</strong> that handles 
+                    10GB+ files instantly in your browser. No upload needed - your logs never leave your device. 
+                    Perfect for DevOps, backend developers, and system administrators who need to 
+                    <strong className="text-slate-300"> analyze log files online</strong> quickly and securely.
+                  </p>
+
+                  {/* Features Grid */}
+                  <div className="grid md:grid-cols-3 gap-4 mb-8">
+                    <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Zap size={18} className="text-[#00f3ff]" />
+                        <h3 className="text-white font-semibold text-sm">Instant Loading</h3>
+                      </div>
+                      <p className="text-slate-500 text-xs">
+                        Open 10GB+ log files instantly using streaming technology. No more waiting for files to load.
+                      </p>
+                    </div>
+                    
+                    <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Search size={18} className="text-[#ff00ff]" />
+                        <h3 className="text-white font-semibold text-sm">Smart Search</h3>
+                      </div>
+                      <p className="text-slate-500 text-xs">
+                        Regex support, case sensitivity, multi-filter system. Find exactly what you need in seconds.
+                      </p>
+                    </div>
+                    
+                    <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <FileJson size={18} className="text-yellow-400" />
+                        <h3 className="text-white font-semibold text-sm">JSON Support</h3>
+                      </div>
+                      <p className="text-slate-500 text-xs">
+                        Automatic JSON detection and pretty-print. Perfect for modern structured logging.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Use Cases */}
+                  <div className="mb-8">
+                    <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
+                      <Bug size={16} className="text-[#00f3ff]" />
+                      Common Use Cases
+                    </h3>
+                    <div className="grid md:grid-cols-2 gap-3 text-sm text-slate-400">
+                      <div className="flex items-start gap-2">
+                        <span className="text-[#00f3ff] mt-1">✓</span>
+                        <span>Debug production errors in server logs</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-[#00f3ff] mt-1">✓</span>
+                        <span>Analyze Nginx/Apache access logs</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-[#00f3ff] mt-1">✓</span>
+                        <span>View Docker container logs</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-[#00f3ff] mt-1">✓</span>
+                        <span>Parse application JSON logs</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-[#00f3ff] mt-1">✓</span>
+                        <span>Search through large API logs</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-[#00f3ff] mt-1">✓</span>
+                        <span>Monitor system syslog files</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Privacy Note */}
+                  <div className="bg-[#00f3ff]/5 border border-[#00f3ff]/20 rounded-xl p-4 mb-6">
+                    <p className="text-sm text-slate-300">
+                      <strong className="text-[#00f3ff]">🔒 100% Privacy:</strong> All processing happens in your browser. 
+                      Your log files are never uploaded to any server. Perfect for analyzing sensitive production logs 
+                      while maintaining compliance.
+                    </p>
+                  </div>
+
+                  {/* CTA */}
+                  <div className="text-center">
+                    <p className="text-slate-500 text-sm mb-4">
+                      Drop a log file above or select one to start analyzing instantly.
+                    </p>
+                    <a 
+                      href="#/blog"
+                      className="inline-flex items-center gap-2 text-[#00f3ff] hover:underline text-sm"
+                    >
+                      Read our Log Analysis Guides →
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Recent Sessions */}
+              <div className="w-full max-w-xs mt-8">
                 <div className="flex items-center gap-2 text-slate-500 text-[10px] uppercase font-bold mb-3 px-2 tracking-widest">
                   <History size={10} /> Recent Sessions
                 </div>
