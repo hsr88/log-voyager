@@ -169,14 +169,25 @@ Log Voyager offers pretty-print, collapsible sections, and field search for JSON
   return (
     <BlogLayout showBackButton>
       <article>
-        {/* Header */}
+        {/* Header with Image */}
         <header className="mb-8">
-          <h1 
-            className="text-3xl md:text-4xl font-bold mb-4 leading-tight"
-            style={{ color: TEXT }}
-          >
-            {article.title}
-          </h1>
+          {/* Article Image */}
+          <div className="relative h-64 md:h-96 rounded-2xl overflow-hidden mb-8">
+            <img 
+              src={article.imageUrl} 
+              alt={article.title}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+              <h1 
+                className="text-2xl md:text-4xl font-bold leading-tight"
+                style={{ color: TEXT }}
+              >
+                {article.title}
+              </h1>
+            </div>
+          </div>
           
           <p 
             className="text-lg mb-6"

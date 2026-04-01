@@ -72,7 +72,7 @@ export const BlogIndex: React.FC = () => {
         {blogArticles.map((article) => (
           <article 
             key={article.id}
-            className="rounded-xl p-6 border transition-all duration-200 hover:border-cyan-400/30 backdrop-blur-sm"
+            className="rounded-xl overflow-hidden border transition-all duration-200 hover:border-cyan-400/30 backdrop-blur-sm"
             style={{ 
               backgroundColor: DARK_PANEL,
               borderColor: BORDER
@@ -82,36 +82,48 @@ export const BlogIndex: React.FC = () => {
               href={`#/blog/${article.slug}`}
               className="block group"
             >
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex-1">
+              {/* Article Image */}
+              <div className="relative h-48 md:h-64 overflow-hidden">
+                <img 
+                  src={article.imageUrl} 
+                  alt={article.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6">
                   <h2 
-                    className="text-xl font-semibold mb-2 transition-opacity group-hover:opacity-80"
+                    className="text-xl md:text-2xl font-bold mb-2 transition-opacity group-hover:opacity-90"
                     style={{ color: TEXT }}
                   >
                     {article.title}
                   </h2>
-                  <p 
-                    className="mb-4"
-                    style={{ color: TEXT_MUTED }}
-                  >
-                    {article.description}
-                  </p>
-                  
-                  {/* Meta */}
-                  <div 
-                    className="flex items-center gap-4 text-sm"
-                    style={{ color: TEXT_MUTED }}
-                  >
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      {article.readingTime}
-                    </span>
-                    <span>{article.publishedAt}</span>
-                  </div>
-                  
-                  {/* Keywords */}
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {article.keywords.slice(0, 4).map((keyword) => (
+                </div>
+              </div>
+              
+              <div className="p-6">
+                <p 
+                  className="mb-4"
+                  style={{ color: TEXT_MUTED }}
+                >
+                  {article.description}
+                </p>
+                
+                {/* Meta */}
+                <div 
+                  className="flex items-center gap-4 text-sm mb-4"
+                  style={{ color: TEXT_MUTED }}
+                >
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    {article.readingTime}
+                  </span>
+                  <span>{article.publishedAt}</span>
+                </div>
+                
+                {/* Keywords & Read More */}
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap gap-2">
+                    {article.keywords.slice(0, 3).map((keyword) => (
                       <span 
                         key={keyword}
                         className="text-xs px-2 py-1 rounded"
@@ -124,13 +136,13 @@ export const BlogIndex: React.FC = () => {
                       </span>
                     ))}
                   </div>
-                </div>
-                
-                <div 
-                  className="flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity whitespace-nowrap"
-                  style={{ color: CYAN }}
-                >
-                  Read <ArrowRight className="w-4 h-4" />
+                  
+                  <div 
+                    className="flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity"
+                    style={{ color: CYAN }}
+                  >
+                    Read <ArrowRight className="w-4 h-4" />
+                  </div>
                 </div>
               </div>
             </a>
