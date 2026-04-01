@@ -941,7 +941,10 @@ function AppContent() {
                   </button>
                 </div>
 
-                {/* About Button - expands SEO content */}
+              </div>
+
+              {/* About Section - Full Width Below Container */}
+              <div className="w-full max-w-4xl px-4">
                 <AboutSection />
               </div>
 
@@ -979,6 +982,20 @@ function AppContent() {
         <footer className="glass-panel border-t border-white/5 py-2 px-4 shrink-0">
           <div className="flex items-center justify-between text-[10px] text-slate-500">
             <div className="flex items-center gap-4">
+              <a 
+                href="#/about" 
+                className="flex items-center gap-1.5 hover:text-[#00f3ff] transition-colors"
+              >
+                <Info size={12} />
+                <span className="hidden sm:inline">About</span>
+              </a>
+              <a 
+                href="#/blog" 
+                className="flex items-center gap-1.5 hover:text-[#00f3ff] transition-colors"
+              >
+                <BookOpen size={12} />
+                <span className="hidden sm:inline">Blog</span>
+              </a>
               <a 
                 href="https://github.com/hsr88/log-voyager" 
                 target="_blank" 
@@ -1079,7 +1096,7 @@ function AppContent() {
 }
 
 // --- Blog Components ---
-import { BlogIndex, BlogPost } from './blog';
+import { BlogIndex, BlogPost, AboutPage } from './blog';
 
 // --- Simple Hash Router ---
 function Router() {
@@ -1097,6 +1114,7 @@ function Router() {
     if (hash === '/' || hash === '') return 'app';
     if (hash === '/blog') return 'blog';
     if (hash.startsWith('/blog/')) return 'blog-post';
+    if (hash === '/about') return 'about';
     return 'app';
   };
 
@@ -1112,6 +1130,8 @@ function Router() {
       return <BlogIndex />;
     case 'blog-post':
       return <BlogPost slug={getBlogSlug()} />;
+    case 'about':
+      return <AboutPage />;
     case 'app':
     default:
       return <AppContent />;
