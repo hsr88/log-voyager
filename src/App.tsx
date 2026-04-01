@@ -891,10 +891,18 @@ function AppContent() {
               </a>
             </div>
             
-            <div className="flex items-center gap-1 text-slate-600">
-              <span>Made with</span>
-              <Heart size={10} className="text-red-500 fill-red-500" />
-              <span>by <a href="https://x.com/hsrvibe" target="_blank" rel="noopener noreferrer" className="hover:text-[#00f3ff] transition-colors underline decoration-dotted">hsr</a></span>
+            <div className="flex items-center gap-4">
+              <a 
+                href="#/blog" 
+                className="flex items-center gap-1.5 hover:text-[#00f3ff] transition-colors"
+              >
+                <BookOpen size={12} />
+                <span>Blog</span>
+              </a>
+              <span className="text-slate-600">|</span>
+              <span className="text-slate-600 flex items-center gap-1">
+                Made with <Heart size={10} className="text-red-500 fill-red-500" /> by <a href="https://x.com/hsrvibe" target="_blank" rel="noopener noreferrer" className="hover:text-[#00f3ff] transition-colors underline decoration-dotted">hsr</a>
+              </span>
             </div>
             
             <div className="flex items-center gap-3">
@@ -962,11 +970,51 @@ function AppContent() {
   );
 }
 
+// --- Blog Components ---
+import { BlogIndex, BlogPost } from './blog';
+
+// --- Simple Hash Router ---
+function Router() {
+  const [currentPath, setCurrentPath] = useState(window.location.hash);
+
+  useEffect(() => {
+    const handleHashChange = () => setCurrentPath(window.location.hash);
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Parse route from hash
+  const getRoute = () => {
+    const hash = currentPath.replace('#', '') || '/';
+    if (hash === '/' || hash === '') return 'app';
+    if (hash === '/blog') return 'blog';
+    if (hash.startsWith('/blog/')) return 'blog-post';
+    return 'app';
+  };
+
+  const getBlogSlug = () => {
+    const match = currentPath.match(/#\/blog\/(.+)/);
+    return match ? match[1] : '';
+  };
+
+  const route = getRoute();
+
+  switch (route) {
+    case 'blog':
+      return <BlogIndex />;
+    case 'blog-post':
+      return <BlogPost slug={getBlogSlug()} />;
+    case 'app':
+    default:
+      return <AppContent />;
+  }
+}
+
 // --- Wrapper with Theme Provider ---
 export default function App() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <Router />
     </ThemeProvider>
   );
 }
