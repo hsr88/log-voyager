@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import {
   FileText, Search, UploadCloud, Zap, Bug, FileJson,
   X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, History, Clipboard, Settings, Download, ChevronDown, ChevronUp, CaseSensitive,
-  Keyboard, Command, Sun, Moon, Split, Filter, BarChart, AlertCircle, BookOpen, Plus, Check, Columns, Github, Coffee, Heart
+  Keyboard, Command, Sun, Moon, Split, Filter, BarChart, AlertCircle, BookOpen, Plus, Check, Columns, Github, Coffee, Heart, Info
 } from 'lucide-react';
 
 import LogLine from './components/LogLine';
@@ -19,6 +19,99 @@ import type { BookmarkData, HistoryItem, Filter, Command as CommandType, Keyboar
 import { isGzip, decompressGzip } from './utils/decompression';
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
+
+// --- About Section Component (SEO Content) ---
+const AboutSection: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="mt-4">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all text-xs border border-white/10"
+      >
+        <Info size={14} />
+        <span>About Log Voyager</span>
+        {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+      </button>
+
+      {isOpen && (
+        <div className="mt-4 text-left animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="glass-panel rounded-2xl p-6 border border-white/10">
+            <h2 className="text-xl font-bold text-white mb-3 text-center">
+              Free <span className="text-[#00f3ff]">Online Log File Analyzer</span> for Massive Files
+            </h2>
+            
+            <p className="text-slate-400 text-sm leading-relaxed mb-4">
+              Log Voyager is a <strong className="text-slate-300">free log file analyzer online</strong> that handles 
+              10GB+ files instantly in your browser. No upload needed - your logs never leave your device. 
+              Perfect for DevOps, backend developers, and system administrators who need to 
+              <strong className="text-slate-300"> analyze log files online</strong> quickly and securely.
+            </p>
+
+            {/* Features */}
+            <div className="grid md:grid-cols-3 gap-3 mb-4">
+              <div className="bg-white/5 p-3 rounded-lg border border-white/5">
+                <div className="flex items-center gap-2 mb-1">
+                  <Zap size={16} className="text-[#00f3ff]" />
+                  <h3 className="text-white font-semibold text-sm">Instant Loading</h3>
+                </div>
+                <p className="text-slate-500 text-xs">Open 10GB+ files instantly using streaming technology.</p>
+              </div>
+              
+              <div className="bg-white/5 p-3 rounded-lg border border-white/5">
+                <div className="flex items-center gap-2 mb-1">
+                  <Search size={16} className="text-[#ff00ff]" />
+                  <h3 className="text-white font-semibold text-sm">Smart Search</h3>
+                </div>
+                <p className="text-slate-500 text-xs">Regex support, case sensitivity, multi-filter system.</p>
+              </div>
+              
+              <div className="bg-white/5 p-3 rounded-lg border border-white/5">
+                <div className="flex items-center gap-2 mb-1">
+                  <FileJson size={16} className="text-yellow-400" />
+                  <h3 className="text-white font-semibold text-sm">JSON Support</h3>
+                </div>
+                <p className="text-slate-500 text-xs">Automatic JSON detection and pretty-print.</p>
+              </div>
+            </div>
+
+            {/* Use Cases */}
+            <div className="mb-4">
+              <h3 className="text-white font-semibold text-sm mb-2">Common Use Cases:</h3>
+              <div className="grid md:grid-cols-2 gap-2 text-xs text-slate-400">
+                <span>✓ Debug production errors</span>
+                <span>✓ Analyze Nginx/Apache logs</span>
+                <span>✓ View Docker container logs</span>
+                <span>✓ Parse application JSON logs</span>
+                <span>✓ Search through large API logs</span>
+                <span>✓ Monitor system syslog files</span>
+              </div>
+            </div>
+
+            {/* Privacy */}
+            <div className="bg-[#00f3ff]/5 border border-[#00f3ff]/20 rounded-lg p-3 mb-3">
+              <p className="text-xs text-slate-300">
+                <strong className="text-[#00f3ff]">🔒 100% Privacy:</strong> All processing happens in your browser. 
+                Your log files are never uploaded to any server.
+              </p>
+            </div>
+
+            {/* CTA */}
+            <div className="text-center">
+              <a 
+                href="#/blog"
+                className="inline-flex items-center gap-2 text-[#00f3ff] hover:underline text-xs"
+              >
+                Read our Log Analysis Guides →
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 // --- Styl CSS ---
 const getStyles = (isDark: boolean) => `
@@ -847,111 +940,9 @@ function AppContent() {
                     <Clipboard size={16} className="text-[#ff00ff]" /> PASTE CLIPBOARD
                   </button>
                 </div>
-              </div>
 
-              {/* SEO Content Section */}
-              <div className="w-full max-w-3xl mt-8 px-4">
-                <div className="glass-panel rounded-2xl p-8 border border-white/10">
-                  <h2 className="text-2xl font-bold text-white mb-4 text-center">
-                    Free <span className="text-[#00f3ff]">Online Log File Analyzer</span> for Massive Files
-                  </h2>
-                  
-                  <p className="text-slate-400 text-sm leading-relaxed mb-6 text-center max-w-2xl mx-auto">
-                    Log Voyager is a <strong className="text-slate-300">free log file analyzer online</strong> that handles 
-                    10GB+ files instantly in your browser. No upload needed - your logs never leave your device. 
-                    Perfect for DevOps, backend developers, and system administrators who need to 
-                    <strong className="text-slate-300"> analyze log files online</strong> quickly and securely.
-                  </p>
-
-                  {/* Features Grid */}
-                  <div className="grid md:grid-cols-3 gap-4 mb-8">
-                    <div className="bg-white/5 p-4 rounded-xl border border-white/5">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Zap size={18} className="text-[#00f3ff]" />
-                        <h3 className="text-white font-semibold text-sm">Instant Loading</h3>
-                      </div>
-                      <p className="text-slate-500 text-xs">
-                        Open 10GB+ log files instantly using streaming technology. No more waiting for files to load.
-                      </p>
-                    </div>
-                    
-                    <div className="bg-white/5 p-4 rounded-xl border border-white/5">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Search size={18} className="text-[#ff00ff]" />
-                        <h3 className="text-white font-semibold text-sm">Smart Search</h3>
-                      </div>
-                      <p className="text-slate-500 text-xs">
-                        Regex support, case sensitivity, multi-filter system. Find exactly what you need in seconds.
-                      </p>
-                    </div>
-                    
-                    <div className="bg-white/5 p-4 rounded-xl border border-white/5">
-                      <div className="flex items-center gap-2 mb-2">
-                        <FileJson size={18} className="text-yellow-400" />
-                        <h3 className="text-white font-semibold text-sm">JSON Support</h3>
-                      </div>
-                      <p className="text-slate-500 text-xs">
-                        Automatic JSON detection and pretty-print. Perfect for modern structured logging.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Use Cases */}
-                  <div className="mb-8">
-                    <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-                      <Bug size={16} className="text-[#00f3ff]" />
-                      Common Use Cases
-                    </h3>
-                    <div className="grid md:grid-cols-2 gap-3 text-sm text-slate-400">
-                      <div className="flex items-start gap-2">
-                        <span className="text-[#00f3ff] mt-1">✓</span>
-                        <span>Debug production errors in server logs</span>
-                      </div>
-                      <div className="flex items-start gap-2">
-                        <span className="text-[#00f3ff] mt-1">✓</span>
-                        <span>Analyze Nginx/Apache access logs</span>
-                      </div>
-                      <div className="flex items-start gap-2">
-                        <span className="text-[#00f3ff] mt-1">✓</span>
-                        <span>View Docker container logs</span>
-                      </div>
-                      <div className="flex items-start gap-2">
-                        <span className="text-[#00f3ff] mt-1">✓</span>
-                        <span>Parse application JSON logs</span>
-                      </div>
-                      <div className="flex items-start gap-2">
-                        <span className="text-[#00f3ff] mt-1">✓</span>
-                        <span>Search through large API logs</span>
-                      </div>
-                      <div className="flex items-start gap-2">
-                        <span className="text-[#00f3ff] mt-1">✓</span>
-                        <span>Monitor system syslog files</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Privacy Note */}
-                  <div className="bg-[#00f3ff]/5 border border-[#00f3ff]/20 rounded-xl p-4 mb-6">
-                    <p className="text-sm text-slate-300">
-                      <strong className="text-[#00f3ff]">🔒 100% Privacy:</strong> All processing happens in your browser. 
-                      Your log files are never uploaded to any server. Perfect for analyzing sensitive production logs 
-                      while maintaining compliance.
-                    </p>
-                  </div>
-
-                  {/* CTA */}
-                  <div className="text-center">
-                    <p className="text-slate-500 text-sm mb-4">
-                      Drop a log file above or select one to start analyzing instantly.
-                    </p>
-                    <a 
-                      href="#/blog"
-                      className="inline-flex items-center gap-2 text-[#00f3ff] hover:underline text-sm"
-                    >
-                      Read our Log Analysis Guides →
-                    </a>
-                  </div>
-                </div>
+                {/* About Button - expands SEO content */}
+                <AboutSection />
               </div>
 
               {/* Recent Sessions */}
