@@ -1,30 +1,48 @@
 import React from 'react';
-import { useTheme } from '../../context/ThemeContext';
 import { BlogLayout } from './BlogLayout';
 import { blogArticles } from '../articles';
 import { Clock, ArrowRight, Search } from 'lucide-react';
 
-export const BlogIndex: React.FC = () => {
-  const { theme } = useTheme();
+// Dark theme colors
+const DARK_BG = '#050505';
+const DARK_PANEL = 'rgba(20, 20, 25, 0.7)';
+const CYAN = '#00f3ff';
+const MAGENTA = '#ff00ff';
+const TEXT = '#e2e8f0';
+const TEXT_MUTED = 'rgba(226, 232, 240, 0.6)';
+const BORDER = 'rgba(255, 255, 255, 0.08)';
 
+export const BlogIndex: React.FC = () => {
   return (
     <BlogLayout>
       {/* Hero Section */}
       <div className="text-center mb-12">
-        <h1 className={`text-4xl md:text-5xl font-bold ${theme.foreground} mb-4`}>
-          Log Analysis <span style={{ color: theme.accent }}>Guides & Tips</span>
+        <h1 
+          className="text-4xl md:text-5xl font-bold mb-4 leading-tight"
+          style={{ color: TEXT }}
+        >
+          Log Analysis <span style={{ color: CYAN }}>Guides & Tips</span>
         </h1>
-        <p className={`text-lg ${theme.foreground} opacity-70 max-w-2xl mx-auto`}>
+        <p 
+          className="text-lg max-w-2xl mx-auto"
+          style={{ color: TEXT_MUTED }}
+        >
           Learn how to analyze log files effectively. From online log viewers to 
           JSON log analysis - master the tools and techniques used by DevOps professionals.
         </p>
       </div>
 
       {/* Search Hint */}
-      <div className={`${theme.panel} rounded-xl p-6 mb-8 border ${theme.border}`}>
-        <div className="flex items-center gap-3 mb-2">
-          <Search className="w-5 h-5" style={{ color: theme.accent }} />
-          <h2 className={`font-semibold ${theme.foreground}`}>Popular Topics</h2>
+      <div 
+        className="rounded-xl p-6 mb-8 border backdrop-blur-sm"
+        style={{ 
+          backgroundColor: DARK_PANEL,
+          borderColor: BORDER
+        }}
+      >
+        <div className="flex items-center gap-3 mb-3">
+          <Search className="w-5 h-5" style={{ color: CYAN }} />
+          <h2 style={{ color: TEXT }} className="font-semibold">Popular Topics</h2>
         </div>
         <div className="flex flex-wrap gap-2">
           {[
@@ -37,10 +55,10 @@ export const BlogIndex: React.FC = () => {
           ].map((tag) => (
             <span 
               key={tag}
-              className="px-3 py-1 rounded-full text-sm opacity-70"
+              className="px-3 py-1.5 rounded-full text-sm"
               style={{ 
-                backgroundColor: `${theme.accent}15`,
-                color: theme.accent 
+                backgroundColor: `${CYAN}15`,
+                color: CYAN 
               }}
             >
               {tag}
@@ -54,11 +72,11 @@ export const BlogIndex: React.FC = () => {
         {blogArticles.map((article) => (
           <article 
             key={article.id}
-            className={`${theme.panel} rounded-xl p-6 border ${theme.border} transition-all duration-200 hover:border-opacity-50`}
+            className="rounded-xl p-6 border transition-all duration-200 hover:border-cyan-400/30 backdrop-blur-sm"
             style={{ 
-              borderColor: theme.border,
-              '--tw-border-opacity': 0.3 
-            } as React.CSSProperties}
+              backgroundColor: DARK_PANEL,
+              borderColor: BORDER
+            }}
           >
             <a 
               href={`#/blog/${article.slug}`}
@@ -66,15 +84,24 @@ export const BlogIndex: React.FC = () => {
             >
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex-1">
-                  <h2 className={`text-xl font-semibold ${theme.foreground} group-hover:opacity-80 transition-opacity mb-2`}>
+                  <h2 
+                    className="text-xl font-semibold mb-2 transition-opacity group-hover:opacity-80"
+                    style={{ color: TEXT }}
+                  >
                     {article.title}
                   </h2>
-                  <p className={`${theme.foreground} opacity-70 mb-4`}>
+                  <p 
+                    className="mb-4"
+                    style={{ color: TEXT_MUTED }}
+                  >
                     {article.description}
                   </p>
                   
                   {/* Meta */}
-                  <div className="flex items-center gap-4 text-sm opacity-60">
+                  <div 
+                    className="flex items-center gap-4 text-sm"
+                    style={{ color: TEXT_MUTED }}
+                  >
                     <span className="flex items-center gap-1">
                       <Clock className="w-4 h-4" />
                       {article.readingTime}
@@ -89,8 +116,8 @@ export const BlogIndex: React.FC = () => {
                         key={keyword}
                         className="text-xs px-2 py-1 rounded"
                         style={{ 
-                          backgroundColor: `${theme.accent}10`,
-                          color: theme.accent 
+                          backgroundColor: `${CYAN}10`,
+                          color: CYAN 
                         }}
                       >
                         {keyword}
@@ -100,8 +127,8 @@ export const BlogIndex: React.FC = () => {
                 </div>
                 
                 <div 
-                  className="flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity"
-                  style={{ color: theme.accent }}
+                  className="flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+                  style={{ color: CYAN }}
                 >
                   Read <ArrowRight className="w-4 h-4" />
                 </div>
@@ -112,18 +139,30 @@ export const BlogIndex: React.FC = () => {
       </div>
 
       {/* CTA Section */}
-      <div className={`mt-12 ${theme.panel} rounded-xl p-8 text-center border ${theme.border}`}>
-        <h2 className={`text-2xl font-bold ${theme.foreground} mb-3`}>
+      <div 
+        className="mt-12 rounded-xl p-8 text-center border backdrop-blur-sm"
+        style={{ 
+          backgroundColor: DARK_PANEL,
+          borderColor: BORDER
+        }}
+      >
+        <h2 
+          className="text-2xl font-bold mb-3"
+          style={{ color: TEXT }}
+        >
           Ready to analyze your logs?
         </h2>
-        <p className={`${theme.foreground} opacity-70 mb-6`}>
+        <p 
+          className="mb-6"
+          style={{ color: TEXT_MUTED }}
+        >
           Try Log Voyager - the free online log analyzer for files of any size.
         </p>
         <a 
           href="https://www.logvoyager.cc"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:opacity-90"
           style={{ 
-            backgroundColor: theme.accent,
+            backgroundColor: CYAN,
             color: '#000' 
           }}
         >
