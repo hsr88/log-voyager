@@ -1,30 +1,44 @@
 {
   "version": 2,
-  "routes": [
-    { 
-      "src": "^/sitemap\\.xml$", 
-      "dest": "/sitemap.xml",
-      "headers": {
-        "Cache-Control": "public, max-age=0, must-revalidate",
-        "Content-Type": "application/xml"
-      }
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "/sitemap.xml"
     },
-    { 
-      "src": "^/sitemap\\.txt$", 
-      "dest": "/sitemap.txt",
-      "headers": {
-        "Cache-Control": "public, max-age=0, must-revalidate"
-      }
+    {
+      "source": "/sitemap.txt",
+      "destination": "/sitemap.txt"
     },
-    { 
-      "src": "^/robots\\.txt$", 
-      "dest": "/robots.txt",
-      "headers": {
-        "Cache-Control": "public, max-age=0, must-revalidate"
-      }
+    {
+      "source": "/robots.txt",
+      "destination": "/robots.txt"
     },
-    { "src": "^/blog-articles/(.*)$", "dest": "/blog-articles/$1" },
-    { "src": "^/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|json|webmanifest))$", "dest": "/$1" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    {
+      "source": "/blog-articles/:path*",
+      "destination": "/blog-articles/:path*"
+    },
+    {
+      "source": "/assets/:path*",
+      "destination": "/assets/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/xml; charset=utf-8"
+        }
+      ]
+    }
   ]
 }
