@@ -28,7 +28,7 @@ const AboutSection: React.FC = () => {
     <div className="mt-4">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center gap-2 py-2 text-slate-400 hover:text-[#00f3ff] transition-all text-xs"
+        className="mx-auto flex items-center justify-center gap-2 py-2 text-slate-400 hover:text-[#00f3ff] transition-all text-xs"
       >
         <Info size={14} />
         <span>About Log Voyager</span>
@@ -100,10 +100,10 @@ const AboutSection: React.FC = () => {
             {/* CTA */}
             <div className="text-center">
               <a 
-                href="#/blog"
+                href="#/about"
                 className="inline-flex items-center gap-2 text-[#00f3ff] hover:underline text-xs"
               >
-                Read our Log Analysis Guides →
+                Read more about Log Voyager →
               </a>
             </div>
           </div>
