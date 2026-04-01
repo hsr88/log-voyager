@@ -1,19 +1,11 @@
 {
-  "rewrites": [
-    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
-    { "source": "/robots.txt", "destination": "/robots.txt" },
-    { "source": "/blog-articles/(.*)", "destination": "/blog-articles/$1" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "headers": [
-    {
-      "source": "/sitemap.xml",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/xml"
-        }
-      ]
-    }
+  "version": 2,
+  "routes": [
+    { "src": "^/sitemap\\.xml$", "dest": "/sitemap.xml", "headers": { "Content-Type": "application/xml" } },
+    { "src": "^/sitemap\\.txt$", "dest": "/sitemap.txt" },
+    { "src": "^/robots\\.txt$", "dest": "/robots.txt" },
+    { "src": "^/blog-articles/(.*)$", "dest": "/blog-articles/$1" },
+    { "src": "^/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|json|webmanifest))$", "dest": "/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
