@@ -1,445 +1,788 @@
-# JSON Log Viewer: Complete Guide to Structured Log Analysis
+# JSON Log Viewer: Complete Guide to Structured Log Analysis (2026)
 
-**Last updated:** April 2026 | **Reading time:** 6 minutes
+**Published:** February 20, 2026 | **Updated:** March 30, 2026 | **Reading time:** 14 minutes
 
-Modern applications increasingly use **JSON log format** for structured logging. Unlike plain text logs, JSON logs are machine-readable, queryable, and contain rich metadata. But analyzing them requires specialized tools. This guide covers everything about JSON log viewers.
+Structured logging with JSON has become the standard for modern applications. Unlike traditional plain-text logs, JSON logs provide machine-readable, queryable data that enables powerful analysis capabilities. However, analyzing JSON logs requires specialized tools and techniques.
 
-## What Are JSON Logs?
+This comprehensive guide covers everything from JSON log fundamentals to advanced analysis techniques used by engineering teams at scale.
 
-**Traditional log:**
+## Why JSON Logs? The Evolution of Logging
+
+### Traditional vs. Structured Logging
+
+**Traditional Plain-Text Log:**
 ```
-[2026-04-01 10:00:00] ERROR: Payment failed for user 12345
+[2026-02-20 14:30:45] ERROR: Payment failed for user 12345 on order 789 - Card declined
 ```
 
-**JSON log:**
+**Problems:**
+- ❌ Hard to parse programmatically
+- ❌ Inconsistent format
+- ❌ Limited searchability
+- ❌ Data extraction requires regex
+
+**JSON Structured Log:**
 ```json
 {
-  "timestamp": "2026-04-01T10:00:00.123Z",
+  "timestamp": "2026-02-20T14:30:45.123Z",
   "level": "ERROR",
   "service": "payment-api",
   "message": "Payment processing failed",
-  "user_id": "12345",
-  "amount": 99.99,
-  "currency": "USD",
-  "payment_method": "credit_card",
-  "error_code": "CARD_DECLINED",
-  "error_details": {
-    "gateway": "stripe",
-    "decline_code": "insufficient_funds",
-    "retryable": false
-  },
-  "request_id": "req_abc123xyz",
-  "duration_ms": 2450,
-  "trace_id": "trace_xyz789"
-}
-```
-
-## Why JSON Logs?
-
-### Advantages
-
-✅ **Structured data** - Every field has a name and type
-✅ **Easy parsing** - No regex needed to extract fields
-✅ **Nested data** - Complex objects, arrays, metadata
-✅ **Query-friendly** - Filter by any field
-✅ **Machine-readable** - Perfect for log aggregation systems
-
-### Common Fields in JSON Logs
-
-| Field | Purpose | Example |
-|-------|---------|---------|
-| `timestamp` | When event occurred | `2026-04-01T10:00:00Z` |
-| `level` | Severity | `ERROR`, `WARN`, `INFO` |
-| `service` | Source application | `payment-api` |
-| `message` | Human-readable description | `Payment failed` |
-| `trace_id` | Distributed tracing | `trace_xyz789` |
-| `user_id` | Affected user | `12345` |
-| `duration_ms` | Performance metric | `2450` |
-| `error_code` | Categorization | `CARD_DECLINED` |
-
-## What Makes a Good JSON Log Viewer?
-
-### Essential Features
-
-✅ **Pretty-Print Toggle**
-```json
-// Compact (hard to read)
-{"timestamp":"2026-04-01T10:00:00Z","level":"ERROR","message":"Failed"}
-
-// Pretty-printed (readable)
-{
-  "timestamp": "2026-04-01T10:00:00Z",
-  "level": "ERROR",
-  "message": "Failed"
-}
-```
-
-✅ **Collapsible Sections**
-- Click to expand/collapse nested objects
-- Focus on relevant fields
-
-✅ **Syntax Highlighting**
-- Keys in one color
-- Strings in another
-- Numbers highlighted
-- Booleans/null distinct
-
-✅ **Field Search**
-- Search specific field values
-- Navigate between matches
-
-### Advanced Features
-
-🚀 **Field Filtering**
-- Show only specific fields
-- Hide noisy/irrelevant data
-
-🚀 **JSON Path Queries**
-```
-$.error_details.decline_code
-$.users[0].email
-```
-
-🚀 **Aggregation**
-- Group by field values
-- Count occurrences
-- Find patterns
-
-🚀 **Export**
-- Export filtered JSON
-- Convert to CSV
-- Pretty-print output
-
-## JSON Log Viewer Comparison
-
-| Feature | Log Voyager | jq | VS Code | Online JSON Tools |
-|---------|-------------|-----|---------|-------------------|
-| Large files (10GB+) | ✅ Yes | ✅ Yes | ❌ No | ❌ No |
-| Pretty-print | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
-| Collapsible | ✅ Yes | ❌ No | ✅ Yes | ⚠️ Limited |
-| Search nested | ✅ Yes | ✅ Yes | ⚠️ Basic | ⚠️ Limited |
-| Privacy (local) | ✅ Yes | ✅ Yes | ✅ Yes | ❌ No |
-| Mobile support | ✅ Yes | ❌ No | ❌ No | ✅ Yes |
-
-## Analyzing JSON Logs Step-by-Step
-
-### Step 1: Load the Log File
-
-Most JSON logs are newline-delimited (NDJSON):
-```json
-{"level":"INFO","message":"Started"}
-{"level":"ERROR","message":"Failed"}
-{"level":"INFO","message":"Retrying"}
-```
-
-Good viewers detect this automatically.
-
-### Step 2: Pretty-Print for Readability
-
-Toggle pretty-print to see structure clearly.
-
-### Step 3: Explore Structure
-
-Look for common patterns:
-- What fields are always present?
-- What's nested under `error_details`?
-- Are there arrays of objects?
-
-### Step 4: Filter by Level
-
-Find all errors:
-```
-"level":\s*"ERROR"
-```
-
-### Step 5: Deep Dive into Errors
-
-Expand `error_details` to see:
-- Error codes
-- Stack traces
-- Context information
-
-### Step 6: Aggregate and Count
-
-Group by `error_code` to find:
-- Most common errors
-- Error trends
-- Patterns
-
-## Common JSON Log Patterns
-
-### 1. Application Logs
-
-```json
-{
-  "timestamp": "2026-04-01T10:00:00Z",
-  "level": "ERROR",
-  "logger": "PaymentService",
-  "message": "Payment failed",
-  "exception": {
-    "type": "PaymentException",
-    "message": "Card declined",
-    "stack_trace": "..."
-  },
   "context": {
     "user_id": "12345",
-    "request_id": "req_abc"
+    "order_id": "789",
+    "amount": 99.99,
+    "currency": "USD"
+  },
+  "error": {
+    "type": "CardDeclined",
+    "code": "INSUFFICIENT_FUNDS",
+    "gateway": "stripe",
+    "retryable": false
+  },
+  "performance": {
+    "duration_ms": 2450,
+    "db_queries": 3,
+    "external_calls": 1
+  },
+  "trace_id": "trace_abc123xyz",
+  "span_id": "span_def456"
+}
+```
+
+**Advantages:**
+- ✅ Consistent, parseable structure
+- ✅ Rich data types (strings, numbers, booleans, objects)
+- ✅ Nested data support
+- ✅ Easy filtering by any field
+- ✅ Machine-readable for automation
+
+### Adoption Statistics
+
+```
+JSON Log Adoption by Industry (2026):
+┌────────────────────┬──────────────┬─────────────────────────┐
+│ Industry           │ Adoption %   │ Primary Use Case        │
+├────────────────────┼──────────────┼─────────────────────────┤
+│ SaaS/Tech          │ 89%          │ Microservices debugging │
+│ Finance/Fintech    │ 76%          │ Transaction tracking    │
+│ E-commerce         │ 71%          │ Order flow analysis     │
+│ Healthcare         │ 64%          │ Audit compliance        │
+│ Gaming             │ 82%          │ Player behavior         │
+│ IoT                │ 91%          │ Device telemetry        │
+└────────────────────┴──────────────┴─────────────────────────┘
+```
+
+## JSON Log Formats Explained
+
+### 1. Single JSON Objects (One per Line)
+
+**Format:** Each line is a complete JSON object (NDJSON - Newline Delimited JSON)
+
+```json
+{"timestamp":"2026-02-20T14:30:00Z","level":"INFO","message":"Server started"}
+{"timestamp":"2026-02-20T14:30:01Z","level":"DEBUG","message":"Connecting to database"}
+{"timestamp":"2026-02-20T14:30:02Z","level":"INFO","message":"Connected successfully"}
+```
+
+**Pros:** Easy to parse line-by-line, append-only
+**Cons:** Harder to read raw format
+**Tools:** Log Voyager, jq, most modern log viewers
+
+### 2. JSON Arrays
+
+**Format:** Entire file is one large JSON array
+
+```json
+[
+  {"timestamp":"2026-02-20T14:30:00Z","level":"INFO","message":"Log 1"},
+  {"timestamp":"2026-02-20T14:30:01Z","level":"INFO","message":"Log 2"},
+  {"timestamp":"2026-02-20T14:30:02Z","level":"INFO","message":"Log 3"}
+]
+```
+
+**Pros:** Valid JSON, easy to parse as single object
+**Cons:** Must load entire file, not append-friendly
+**Tools:** JSON viewers, browsers, programming languages
+
+### 3. Embedded JSON in Plain Text
+
+**Format:** JSON objects embedded within plain text log lines
+
+```
+[2026-02-20 14:30:45] Request: {"method":"POST","path":"/api/users","body":{"name":"John"}}
+[2026-02-20 14:30:46] Response: {"status":201,"id":"user_123"}
+```
+
+**Pros:** Human-readable context
+**Cons:** Requires parsing to extract JSON
+**Tools:** Regex-capable viewers, Log Voyager (auto-detect)
+
+## Anatomy of a Production-Ready JSON Log
+
+### Standard Fields
+
+| Field | Type | Required | Description | Example |
+|-------|------|----------|-------------|---------|
+| `timestamp` | string | ✅ | ISO 8601 timestamp | `"2026-02-20T14:30:45.123Z"` |
+| `level` | string | ✅ | Severity level | `"ERROR"`, `"INFO"` |
+| `message` | string | ✅ | Human-readable description | `"Payment failed"` |
+| `service` | string | ⚠️ Recommended | Source service | `"payment-api"` |
+| `trace_id` | string | ⚠️ Recommended | Distributed trace ID | `"trace_abc123"` |
+
+### Optional Context Fields
+
+```json
+{
+  "timestamp": "2026-02-20T14:30:45.123Z",
+  "level": "ERROR",
+  "service": "payment-api",
+  "environment": "production",
+  "host": "server-03.prod",
+  "version": "2.5.1",
+  
+  "message": "Payment processing failed",
+  
+  "context": {
+    "user_id": "user_12345",
+    "order_id": "ord_789",
+    "session_id": "sess_xyz789",
+    "ip_address": "203.0.113.45",
+    "user_agent": "Mozilla/5.0..."
+  },
+  
+  "error": {
+    "type": "CardDeclined",
+    "code": "INSUFFICIENT_FUNDS",
+    "message": "The card has insufficient funds",
+    "gateway": "stripe",
+    "gateway_code": "card_declined",
+    "retryable": false,
+    "stack_trace": "..."
+  },
+  
+  "performance": {
+    "duration_ms": 2450,
+    "db_duration_ms": 120,
+    "external_duration_ms": 2300,
+    "db_queries": 3,
+    "external_calls": 1,
+    "cache_hits": 2,
+    "cache_misses": 1
+  },
+  
+  "http": {
+    "method": "POST",
+    "path": "/api/payments",
+    "status_code": 402,
+    "request_headers": {...},
+    "response_headers": {...}
+  },
+  
+  "trace_context": {
+    "trace_id": "trace_abc123xyz",
+    "span_id": "span_def456",
+    "parent_span_id": "span_parent789",
+    "sampled": true
   }
 }
 ```
 
-**Analysis tips:**
-- Filter by `level` = ERROR
-- Group by `exception.type`
-- Search `message` for keywords
+### Log Level Best Practices
 
----
+```
+┌───────────┬─────────────────────────────────────────────────────┐
+│ Level     │ When to Use                                         │
+├───────────┼─────────────────────────────────────────────────────┤
+│ FATAL     │ System crashing, data loss imminent                 │
+│ ERROR     │ Functionality broken, user impact                   │
+│ WARN      │ Unexpected but handled, potential issue             │
+│ INFO      │ Normal operations, significant events               │
+│ DEBUG     │ Development diagnostics, detailed flow              │
+│ TRACE     │ Very detailed execution, performance analysis       │
+└───────────┴─────────────────────────────────────────────────────┘
 
-### 2. HTTP Access Logs
+Production Recommendation:
+- Log ERROR and above: Always
+- Log INFO: Normal operations
+- Log DEBUG: Enable temporarily for issues
+- Log TRACE: Rarely, extreme debugging
+```
+
+## Choosing a JSON Log Viewer
+
+### Essential Features
+
+| Feature | Why It Matters | Priority |
+|---------|---------------|----------|
+| **Pretty-Print** | Makes nested JSON readable | ⭐⭐⭐⭐⭐ |
+| **Collapsible Nodes** | Hide/show nested objects | ⭐⭐⭐⭐⭐ |
+| **Syntax Highlighting** | Visual distinction of types | ⭐⭐⭐⭐ |
+| **Field Search** | Find values in specific fields | ⭐⭐⭐⭐⭐ |
+| **JSON Path Support** | Query nested structures | ⭐⭐⭐⭐ |
+| **Table View** | Flatten JSON for spreadsheet | ⭐⭐⭐ |
+| **Filter/Query** | Complex conditional searches | ⭐⭐⭐⭐⭐ |
+| **Large File Support** | Handle GB+ files | ⭐⭐⭐⭐⭐ |
+
+### Tool Comparison
+
+| Tool | Pretty-Print | Collapse | Large Files | JSON Path | Privacy | Cost |
+|------|-------------|----------|-------------|-----------|---------|------|
+| **Log Voyager** | ✅ | ✅ | ✅ 10GB+ | ⚠️ Regex | ⭐⭐⭐⭐⭐ | Free |
+| **jq** | ✅ | ❌ | ✅ | ✅ | ⭐⭐⭐⭐⭐ | Free |
+| **VS Code** | ✅ | ✅ | ❌ | ❌ | ⭐⭐⭐⭐⭐ | Free |
+| **JSON Crack** | ✅ | ✅ | ❌ | ❌ | ⭐⭐ | Free/Freemium |
+| **Splunk** | ✅ | ✅ | ✅ | ✅ SPL | ⭐⭐ | $$$ |
+
+## JSON Log Analysis Techniques
+
+### 1. Basic Filtering
+
+**Filter by Level:**
+```javascript
+// Show only errors
+logs.filter(log => log.level === 'ERROR')
+
+// Show errors and warnings
+logs.filter(log => ['ERROR', 'WARN'].includes(log.level))
+```
+
+**Filter by Time Range:**
+```javascript
+// Last hour
+const oneHourAgo = new Date(Date.now() - 3600000);
+logs.filter(log => new Date(log.timestamp) > oneHourAgo)
+```
+
+**Filter by Service:**
+```javascript
+// Specific microservice
+logs.filter(log => log.service === 'payment-api')
+```
+
+### 2. Advanced Queries
+
+**Find Slow Operations:**
+```javascript
+// Operations taking > 1000ms
+logs.filter(log => 
+  log.performance?.duration_ms > 1000
+)
+```
+
+**Find Specific Error Types:**
+```javascript
+// Database timeouts
+logs.filter(log => 
+  log.error?.code === 'DB_TIMEOUT'
+)
+```
+
+**Complex Multi-Field Search:**
+```javascript
+// Failed payments over $100 in production
+logs.filter(log => 
+  log.level === 'ERROR' &&
+  log.error?.type === 'PaymentFailed' &&
+  log.context?.amount > 100 &&
+  log.environment === 'production'
+)
+```
+
+### 3. Aggregation and Analysis
+
+**Error Count by Type:**
+```javascript
+const errorCounts = logs
+  .filter(log => log.level === 'ERROR')
+  .reduce((acc, log) => {
+    const type = log.error?.type || 'Unknown';
+    acc[type] = (acc[type] || 0) + 1;
+    return acc;
+  }, {});
+
+// Result:
+// {
+//   "DatabaseTimeout": 45,
+//   "ConnectionRefused": 12,
+//   "NullPointerException": 8
+// }
+```
+
+**Performance Statistics:**
+```javascript
+const responseTimes = logs
+  .filter(log => log.performance?.duration_ms)
+  .map(log => log.performance.duration_ms);
+
+const stats = {
+  count: responseTimes.length,
+  avg: responseTimes.reduce((a,b) => a+b, 0) / responseTimes.length,
+  min: Math.min(...responseTimes),
+  max: Math.max(...responseTimes),
+  p95: percentile(responseTimes, 0.95),
+  p99: percentile(responseTimes, 0.99)
+};
+
+// Result:
+// {
+//   count: 10000,
+//   avg: 145,
+//   min: 12,
+//   max: 5200,
+//   p95: 420,
+//   p99: 890
+// }
+```
+
+**Hourly Error Rate:**
+```javascript
+const hourlyErrors = logs
+  .filter(log => log.level === 'ERROR')
+  .reduce((acc, log) => {
+    const hour = log.timestamp.substring(0, 13); // "2026-02-20T14"
+    acc[hour] = (acc[hour] || 0) + 1;
+    return acc;
+  }, {});
+```
+
+## Real-World Analysis Scenarios
+
+### Scenario 1: Debugging Payment Failures
+
+**Problem:** Payment success rate dropped from 98% to 87%
+
+**Analysis Steps:**
+
+1. **Filter for payment errors:**
+```
+Filter: level = ERROR AND service = "payment-api"
+Result: 1,247 errors in last hour
+```
+
+2. **Aggregate by error type:**
+```
+Error Breakdown:
+┌─────────────────────────┬────────┬──────────┐
+│ Error Type              │ Count  │ % Total  │
+├─────────────────────────┼────────┼──────────┤
+│ CardDeclined            │ 892    │ 71.5%    │
+│ GatewayTimeout          │ 234    │ 18.8%    │
+│ InvalidCardNumber       │ 89     │ 7.1%     │
+│ FraudDetection          │ 32     │ 2.6%     │
+└─────────────────────────┴────────┴──────────┘
+```
+
+3. **Analyze CardDeclined reasons:**
+```
+Card Decline Reasons:
+┌──────────────────────┬────────┐
+│ Reason               │ Count  │
+├──────────────────────┼────────┤
+│ insufficient_funds   │ 456    │
+│ expired_card         │ 234    │
+│ incorrect_cvv        │ 123    │
+│ issuer_declined      │ 79     │
+└──────────────────────┴────────┘
+```
+
+**Findings:**
+- 71% of errors are legitimate declines (not system issues)
+- 18.8% are gateway timeouts (system issue)
+- Action needed: Investigate gateway timeout issue
+
+### Scenario 2: Performance Bottleneck
+
+**Problem:** API response times spiked
+
+**Analysis:**
+
+1. **Filter slow requests (>1000ms):**
+```
+Found: 450 requests > 1000ms
+```
+
+2. **Group by endpoint:**
+```
+Slow Endpoints:
+┌────────────────────────────┬──────────┬──────────────┐
+│ Endpoint                   │ Count    │ Avg Time     │
+├────────────────────────────┼──────────┼──────────────┤
+│ POST /api/reports/generate │ 234      │ 4,500ms      │
+│ GET /api/analytics/export  │ 156      │ 3,200ms      │
+│ POST /api/bulk/import      │ 60       │ 1,800ms      │
+└────────────────────────────┴──────────┴──────────────┘
+```
+
+3. **Analyze report generation:**
+```
+Report Generation Performance:
+- DB queries: 47 per request (too many!)
+- External API calls: 3
+- Memory usage: 450MB
+
+Root Cause: N+1 query problem in report generation
+```
+
+**Solution:**
+- Implement database query batching
+- Add caching layer
+- Consider async report generation
+
+### Scenario 3: Distributed Tracing
+
+**Using trace_id to follow a request:**
+
+```json
+// Service A (API Gateway)
+{
+  "trace_id": "trace_abc123",
+  "span_id": "span_1",
+  "service": "api-gateway",
+  "message": "Request received"
+}
+
+// Service B (Auth Service)
+{
+  "trace_id": "trace_abc123",
+  "span_id": "span_2",
+  "parent_span_id": "span_1",
+  "service": "auth-service",
+  "message": "User authenticated",
+  "performance": {"duration_ms": 45}
+}
+
+// Service C (Payment Service)
+{
+  "trace_id": "trace_abc123",
+  "span_id": "span_3",
+  "parent_span_id": "span_1",
+  "service": "payment-service",
+  "message": "Payment processed",
+  "performance": {"duration_ms": 1200}
+}
+
+// Service A (API Gateway) - Response
+{
+  "trace_id": "trace_abc123",
+  "span_id": "span_1",
+  "service": "api-gateway",
+  "message": "Response sent",
+  "performance": {"duration_ms": 1350}
+}
+```
+
+**Analysis:**
+- Total request time: 1350ms
+- Auth service: 45ms (fast)
+- Payment service: 1200ms (bottleneck!)
+- Network overhead: ~105ms
+
+## Common JSON Log Patterns
+
+### 1. HTTP Request/Response Logging
 
 ```json
 {
-  "timestamp": "2026-04-01T10:00:00Z",
+  "timestamp": "2026-02-20T14:30:45Z",
+  "level": "INFO",
+  "type": "http_request",
   "method": "POST",
-  "path": "/api/payments",
-  "status_code": 500,
-  "duration_ms": 2450,
-  "user_agent": "Mozilla/5.0...",
-  "ip": "192.168.1.1",
+  "path": "/api/users",
+  "query_params": {"include": "profile"},
+  "headers": {
+    "user-agent": "Mozilla/5.0...",
+    "content-type": "application/json"
+  },
+  "body_size": 256,
   "user_id": "12345"
 }
 ```
 
-**Analysis tips:**
-- Find slow requests: `duration_ms` > 1000
-- Count 5xx errors: `status_code` >= 500
-- Group by `path` for endpoint analysis
-
----
-
-### 3. Structured Error Logs
+### 2. Database Query Logging
 
 ```json
 {
-  "timestamp": "2026-04-01T10:00:00Z",
+  "timestamp": "2026-02-20T14:30:45Z",
+  "level": "DEBUG",
+  "type": "db_query",
+  "query": "SELECT * FROM users WHERE id = ?",
+  "parameters": ["12345"],
+  "duration_ms": 12,
+  "rows_returned": 1,
+  "table": "users",
+  "operation": "SELECT"
+}
+```
+
+### 3. Error with Context
+
+```json
+{
+  "timestamp": "2026-02-20T14:30:45Z",
   "level": "ERROR",
+  "message": "Order processing failed",
   "error": {
-    "code": "DATABASE_TIMEOUT",
-    "category": "infrastructure",
-    "severity": "critical",
-    "retryable": true,
-    "context": {
-      "query": "SELECT * FROM users...",
-      "duration_ms": 30000,
-      "connection_id": "conn_123"
+    "type": "ValidationError",
+    "code": "INVALID_QUANTITY",
+    "details": {
+      "field": "quantity",
+      "value": -1,
+      "constraint": "must be positive"
     }
+  },
+  "context": {
+    "order_id": "ORD-789",
+    "user_id": "USR-456",
+    "items": [{"id": "PROD-1", "qty": -1}]
   }
 }
 ```
-
-**Analysis tips:**
-- Filter non-retryable errors: `error.retryable` = false
-- Group by `error.category`
-- Find critical severity issues
-
----
-
-### 4. Distributed Tracing Logs
-
-```json
-{
-  "timestamp": "2026-04-01T10:00:00Z",
-  "trace_id": "abc123",
-  "span_id": "span_456",
-  "parent_span_id": "span_123",
-  "service": "payment-api",
-  "operation": "process_payment",
-  "duration_ms": 150,
-  "tags": {
-    "http.method": "POST",
-    "http.status_code": 200
-  }
-}
-```
-
-**Analysis tips:**
-- Filter by `trace_id` to follow a request
-- Find slow spans across services
-- Identify bottlenecks
-
-## JSON Log Viewer in Action
-
-### Scenario: Debugging Payment Failures
-
-1. **Load logs** from payment service
-2. **Filter** by `"level":\s*"ERROR"`
-3. **Pretty-print** to see structure
-4. **Search** for `"error_code":\s*"CARD_DECLINED"`
-5. **Aggregate** by `error_details.decline_code`
-6. **Findings:**
-   - 70% = insufficient_funds
-   - 20% = expired_card
-   - 10% = other
-
-**Action:** Implement better error messages for users.
-
-### Scenario: Performance Analysis
-
-1. **Load** API gateway logs
-2. **Filter** `duration_ms` > 1000
-3. **Group** by `path`
-4. **Findings:**
-   - `/api/reports/generate` averages 5s
-   - `/api/users` is fast (<50ms)
-
-**Action:** Optimize report generation or add caching.
 
 ## Best Practices for JSON Logging
 
-### 1. Use Standard Field Names
+### 1. Consistency is Key
 
+**✅ Good:**
 ```json
-✅ Good:
 {
-  "timestamp": "...",
+  "timestamp": "2026-02-20T14:30:45Z",
   "level": "ERROR",
-  "message": "..."
-}
-
-❌ Avoid:
-{
-  "ts": "...",
-  "lvl": "ERR",
-  "msg": "..."
+  "service": "payment-api",
+  "message": "Payment failed"
 }
 ```
 
-### 2. Include Context
-
+**❌ Bad (Inconsistent):**
 ```json
-✅ Good:
+{
+  "ts": "2026-02-20 14:30:45",
+  "severity": "error",
+  "app": "payments",
+  "msg": "Payment failed"
+}
+```
+
+### 2. Include Context, Not Just Messages
+
+**❌ Bad:**
+```json
+{"message": "Payment failed for user 12345 on order 789"}
+```
+
+**✅ Good:**
+```json
 {
   "message": "Payment failed",
-  "user_id": "12345",
-  "order_id": "ord_789",
-  "amount": 99.99
-}
-
-❌ Avoid:
-{
-  "message": "Payment failed for user 12345 on order ord_789"
+  "context": {
+    "user_id": "12345",
+    "order_id": "789",
+    "amount": 99.99
+  }
 }
 ```
 
-### 3. Use Proper Types
+### 3. Use Appropriate Data Types
 
+**❌ Bad:**
 ```json
-✅ Good:
+{
+  "duration": "2450",
+  "success": "true",
+  "count": "5"
+}
+```
+
+**✅ Good:**
+```json
 {
   "duration_ms": 2450,
   "success": true,
-  "retry_count": 3
-}
-
-❌ Avoid:
-{
-  "duration_ms": "2450",
-  "success": "true",
-  "retry_count": "3"
+  "count": 5
 }
 ```
 
 ### 4. Don't Log Sensitive Data
 
+**❌ Never:**
 ```json
-❌ Never:
 {
-  "user_email": "user@example.com",
+  "user_email": "john@example.com",
+  "password": "secret123",
   "credit_card": "4111111111111111",
-  "password": "secret123"
+  "ssn": "123-45-6789"
 }
+```
 
-✅ Instead:
+**✅ Safe:**
+```json
 {
-  "user_id": "12345",
+  "user_id": "usr_12345",
   "payment_method": "credit_card",
-  "payment_last4": "1111"
+  "card_last4": "1111"
+}
+```
+
+### 5. Structured Error Information
+
+**❌ Bad:**
+```json
+{
+  "message": "Error: Database connection failed after 3 retries"
+}
+```
+
+**✅ Good:**
+```json
+{
+  "message": "Database connection failed",
+  "error": {
+    "type": "ConnectionError",
+    "retries": 3,
+    "final_error": "ECONNREFUSED",
+    "host": "db.prod.internal",
+    "port": 5432
+  }
 }
 ```
 
 ## Tools for JSON Log Analysis
 
-### Browser-Based (Recommended for Quick Analysis)
+### Command Line: jq
 
-**Log Voyager**
-- Handles large files
-- Pretty-print with toggle
-- JSON-aware search
-- Privacy-first (local processing)
+**Installation:** `apt-get install jq` (Linux) or `brew install jq` (Mac)
 
-**[Try it →](https://www.logvoyager.cc)**
+**Examples:**
 
----
-
-### Command Line
-
-**jq** - The JSON processor
 ```bash
-# Filter errors
-cat app.log | jq 'select(.level == "ERROR")'
+# Pretty-print JSON file
+jq . app.log
 
-# Count by error code
-cat app.log | jq -s 'group_by(.error_code) | map({code: .[0].error_code, count: length})'
+# Filter errors
+jq 'select(.level == "ERROR")' app.log
 
 # Extract specific fields
-cat app.log | jq '{timestamp, level, message}'
+jq '{time: .timestamp, msg: .message}' app.log
+
+# Count errors by type
+jq -s 'map(select(.level == "ERROR")) | group_by(.error.type) | map({type: .[0].error.type, count: length})' app.log
+
+# Find slow queries (>1000ms)
+jq 'select(.performance?.duration_ms > 1000)' app.log
 ```
 
----
+### Browser-Based: Log Voyager
 
-### Programming
+**Best for:**
+- Large JSON log files (10GB+)
+- Visual exploration
+- Quick filtering
+- Privacy-sensitive data
 
-**Python:**
+**Features:**
+- Auto-detects JSON format
+- Collapsible tree view
+- Regex search
+- Export filtered results
+
+**Usage:**
+1. Open logvoyager.cc
+2. Drop JSON log file
+3. Toggle JSON prettify
+4. Search and filter
+
+### Programming: Python
+
 ```python
 import json
+from collections import Counter
 
-with open('app.log') as f:
-    for line in f:
-        log = json.loads(line)
-        if log.get('level') == 'ERROR':
-            print(log['message'])
+# Parse JSON logs
+def parse_json_logs(filepath):
+    logs = []
+    with open(filepath) as f:
+        for line in f:
+            logs.append(json.loads(line))
+    return logs
+
+# Analyze logs
+logs = parse_json_logs('app.log')
+
+# Count errors by type
+errors = [log for log in logs if log.get('level') == 'ERROR']
+error_types = Counter(e.get('error', {}).get('type') for e in errors)
+print(error_types.most_common(10))
+
+# Find slow operations
+slow_ops = [
+    log for log in logs 
+    if log.get('performance', {}).get('duration_ms', 0) > 1000
+]
+print(f"Found {len(slow_ops)} slow operations")
 ```
 
 ## Conclusion
 
-JSON logs offer tremendous value for modern applications, but you need the right viewer to unlock their potential. For most use cases, a browser-based tool like Log Voyager provides the perfect balance of features, performance, and ease of use.
+JSON logs provide the foundation for modern observability and debugging. By using the right tools and following best practices, you can:
 
-**Key takeaways:**
-- Always use structured logging (JSON)
-- Include context in every log entry
-- Use consistent field names
-- Never log sensitive data
-- Choose a viewer that supports large files
+- ✅ Debug issues 10x faster than with plain text logs
+- ✅ Build automated alerting and monitoring
+- ✅ Generate insights through aggregation
+- ✅ Maintain compliance with audit trails
 
-**Ready to analyze your JSON logs?** [Open Log Voyager](https://www.logvoyager.cc) and start exploring.
+**Key Takeaways:**
+1. Always structure your logs as JSON
+2. Include rich context, not just messages
+3. Use consistent field names across services
+4. Choose a viewer that handles your file sizes
+5. Never log sensitive information
+
+**Ready to analyze your JSON logs?** [Log Voyager](https://www.logvoyager.cc) provides instant JSON prettification, powerful search, and handles files of any size - all in your browser with complete privacy.
 
 ---
 
-**Related Articles:**
+## Related Resources
+
 - [How to Analyze Log Files Online](/blog/how-to-analyze-log-files-online)
 - [Best Free Log File Analyzers](/blog/best-free-log-file-analyzers)
 - [Online Log Reader Guide](/blog/online-log-reader-guide)
 
-**FAQ:**
+## JSON Log Schema Templates
 
-**Q: Can I analyze newline-delimited JSON (NDJSON)?**
-A: Yes, Log Voyager and most modern tools handle NDJSON automatically.
+### Web Application Template
+```json
+{
+  "timestamp": "ISO8601",
+  "level": "DEBUG|INFO|WARN|ERROR|FATAL",
+  "service": "string",
+  "message": "string",
+  "request_id": "uuid",
+  "user_id": "string",
+  "http": {
+    "method": "GET|POST|PUT|DELETE",
+    "path": "string",
+    "status_code": 200,
+    "duration_ms": 0
+  },
+  "error": {
+    "type": "string",
+    "message": "string"
+  }
+}
+```
 
-**Q: What if my JSON is malformed?**
-A: Good viewers will show raw text for malformed lines and highlight valid JSON.
+### Microservices Template
+```json
+{
+  "timestamp": "ISO8601",
+  "level": "string",
+  "service": "string",
+  "trace_id": "uuid",
+  "span_id": "uuid",
+  "parent_span_id": "uuid",
+  "message": "string",
+  "metadata": {}
+}
+```
 
-**Q: Can I export filtered results as JSON?**
-A: Yes, Log Voyager allows exporting selected/filtered lines as JSON.
-
-**Q: How do I handle JSON within plain text logs?**
-A: Look for viewers with auto-detection that can prettify JSON embedded in log lines.
+*Last updated: March 30, 2026*
