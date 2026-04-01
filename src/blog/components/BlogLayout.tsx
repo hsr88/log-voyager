@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BookOpen, ArrowLeft } from 'lucide-react';
 
 interface BlogLayoutProps {
   children: React.ReactNode;
   showBackButton?: boolean;
+  title?: string;
+  description?: string;
 }
 
 // Dark theme colors (matching main app)
@@ -16,8 +18,37 @@ const BORDER = 'rgba(255, 255, 255, 0.08)';
 
 export const BlogLayout: React.FC<BlogLayoutProps> = ({ 
   children, 
-  showBackButton = false 
+  showBackButton = false,
+  title = 'Log Voyager Blog',
+  description = 'Log analysis guides and tips for developers'
 }) => {
+  useEffect(() => {
+    document.title = title;
+    
+    // Update meta description
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute('content', description);
+    }
+    
+    // Update canonical link
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      canonical.setAttribute('href', window.location.href.split('#')[0] + window.location.hash);
+    }
+    
+    // Update OG title
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) {
+      ogTitle.setAttribute('content', title);
+    }
+    
+    // Update Twitter title
+    let twitterTitle = document.querySelector('meta[property="twitter:title"]');
+    if (twitterTitle) {
+      twitterTitle.setAttribute('content', title);
+    }
+  }, [title, description]);
   return (
     <div 
       className="min-h-screen"

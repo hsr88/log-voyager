@@ -15,7 +15,11 @@ const PANEL = 'rgba(20, 20, 25, 0.7)';
 
 export const AboutPage: React.FC = () => {
   return (
-    <BlogLayout showBackButton>
+    <BlogLayout 
+      showBackButton
+      title="About Log Voyager | Free Online Log File Analyzer"
+      description="Learn about Log Voyager - the free, open-source log file analyzer for massive files. 100% privacy, instant loading, and cross-platform."
+    >
       {/* Hero Section */}
       <div className="text-center mb-12">
         <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6" style={{ background: `${CYAN}15` }}>

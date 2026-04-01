@@ -14,7 +14,10 @@ const BORDER = 'rgba(255, 255, 255, 0.08)';
 
 export const BlogIndex: React.FC = () => {
   return (
-    <BlogLayout>
+    <BlogLayout 
+      title="Log Voyager Blog | Log Analysis Guides & Tips"
+      description="Learn how to analyze log files effectively. From online log viewers to JSON log analysis - master the tools and techniques used by DevOps professionals."
+    >
       {/* Hero Section */}
       <div className="text-center mb-12">
         <h1 

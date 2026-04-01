@@ -26,6 +26,24 @@ export const BlogPost: React.FC<BlogPostProps> = ({ slug }) => {
   const article = getArticleBySlug(slug);
   const relatedArticles = getRelatedArticles(slug);
 
+  // Update document title and meta tags
+  useEffect(() => {
+    if (article) {
+      document.title = `${article.title} | Log Voyager Blog`;
+      
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', article.description);
+      
+      let canonical = document.querySelector('link[rel="canonical"]');
+      if (canonical) canonical.setAttribute('href', `https://www.logvoyager.cc/#/blog/${article.slug}`);
+      
+      let ogTitle = document.querySelector('meta[property="og:title"]');
+      let ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogTitle) ogTitle.setAttribute('content', article.title);
+      if (ogDesc) ogDesc.setAttribute('content', article.description);
+    }
+  }, [article]);
+
   useEffect(() => {
     const loadContent = async () => {
       try {
