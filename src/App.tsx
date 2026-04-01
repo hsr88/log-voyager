@@ -494,6 +494,17 @@ function AppContent() {
           </div>
           
           <div className="flex items-center gap-2">
+            {/* GitHub Star Button - Always Visible */}
+            <a
+              href="https://github.com/hsr88/log-voyager"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#24292e] hover:bg-[#2f363d] text-white transition-colors text-xs border border-white/10"
+            >
+              <Github size={14} />
+              <span>Star on GitHub</span>
+            </a>
+            
             {file && (
               <button
                 onClick={() => setShowCommandPalette(true)}
