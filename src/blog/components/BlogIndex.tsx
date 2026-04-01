@@ -82,7 +82,7 @@ export const BlogIndex: React.FC = () => {
             }}
           >
             <a 
-              href={`#/blog/${article.slug}`}
+              href={`/blog/${article.slug}`}
               className="block group"
             >
               {/* Article Image */}

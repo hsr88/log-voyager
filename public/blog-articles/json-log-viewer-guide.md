@@ -743,9 +743,9 @@ JSON logs provide the foundation for modern observability and debugging. By usin
 
 ## Related Resources
 
-- [How to Analyze Log Files Online](#/blog/how-to-analyze-log-files-online)
-- [Best Free Log File Analyzers](#/blog/best-free-log-file-analyzers)
-- [Online Log Reader Guide](#/blog/online-log-reader-guide)
+- [How to Analyze Log Files Online](/blog/how-to-analyze-log-files-online)
+- [Best Free Log File Analyzers](/blog/best-free-log-file-analyzers)
+- [Online Log Reader Guide](/blog/online-log-reader-guide)
 
 ## JSON Log Schema Templates
 

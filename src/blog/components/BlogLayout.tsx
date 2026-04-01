@@ -92,7 +92,7 @@ export const BlogLayout: React.FC<BlogLayoutProps> = ({
       {showBackButton && (
         <div className="max-w-4xl mx-auto px-4 pt-6">
           <a 
-            href="#/blog"
+            href="/blog"
             className="inline-flex items-center gap-2 transition-opacity hover:opacity-100"
             style={{ color: TEXT_MUTED }}
           >

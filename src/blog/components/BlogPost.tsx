@@ -35,7 +35,7 @@ export const BlogPost: React.FC<BlogPostProps> = ({ slug }) => {
       if (metaDesc) metaDesc.setAttribute('content', article.description);
       
       let canonical = document.querySelector('link[rel="canonical"]');
-      if (canonical) canonical.setAttribute('href', `https://www.logvoyager.cc/#/blog/${article.slug}`);
+      if (canonical) canonical.setAttribute('href', `https://www.logvoyager.cc/blog/${article.slug}`);
       
       let ogTitle = document.querySelector('meta[property="og:title"]');
       let ogDesc = document.querySelector('meta[property="og:description"]');
@@ -75,7 +75,7 @@ export const BlogPost: React.FC<BlogPostProps> = ({ slug }) => {
             Article not found
           </h1>
           <a 
-            href="#/blog"
+            href="/blog"
             style={{ color: CYAN }}
             className="hover:underline"
           >
@@ -367,7 +367,7 @@ Log Voyager offers pretty-print, collapsible sections, and field search for JSON
               {relatedArticles.map((related) => (
                 <a
                   key={related.id}
-                  href={`#/blog/${related.slug}`}
+                  href={`/blog/${related.slug}`}
                   className="p-4 rounded-lg border transition-all hover:border-cyan-400/30 backdrop-blur-sm"
                   style={{ 
                     backgroundColor: DARK_PANEL,

@@ -100,7 +100,7 @@ const AboutSection: React.FC = () => {
             {/* CTA */}
             <div className="text-center">
               <a 
-                href="#/about"
+                href="/about"
                 className="inline-flex items-center gap-2 text-[#00f3ff] hover:underline text-xs"
               >
                 Read more about Log Voyager →
@@ -983,14 +983,14 @@ function AppContent() {
           <div className="flex items-center justify-between text-[10px] text-slate-500">
             <div className="flex items-center gap-4">
               <a 
-                href="#/about" 
+                href="/about" 
                 className="flex items-center gap-1.5 hover:text-[#00f3ff] transition-colors"
               >
                 <Info size={12} />
                 <span className="hidden sm:inline">About</span>
               </a>
               <a 
-                href="#/blog" 
+                href="/blog" 
                 className="flex items-center gap-1.5 hover:text-[#00f3ff] transition-colors"
               >
                 <BookOpen size={12} />
@@ -1088,32 +1088,32 @@ function AppContent() {
 // --- Blog Components ---
 import { BlogIndex, BlogPost, AboutPage, NotFoundPage, blogArticles } from './blog';
 
-// --- Simple Hash Router ---
+// --- Browser Router (SEO-friendly) ---
 function Router() {
-  const [currentPath, setCurrentPath] = useState(window.location.hash);
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
   useEffect(() => {
-    const handleHashChange = () => setCurrentPath(window.location.hash);
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    const handlePopState = () => setCurrentPath(window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Parse route from hash
+  // Parse route from pathname
   const getRoute = () => {
-    const hash = currentPath.replace('#', '') || '/';
-    if (hash === '/' || hash === '') return 'app';
-    if (hash === '/blog') return 'blog';
-    if (hash.startsWith('/blog/')) {
-      const slug = hash.replace('/blog/', '');
+    const path = currentPath;
+    if (path === '/' || path === '') return 'app';
+    if (path === '/blog') return 'blog';
+    if (path.startsWith('/blog/')) {
+      const slug = path.replace('/blog/', '');
       const articleExists = blogArticles.some(a => a.slug === slug);
       return articleExists ? 'blog-post' : '404';
     }
-    if (hash === '/about') return 'about';
+    if (path === '/about') return 'about';
     return '404';
   };
 
   const getBlogSlug = () => {
-    const match = currentPath.match(/#\/blog\/(.+)/);
+    const match = currentPath.match(/\/blog\/(.+)/);
     return match ? match[1] : '';
   };
 

@@ -382,9 +382,9 @@ For most users, starting with **Log Voyager** provides the best balance of featu
 
 ## Additional Resources
 
-- [How to Analyze Log Files Online](#/blog/how-to-analyze-log-files-online)
-- [JSON Log Analysis Guide](#/blog/json-log-viewer-guide)
-- [Online Log Reader Complete Guide](#/blog/online-log-reader-guide)
+- [How to Analyze Log Files Online](/blog/how-to-analyze-log-files-online)
+- [JSON Log Analysis Guide](/blog/json-log-viewer-guide)
+- [Online Log Reader Complete Guide](/blog/online-log-reader-guide)
 
 ## Methodology
 

@@ -49,7 +49,7 @@ export const NotFoundPage: React.FC = () => {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <a 
-            href="#/blog"
+            href="/blog"
             className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all"
             style={{ 
               backgroundColor: PANEL,
@@ -84,21 +84,21 @@ export const NotFoundPage: React.FC = () => {
           </h3>
           <div className="space-y-2 text-left">
             <a 
-              href="#/blog/how-to-analyze-log-files-online"
+              href="/blog/how-to-analyze-log-files-online"
               className="block py-2 px-3 rounded transition-colors hover:bg-white/5"
               style={{ color: TEXT_MUTED }}
             >
               → How to Analyze Log Files Online
             </a>
             <a 
-              href="#/blog/best-free-log-file-analyzers"
+              href="/blog/best-free-log-file-analyzers"
               className="block py-2 px-3 rounded transition-colors hover:bg-white/5"
               style={{ color: TEXT_MUTED }}
             >
               → Best Free Log File Analyzers
             </a>
             <a 
-              href="#/blog/json-log-viewer-guide"
+              href="/blog/json-log-viewer-guide"
               className="block py-2 px-3 rounded transition-colors hover:bg-white/5"
               style={{ color: TEXT_MUTED }}
             >
