@@ -39,14 +39,15 @@ const AboutSection: React.FC = () => {
         <div className="mt-4 text-left animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="glass-panel rounded-2xl p-6 border border-white/10">
             <h2 className="text-xl font-bold text-white mb-3 text-center">
-              Free <span className="text-[#00f3ff]">Online Log File Analyzer</span> for Massive Files
+              Free <span className="text-[#00f3ff]">Log File Analyzer Online</span> — 10GB+ Instantly
             </h2>
             
             <p className="text-slate-400 text-sm leading-relaxed mb-4">
-              Log Voyager is a <strong className="text-slate-300">free log file analyzer online</strong> that handles 
-              10GB+ files instantly in your browser. No upload needed - your logs never leave your device. 
-              Perfect for DevOps, backend developers, and system administrators who need to 
-              <strong className="text-slate-300"> analyze log files online</strong> quickly and securely.
+              Log Voyager is a <strong className="text-slate-300">free log file analyzer online</strong> that lets you 
+              analyze log files online free — no upload needed, 10GB+ files open instantly in your browser. 
+              As the best <strong className="text-slate-300">online log file analyzer</strong> for privacy-conscious 
+              developers, your logs never leave your device. Perfect for DevOps, backend engineers, and system 
+              administrators who need fast, secure log analysis.
             </p>
 
             {/* Features */}
@@ -115,8 +116,6 @@ const AboutSection: React.FC = () => {
 
 // --- Styl CSS ---
 const getStyles = (isDark: boolean) => `
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
-  
   .font-jetbrains { font-family: 'JetBrains Mono', monospace; }
   
   .tech-grid {
@@ -575,7 +574,7 @@ function AppContent() {
             <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setShowCommandPalette(true)}>
               <div className="relative">
                 <div className="absolute inset-0 bg-[#00f3ff] blur-lg opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-                <img src="/lv_new.png" alt="LV" className="w-8 h-8 object-contain relative z-10 brightness-125 filter drop-shadow-[0_0_8px_rgba(0,243,255,0.5)] transition-transform duration-500 group-hover:scale-110" />
+                <img src="/lv_new.png" alt="Log Voyager - Free Log File Analyzer" className="w-8 h-8 object-contain relative z-10 brightness-125 filter drop-shadow-[0_0_8px_rgba(0,243,255,0.5)] transition-transform duration-500 group-hover:scale-110" />
               </div>
               <div>
                 <h1 className="text-sm font-bold text-white tracking-wider group-hover:text-[#00f3ff] transition-colors duration-300 neon-text">
@@ -1118,6 +1117,29 @@ function Router() {
   };
 
   const route = getRoute();
+
+  // SEO: update title, description, robots, OG/Twitter per route
+  useEffect(() => {
+    const updateMeta = (selector: string, attr: string, value: string) => {
+      const el = document.querySelector(selector) as HTMLMetaElement | null;
+      if (el) el.setAttribute(attr, value);
+    };
+
+    if (route === 'app') {
+      document.title = 'Log Voyager | Free Log File Analyzer Online — Analyze 10GB+ Logs Instantly';
+      updateMeta('meta[name="description"]', 'content', 'Free online log file analyzer. Analyze massive log files (10GB+) directly in your browser. 100% privacy — no upload, no server. Instant error detection, filtering & export.');
+      updateMeta('meta[name="robots"]', 'content', 'index, follow');
+      updateMeta('meta[property="og:title"]', 'content', 'Log Voyager | Free Log File Analyzer Online — Analyze 10GB+ Logs Instantly');
+      updateMeta('meta[property="og:description"]', 'content', 'Free online log file analyzer. Analyze massive log files (10GB+) directly in your browser. 100% privacy — no upload, no server. Instant error detection, filtering & export.');
+      updateMeta('meta[property="twitter:title"]', 'content', 'Log Voyager | Free Log File Analyzer Online — Analyze 10GB+ Logs Instantly');
+      updateMeta('meta[property="twitter:description"]', 'content', 'Free online log file analyzer. Analyze massive log files (10GB+) directly in your browser. 100% privacy — no upload, no server. Instant error detection, filtering & export.');
+    } else if (route === '404') {
+      document.title = 'Page Not Found | Log Voyager';
+      updateMeta('meta[name="description"]', 'content', 'The page you are looking for does not exist. Return to Log Voyager — free online log file analyzer.');
+      updateMeta('meta[name="robots"]', 'content', 'noindex, nofollow');
+    }
+    // blog / about / blog-post handle their own meta inside their components
+  }, [route]);
 
   switch (route) {
     case 'blog':

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BlogLayout } from './BlogLayout';
 import { 
   Zap, Search, FileJson, Shield, Globe, Smartphone, 
   Github, Heart, ExternalLink, Check, Star, Users,
-  Clock, Lock, Code, Sparkles, Database, Terminal
+  Clock, Lock, Code, Sparkles, Database, Terminal,
+  ChevronRight, Home
 } from 'lucide-react';
 
 const CYAN = '#00f3ff';
@@ -14,23 +15,82 @@ const BORDER = 'rgba(255, 255, 255, 0.08)';
 const PANEL = 'rgba(20, 20, 25, 0.7)';
 
 export const AboutPage: React.FC = () => {
+  useEffect(() => {
+    // About-specific OG / Twitter tags
+    const setMeta = (selector: string, attr: string, value: string) => {
+      const el = document.querySelector(selector) as HTMLMetaElement | null;
+      if (el) el.setAttribute(attr, value);
+    };
+
+    setMeta('meta[property="og:type"]', 'content', 'website');
+    setMeta('meta[property="og:url"]', 'content', 'https://www.logvoyager.cc/about');
+    setMeta('meta[property="og:title"]', 'content', 'About Log Voyager — Free Online Log File Analyzer');
+    setMeta('meta[property="og:description"]', 'content', 'Log Voyager is a free log file analyzer online. Analyze 10GB+ logs instantly in your browser. 100% privacy — no upload, no server. Open source.');
+    setMeta('meta[property="og:image"]', 'content', 'https://www.logvoyager.cc/og-image.png');
+    setMeta('meta[property="twitter:card"]', 'content', 'summary_large_image');
+    setMeta('meta[property="twitter:url"]', 'content', 'https://www.logvoyager.cc/about');
+    setMeta('meta[property="twitter:title"]', 'content', 'About Log Voyager — Free Online Log File Analyzer');
+    setMeta('meta[property="twitter:description"]', 'content', 'Log Voyager is a free log file analyzer online. Analyze 10GB+ logs instantly in your browser. 100% privacy — no upload, no server. Open source.');
+    setMeta('meta[property="twitter:image"]', 'content', 'https://www.logvoyager.cc/og-image.png');
+
+    // Canonical
+    const canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (canonical) canonical.href = 'https://www.logvoyager.cc/about';
+  }, []);
+
   return (
     <BlogLayout 
       showBackButton
-      title="About Log Voyager | Free Online Log File Analyzer"
-      description="Learn about Log Voyager - the free, open-source log file analyzer for massive files. 100% privacy, instant loading, and cross-platform."
+      title="About Log Voyager — Free Online Log File Analyzer"
+      description="Log Voyager is a free log file analyzer online and online log file analyzer for massive files. 100% privacy, instant loading, cross-platform and open source."
     >
+      {/* Breadcrumb JSON-LD */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.logvoyager.cc/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "About",
+              "item": "https://www.logvoyager.cc/about"
+            }
+          ]
+        })}
+      </script>
+
+      {/* Breadcrumb UI */}
+      <nav aria-label="Breadcrumb" className="mb-6">
+        <ol className="flex items-center gap-2 text-sm" style={{ color: TEXT_MUTED }}>
+          <li>
+            <a href="/" className="flex items-center gap-1 hover:text-white transition-colors">
+              <Home size={14} />
+              <span>Home</span>
+            </a>
+          </li>
+          <li><ChevronRight size={14} /></li>
+          <li className="text-white" aria-current="page">About</li>
+        </ol>
+      </nav>
       {/* Hero Section */}
       <div className="text-center mb-12">
         <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6" style={{ background: `${CYAN}15` }}>
           <Database className="w-10 h-10" style={{ color: CYAN }} />
         </div>
         <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: TEXT }}>
-          About <span style={{ color: CYAN }}>Log Voyager</span>
+          About Log Voyager — <span style={{ color: CYAN }}>Free Online Log File Analyzer</span>
         </h1>
         <p className="text-lg max-w-3xl mx-auto" style={{ color: TEXT_MUTED }}>
-          The free, open-source log file analyzer designed for developers who need to 
-          analyze massive log files instantly without compromising privacy.
+          Log Voyager is a <strong style={{ color: TEXT }}>free log file analyzer online</strong> designed for developers who need to 
+          <strong style={{ color: TEXT }}> analyze log files online</strong> instantly without compromising privacy. 
+          As an <strong style={{ color: TEXT }}>online log file analyzer</strong>, it processes massive files directly in your browser — no upload, no server, 100% free.
         </p>
       </div>
 
@@ -45,6 +105,8 @@ export const AboutPage: React.FC = () => {
         <p className="mb-4" style={{ color: TEXT_MUTED }}>
           Log Voyager was born from a simple frustration: analyzing large log files shouldn't require 
           uploading sensitive data to third-party servers or waiting minutes for files to load. 
+          We built a <strong style={{ color: TEXT }}>free log file analyzer online</strong> so developers can 
+          <strong style={{ color: TEXT }}> analyze log files online</strong> with zero compromise. 
           We believe that <strong style={{ color: TEXT }}>privacy and performance</strong> should never be mutually exclusive.
         </p>
         <p style={{ color: TEXT_MUTED }}>
@@ -286,10 +348,11 @@ export const AboutPage: React.FC = () => {
         style={{ backgroundColor: PANEL, borderColor: BORDER }}
       >
         <h2 className="text-2xl font-bold mb-3" style={{ color: TEXT }}>
-          Ready to analyze your logs?
+          Ready to Analyze Your Logs?
         </h2>
         <p className="mb-6" style={{ color: TEXT_MUTED }}>
-          Join thousands of developers who trust Log Voyager for their log analysis needs.
+          Join thousands of developers who use Log Voyager as their free log file analyzer online. 
+          Analyze log files online free — open 10GB+ files instantly with complete privacy.
         </p>
         <a 
           href="https://www.logvoyager.cc"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BlogLayout } from './BlogLayout';
 import { blogArticles } from '../articles';
 import { Clock, ArrowRight, Search } from 'lucide-react';
@@ -13,11 +13,43 @@ const TEXT_MUTED = 'rgba(226, 232, 240, 0.6)';
 const BORDER = 'rgba(255, 255, 255, 0.08)';
 
 export const BlogIndex: React.FC = () => {
+  // Inject BreadcrumbList JSON-LD
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'jsonld-breadcrumb';
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.logvoyager.cc/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.logvoyager.cc/blog" }
+      ]
+    });
+    document.head.appendChild(script);
+
+    return () => {
+      const existing = document.getElementById('jsonld-breadcrumb');
+      if (existing) existing.remove();
+    };
+  }, []);
+
   return (
     <BlogLayout 
-      title="Log Voyager Blog | Log Analysis Guides & Tips"
-      description="Learn how to analyze log files effectively. From online log viewers to JSON log analysis - master the tools and techniques used by DevOps professionals."
+      title="Log Analysis Blog | Log Voyager — Online Log File Analyzer"
+      description="Free log file analyzer online resources and guides. Learn how to analyze log files online free with the best online log file analyzer tools and techniques."
     >
+      {/* Breadcrumb UI */}
+      <nav aria-label="breadcrumb" className="mb-4 text-sm" style={{ color: TEXT_MUTED }}>
+        <ol className="flex items-center gap-2">
+          <li>
+            <a href="https://www.logvoyager.cc/" style={{ color: CYAN }}>Home</a>
+          </li>
+          <li aria-hidden="true">{'>'}</li>
+          <li aria-current="page" style={{ color: TEXT }}>Blog</li>
+        </ol>
+      </nav>
+
       {/* Hero Section */}
       <div className="text-center mb-12">
         <h1 
@@ -94,12 +126,12 @@ export const BlogIndex: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h2 
+                  <h3 
                     className="text-xl md:text-2xl font-bold mb-2 transition-opacity group-hover:opacity-90"
                     style={{ color: TEXT }}
                   >
                     {article.title}
-                  </h2>
+                  </h3>
                 </div>
               </div>
               

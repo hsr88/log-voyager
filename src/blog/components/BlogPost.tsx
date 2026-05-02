@@ -35,14 +35,78 @@ export const BlogPost: React.FC<BlogPostProps> = ({ slug }) => {
       if (metaDesc) metaDesc.setAttribute('content', article.description);
       
       let canonical = document.querySelector('link[rel="canonical"]');
-      if (canonical) canonical.setAttribute('href', `https://www.logvoyager.cc/blog/${article.slug}`);
+      if (canonical) canonical.setAttribute('href', `https://www.logvoyager.cc/blog/${slug}`);
       
-      let ogTitle = document.querySelector('meta[property="og:title"]');
-      let ogDesc = document.querySelector('meta[property="og:description"]');
-      if (ogTitle) ogTitle.setAttribute('content', article.title);
-      if (ogDesc) ogDesc.setAttribute('content', article.description);
+      const metaTags: Record<string, string> = {
+        'og:title': article.title,
+        'og:description': article.description,
+        'og:url': `https://www.logvoyager.cc/blog/${slug}`,
+        'twitter:title': article.title,
+        'twitter:description': article.description,
+        'twitter:image': article.imageUrl,
+      };
+      
+      Object.entries(metaTags).forEach(([property, content]) => {
+        let meta = document.querySelector(`meta[property="${property}"]`);
+        if (meta) meta.setAttribute('content', content);
+      });
     }
-  }, [article]);
+  }, [article, slug]);
+
+  // Inject JSON-LD schemas
+  useEffect(() => {
+    if (!article) return;
+
+    // BlogPosting schema
+    const blogPostingScript = document.createElement('script');
+    blogPostingScript.type = 'application/ld+json';
+    blogPostingScript.id = 'jsonld-blogpost';
+    blogPostingScript.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": article.title,
+      "description": article.description,
+      "image": article.imageUrl,
+      "author": { "@type": "Organization", "name": "Log Voyager Team" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Log Voyager",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.logvoyager.cc/logo192.png"
+        }
+      },
+      "datePublished": article.publishedAt,
+      "dateModified": article.updatedAt || article.publishedAt,
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": `https://www.logvoyager.cc/blog/${slug}`
+      }
+    });
+    document.head.appendChild(blogPostingScript);
+
+    // BreadcrumbList schema
+    const breadcrumbScript = document.createElement('script');
+    breadcrumbScript.type = 'application/ld+json';
+    breadcrumbScript.id = 'jsonld-breadcrumb';
+    breadcrumbScript.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.logvoyager.cc/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.logvoyager.cc/blog" },
+        { "@type": "ListItem", "position": 3, "name": article.title, "item": `https://www.logvoyager.cc/blog/${slug}` }
+      ]
+    });
+    document.head.appendChild(breadcrumbScript);
+
+    return () => {
+      const existingBlogPost = document.getElementById('jsonld-blogpost');
+      if (existingBlogPost) existingBlogPost.remove();
+      const existingBreadcrumb = document.getElementById('jsonld-breadcrumb');
+      if (existingBreadcrumb) existingBreadcrumb.remove();
+    };
+  }, [article, slug]);
 
   useEffect(() => {
     const loadContent = async () => {
@@ -126,24 +190,24 @@ export const BlogPost: React.FC<BlogPostProps> = ({ slug }) => {
         continue;
       }
       
-      // Headers
+      // Headers (shifted down by one level so page H1 is unique)
       if (line.startsWith('# ')) {
-        result.push(`<h1 style="color: ${TEXT}; font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; margin-top: 2rem;">${formatInline(line.slice(2))}</h1>`);
+        result.push(`<h2 style="color: ${TEXT}; font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; margin-top: 2rem;">${formatInline(line.slice(2))}</h2>`);
         i++;
         continue;
       }
       if (line.startsWith('## ')) {
-        result.push(`<h2 style="color: ${TEXT}; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; margin-top: 1.5rem;">${formatInline(line.slice(3))}</h2>`);
+        result.push(`<h3 style="color: ${TEXT}; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; margin-top: 1.5rem;">${formatInline(line.slice(3))}</h3>`);
         i++;
         continue;
       }
       if (line.startsWith('### ')) {
-        result.push(`<h3 style="color: ${TEXT}; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; margin-top: 1.25rem;">${formatInline(line.slice(4))}</h3>`);
+        result.push(`<h4 style="color: ${TEXT}; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; margin-top: 1.25rem;">${formatInline(line.slice(4))}</h4>`);
         i++;
         continue;
       }
       if (line.startsWith('#### ')) {
-        result.push(`<h4 style="color: ${TEXT}; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; margin-top: 1rem;">${formatInline(line.slice(5))}</h4>`);
+        result.push(`<h5 style="color: ${TEXT}; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; margin-top: 1rem;">${formatInline(line.slice(5))}</h5>`);
         i++;
         continue;
       }
@@ -311,7 +375,22 @@ Log Voyager offers pretty-print, collapsible sections, and field search for JSON
   };
 
   return (
-    <BlogLayout showBackButton>
+    <BlogLayout showBackButton imageUrl={article.imageUrl}>
+      {/* Breadcrumb UI */}
+      <nav aria-label="breadcrumb" className="mb-4 text-sm" style={{ color: TEXT_MUTED }}>
+        <ol className="flex items-center gap-2">
+          <li>
+            <a href="https://www.logvoyager.cc/" style={{ color: CYAN }}>Home</a>
+          </li>
+          <li aria-hidden="true">{'>'}</li>
+          <li>
+            <a href="/blog" style={{ color: CYAN }}>Blog</a>
+          </li>
+          <li aria-hidden="true">{'>'}</li>
+          <li aria-current="page" style={{ color: TEXT }}>{article.title}</li>
+        </ol>
+      </nav>
+
       <article>
         {/* Header with Image */}
         <header className="mb-8">
@@ -351,7 +430,7 @@ Log Voyager offers pretty-print, collapsible sections, and field search for JSON
             </span>
             <span className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              {article.publishedAt}
+              <time dateTime={article.publishedAt}>{article.publishedAt}</time>
             </span>
             <span className="flex items-center gap-1">
               <Clock className="w-4 h-4" />

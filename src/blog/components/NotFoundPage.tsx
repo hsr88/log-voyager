@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BlogLayout } from './BlogLayout';
 import { Ghost, ArrowLeft, Home } from 'lucide-react';
 
@@ -9,6 +9,28 @@ const PANEL = 'rgba(20, 20, 25, 0.7)';
 const BORDER = 'rgba(255, 255, 255, 0.08)';
 
 export const NotFoundPage: React.FC = () => {
+  useEffect(() => {
+    // Add noindex meta tag
+    let robots = document.querySelector('meta[name="robots"]');
+    if (robots) {
+      robots.setAttribute('content', 'noindex, follow');
+    }
+
+    // Remove canonical tag
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      canonical.remove();
+    }
+
+    return () => {
+      // Restore robots meta on unmount (optional cleanup)
+      let robotsRestore = document.querySelector('meta[name="robots"]');
+      if (robotsRestore) {
+        robotsRestore.setAttribute('content', 'index, follow');
+      }
+    };
+  }, []);
+
   return (
     <BlogLayout 
       title="404 - Page Not Found | Log Voyager"

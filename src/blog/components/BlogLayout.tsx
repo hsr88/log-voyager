@@ -6,6 +6,7 @@ interface BlogLayoutProps {
   showBackButton?: boolean;
   title?: string;
   description?: string;
+  imageUrl?: string;
 }
 
 // Dark theme colors (matching main app)
@@ -20,7 +21,8 @@ export const BlogLayout: React.FC<BlogLayoutProps> = ({
   children, 
   showBackButton = false,
   title = 'Log Voyager Blog',
-  description = 'Log analysis guides and tips for developers'
+  description = 'Log analysis guides and tips for developers',
+  imageUrl = 'https://www.logvoyager.cc/og-image.png'
 }) => {
   useEffect(() => {
     document.title = title;
@@ -32,23 +34,31 @@ export const BlogLayout: React.FC<BlogLayoutProps> = ({
     }
     
     // Update canonical link
+    const pathname = window.location.pathname;
     let canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) {
-      canonical.setAttribute('href', window.location.href.split('#')[0] + window.location.hash);
+      canonical.setAttribute('href', `https://www.logvoyager.cc${pathname}`);
     }
     
-    // Update OG title
-    let ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) {
-      ogTitle.setAttribute('content', title);
-    }
+    // Update OG and Twitter meta tags
+    const metaTags: Record<string, string> = {
+      'og:title': title,
+      'og:description': description,
+      'og:url': `https://www.logvoyager.cc${pathname}`,
+      'og:image': imageUrl,
+      'twitter:title': title,
+      'twitter:description': description,
+      'twitter:image': imageUrl,
+    };
     
-    // Update Twitter title
-    let twitterTitle = document.querySelector('meta[property="twitter:title"]');
-    if (twitterTitle) {
-      twitterTitle.setAttribute('content', title);
-    }
-  }, [title, description]);
+    Object.entries(metaTags).forEach(([property, content]) => {
+      let meta = document.querySelector(`meta[property="${property}"]`);
+      if (meta) {
+        meta.setAttribute('content', content);
+      }
+    });
+  }, [title, description, imageUrl]);
+
   return (
     <div 
       className="min-h-screen"
@@ -70,9 +80,9 @@ export const BlogLayout: React.FC<BlogLayoutProps> = ({
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <BookOpen className="w-6 h-6" style={{ color: CYAN }} />
-            <h1 style={{ color: TEXT }} className="text-xl font-bold">
+            <span style={{ color: TEXT }} className="text-xl font-bold">
               Log Voyager
-            </h1>
+            </span>
           </div>
           
           <a 
