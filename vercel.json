@@ -1,11 +1,17 @@
 {
   "version": 2,
+  "functions": {
+    "api/sitemap.xml.js": {
+      "maxDuration": 10
+    },
+    "api/robots.txt.js": {
+      "maxDuration": 10
+    }
+  },
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap.xml" },
     { "source": "/sitemap.txt", "destination": "/api/sitemap.xml" },
-    { "source": "/robots.txt", "destination": "/api/robots.txt" },
-    { "source": "/blog-articles/:path*", "destination": "/blog-articles/:path*" },
-    { "source": "/assets/:path*", "destination": "/assets/:path*" }
+    { "source": "/robots.txt", "destination": "/api/robots.txt" }
   ],
   "headers": [
     {
@@ -20,14 +26,6 @@
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
         { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
     }
   ]
