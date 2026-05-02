@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate', // Aplikacja zaktualizuje się sama po odświeżeniu
-      includeAssets: ['favicon.svg', 'og-image.png'], // Pliki statyczne do cache'owania
+      includeAssets: ['favicon.svg', 'og_image.png'], // Pliki statyczne do cache'owania
       manifest: {
         name: 'Log Voyager',
         short_name: 'LogVoyager',
