@@ -1,9 +1,12 @@
 {
   "version": 2,
+  "cleanUrls": true,
   "rewrites": [
     { "source": "/sitemap_index.xml", "destination": "/sitemap_index.xml" },
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
-    { "source": "/robots.txt", "destination": "/robots.txt" }
+    { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/blog-articles/:path*", "destination": "/blog-articles/:path*" },
+    { "source": "/assets/:path*", "destination": "/assets/:path*" }
   ],
   "headers": [
     {
@@ -12,18 +15,7 @@
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate, proxy-revalidate" },
         { "key": "Pragma", "value": "no-cache" },
         { "key": "Expires", "value": "0" },
-        { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
-        { "key": "Vary", "value": "*" }
-      ]
-    },
-    {
-      "source": "/sitemap.xml",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate, proxy-revalidate" },
-        { "key": "Pragma", "value": "no-cache" },
-        { "key": "Expires", "value": "0" },
-        { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
-        { "key": "Vary", "value": "*" }
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" }
       ]
     },
     {
