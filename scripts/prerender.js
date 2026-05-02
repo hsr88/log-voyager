@@ -162,7 +162,6 @@ function generateHtml(route) {
   );
 
   // Article-specific OG tags
-  // First remove any existing article meta tags
   html = html.replace(
     /\s*<meta property="article:published_time" content="[^"]*" \/>/g,
     ''
@@ -210,11 +209,9 @@ for (const route of routes) {
   const html = generateHtml(route);
 
   if (route.path === '/') {
-    // Overwrite root index.html
     fs.writeFileSync(indexPath, html);
     console.log(`✓ ${route.path} -> index.html`);
   } else {
-    // Write to dist/<path>/index.html
     const dirPath = path.join(distDir, route.path);
     fs.mkdirSync(dirPath, { recursive: true });
     fs.writeFileSync(path.join(dirPath, 'index.html'), html);
@@ -224,7 +221,7 @@ for (const route of routes) {
   }
 }
 
-// Also generate 404.html
+// Generate 404.html
 const notFoundRoute = {
   path: '/404',
   title: '404 - Page Not Found | Log Voyager',
@@ -233,7 +230,6 @@ const notFoundRoute = {
   noindex: true,
 };
 let notFoundHtml = generateHtml(notFoundRoute);
-// Fix canonical and robots for 404
 notFoundHtml = notFoundHtml.replace(
   /<link rel="canonical" href="[^"]*" \/>/,
   '<link rel="canonical" href="https://www.logvoyager.cc/" />'
@@ -244,5 +240,21 @@ notFoundHtml = notFoundHtml.replace(
 );
 fs.writeFileSync(path.join(distDir, '404.html'), notFoundHtml);
 console.log(`✓ /404 -> 404.html`);
+
+// Verify static files exist in dist
+const staticFiles = ['sitemap.xml', 'sitemap_index.xml', 'robots.txt', 'site.webmanifest', 'og_image.png'];
+for (const file of staticFiles) {
+  const filePath = path.join(distDir, file);
+  if (fs.existsSync(filePath)) {
+    const stats = fs.statSync(filePath);
+    console.log(`✓ Static file found: ${file} (${stats.size} bytes)`);
+  } else {
+    console.log(`✗ MISSING Static file: ${file}`);
+  }
+}
+
+// List all files in dist root
+const distFiles = fs.readdirSync(distDir);
+console.log('\nAll files in dist root:', distFiles.join(', '));
 
 console.log('\nPrerender complete!');
