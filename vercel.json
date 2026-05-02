@@ -1,13 +1,8 @@
 {
   "version": 2,
-  "functions": {
-    "api/sitemap.xml.js": {
-      "maxDuration": 10
-    },
-    "api/robots.txt.js": {
-      "maxDuration": 10
-    }
-  },
+  "builds": [
+    { "src": "api/*.js", "use": "@vercel/node" }
+  ],
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap.xml" },
     { "source": "/sitemap.txt", "destination": "/api/sitemap.xml" },
