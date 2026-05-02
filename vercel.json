@@ -1,6 +1,21 @@
 {
   "version": 2,
+  "rewrites": [
+    { "source": "/sitemap_index.xml", "destination": "/sitemap_index.xml" },
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
+    { "source": "/robots.txt", "destination": "/robots.txt" }
+  ],
   "headers": [
+    {
+      "source": "/sitemap_index.xml",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate, proxy-revalidate" },
+        { "key": "Pragma", "value": "no-cache" },
+        { "key": "Expires", "value": "0" },
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
+        { "key": "Vary", "value": "*" }
+      ]
+    },
     {
       "source": "/sitemap.xml",
       "headers": [
