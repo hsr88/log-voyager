@@ -1,38 +1,20 @@
 {
   "version": 2,
-  "rewrites": [
-    {
-      "source": "/sitemap.xml",
-      "destination": "/sitemap.xml"
-    },
-    {
-      "source": "/sitemap.txt",
-      "destination": "/sitemap.txt"
-    },
-    {
-      "source": "/robots.txt",
-      "destination": "/robots.txt"
-    },
-    {
-      "source": "/blog-articles/:path*",
-      "destination": "/blog-articles/:path*"
-    },
-    {
-      "source": "/assets/:path*",
-      "destination": "/assets/:path*"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
   "headers": [
     {
       "source": "/sitemap.xml",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
+          "value": "no-cache, no-store, must-revalidate, proxy-revalidate"
+        },
+        {
+          "key": "Pragma",
+          "value": "no-cache"
+        },
+        {
+          "key": "Expires",
+          "value": "0"
         },
         {
           "key": "Content-Type",
@@ -41,11 +23,29 @@
       ]
     },
     {
+      "source": "/robots.txt",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
       ]
     }
   ]
