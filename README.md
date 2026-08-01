@@ -1,5 +1,6 @@
 [![GitHub stars](https://img.shields.io/github/stars/hsr88/log-voyager?style=social)](https://github.com/hsr88/log-voyager)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitGem](https://gitgem.org/api/badge/github/hsr88/log-voyager.svg)](https://gitgem.org/github/hsr88/log-voyager)
 
 # 🚀 Log Voyager
 
