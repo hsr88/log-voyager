@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   FileText, Search, UploadCloud, Zap, Bug, FileJson,
   X, Bookmark, ArrowDown, ArrowUp, Eye, EyeOff, Trash2, MapPin, Menu, History, Clipboard, Settings, Download, ChevronDown, ChevronUp, CaseSensitive,
-  Keyboard, Command, Sun, Moon, Split, Filter, BarChart, AlertCircle, BookOpen, Plus, Check, Columns, Github, Coffee, Heart, Info
+  Command, Sun, Moon, BarChart, AlertCircle, BookOpen, Check, Columns, Github, Coffee, Heart, Info
 } from 'lucide-react';
 
 import LogLine from './components/LogLine';
@@ -12,11 +12,15 @@ import { CommandPalette } from './components/CommandPalette';
 import { MultiFilter, applyFilters } from './components/MultiFilter';
 import { ErrorAggregation } from './components/ErrorAggregation';
 import { LogStats } from './components/LogStats';
-import { useKeyboardShortcuts, formatShortcut } from './hooks/useKeyboardShortcuts';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
-import { formatBytes, getLogLevel } from './utils/helpers';
+import { formatBytes } from './utils/helpers';
 import type { BookmarkData, HistoryItem, Filter, Command as CommandType, KeyboardShortcut, Selection } from './types';
 import { isGzip, decompressGzip } from './utils/decompression';
+import { HomeWorkbench } from './seo/HomeWorkbench';
+import { UseCasePage } from './seo/UseCasePage';
+import { getUseCaseBySlug } from './seo/useCases';
+import { SeoHeader } from './seo/SeoChrome';
 
 const CHUNK_SIZE = 50 * 1024; // 50KB
 
@@ -39,12 +43,12 @@ const AboutSection: React.FC = () => {
         <div className="mt-4 text-left animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="glass-panel rounded-2xl p-6 border border-white/10">
             <h2 className="text-xl font-bold text-white mb-3 text-center">
-              Free <span className="text-[#00f3ff]">Log File Analyzer Online</span> — 10GB+ Instantly
+              Free <span className="text-[#00f3ff]">Log File Analyzer Online</span> - 10GB+ Instantly
             </h2>
             
             <p className="text-slate-400 text-sm leading-relaxed mb-4">
               Log Voyager is a <strong className="text-slate-300">free log file analyzer online</strong> that lets you 
-              analyze log files online free — no upload needed, 10GB+ files open instantly in your browser. 
+              analyze log files online free - no upload needed, 10GB+ files open instantly in your browser. 
               As the best <strong className="text-slate-300">online log file analyzer</strong> for privacy-conscious 
               developers, your logs never leave your device. Perfect for DevOps, backend engineers, and system 
               administrators who need fast, secure log analysis.
@@ -159,7 +163,7 @@ const getStyles = (isDark: boolean) => `
 
 // --- Main App Content Component ---
 function AppContent() {
-  const { theme, isDark, toggleTheme } = useTheme();
+  const { isDark, toggleTheme } = useTheme();
   
   // --- State ---
   const [file, setFile] = useState<File | null>(null);
@@ -192,7 +196,7 @@ function AppContent() {
   
   // Multi-filter
   const [filters, setFilters] = useState<Filter[]>([]);
-  const [showMultiFilter, setShowMultiFilter] = useState(false);
+  const [, setShowMultiFilter] = useState(false);
   
   // Error Aggregation
   const [showErrorAggregation, setShowErrorAggregation] = useState(false);
@@ -562,11 +566,12 @@ function AppContent() {
   // --- Render ---
   return (
     <>
-      <div className={`${isDark ? 'bg-[#050505] text-slate-300' : 'bg-slate-200 text-slate-600'} font-jetbrains h-[100dvh] overflow-hidden flex flex-col tech-grid relative`}>
+      <div className={`${isDark ? 'bg-[#050505] text-slate-300' : 'bg-slate-200 text-slate-600'} ${file ? 'font-jetbrains h-[100dvh] overflow-hidden' : 'seo-shell min-h-[100dvh] overflow-x-clip'} flex flex-col relative`}>
         <style>{getStyles(isDark)}</style>
 
         {/* --- TOP BAR --- */}
-        <div className="glass-panel h-14 flex items-center justify-between px-4 shrink-0 z-20">
+        {!file && <SeoHeader />}
+        {file && <div className="glass-panel h-14 flex items-center justify-between px-4 shrink-0 z-20">
           <div className="flex items-center gap-3">
             <button onClick={() => setShowInfoModal(true)} className="p-1.5 hover:bg-white/10 rounded-lg text-slate-400 hover:text-white transition-colors">
               <Menu size={20} />
@@ -577,15 +582,26 @@ function AppContent() {
                 <img src="/lv_new.png" alt="Log Voyager - Free Log File Analyzer" className="w-8 h-8 object-contain relative z-10 brightness-125 filter drop-shadow-[0_0_8px_rgba(0,243,255,0.5)] transition-transform duration-500 group-hover:scale-110" />
               </div>
               <div>
-                <h1 className="text-sm font-bold text-white tracking-wider group-hover:text-[#00f3ff] transition-colors duration-300 neon-text">
+                <div className="text-sm font-bold text-white tracking-wider group-hover:text-[#00f3ff] transition-colors duration-300 neon-text">
                   LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1.5 py-0.5 rounded ml-1 hidden sm:inline-block">Analyze huge log files instantly in your browser</span>
-                </h1>
+                </div>
                 {file && <p className="text-[10px] text-[#00f3ff] font-mono">{file.name} ({formatBytes(fileSize)})</p>}
               </div>
             </div>
           </div>
           
           <div className="flex items-center gap-2">
+            {!file && (
+              <nav className="hidden lg:flex items-center gap-4 mr-2 text-xs" aria-label="Main navigation">
+                <a href="#formats" className="text-slate-400 hover:text-white">Formats</a>
+                <a href="/blog" className="text-slate-400 hover:text-white">Guides</a>
+                <a href="/about" className="text-slate-400 hover:text-white">About</a>
+              </nav>
+            )}
+            <a href="https://ko-fi.com/hsr" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#ff5e5b] hover:bg-[#ff7774] text-white transition-colors text-xs border border-white/10">
+              <Coffee size={14} />
+              <span className="hidden sm:inline">Support on Ko-fi</span>
+            </a>
             {/* GitHub Star Button - Always Visible */}
             <a
               href="https://github.com/hsr88/log-voyager"
@@ -636,10 +652,10 @@ function AppContent() {
               </button>
             )}
           </div>
-        </div>
+        </div>}
 
         {/* --- MAIN CONTENT --- */}
-        <div className="flex-1 overflow-hidden relative flex">
+        <main className={file ? 'flex-1 overflow-hidden relative flex' : 'relative block flex-1'}>
           {file ? (
             <>
               {/* Primary View */}
@@ -906,7 +922,15 @@ function AppContent() {
               />
             </>
           ) : (
-            /* --- EMPTY STATE / DASHBOARD --- */
+            <HomeWorkbench
+              history={history}
+              onOpenFile={handleFile}
+              onSelectFile={() => fileInputRef.current?.click()}
+              onPaste={handlePasteClick}
+            />
+          )}
+          {false && (
+            /* Legacy empty state retained temporarily for safe rollback. */
             <div className="flex-1 flex flex-col items-center justify-center p-6 text-center z-10 overflow-y-auto">
               <div className="max-w-xs w-full glass-panel rounded-2xl p-6 border-t border-t-[#00f3ff]/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)] mb-6">
                 <div className="mb-4 relative">
@@ -975,10 +999,10 @@ function AppContent() {
               </div>
             </div>
           )}
-        </div>
+        </main>
         
         {/* Footer */}
-        <footer className="glass-panel border-t border-white/5 py-2 px-4 shrink-0">
+        {file && <footer className="glass-panel border-t border-white/5 py-2 px-4 shrink-0">
           <div className="flex items-center justify-between text-[10px] text-slate-500">
             <div className="flex items-center gap-4">
               <a 
@@ -1031,7 +1055,7 @@ function AppContent() {
               <span className="text-slate-600">© 2026 logvoyager.cc</span>
             </div>
           </div>
-        </footer>
+        </footer>}
 
         <input type="file" ref={fileInputRef} onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} className="hidden" />
       </div>
@@ -1097,6 +1121,34 @@ function Router() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  useEffect(() => {
+    const handleInternalNavigation = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (!(event.target instanceof Element)) return;
+
+      const anchor = event.target.closest<HTMLAnchorElement>('a[href]');
+      if (!anchor || anchor.target === '_blank' || anchor.hasAttribute('download')) return;
+
+      const destination = new URL(anchor.href, window.location.href);
+      if (destination.origin !== window.location.origin || !['http:', 'https:'].includes(destination.protocol)) return;
+
+      event.preventDefault();
+      window.history.pushState({}, '', `${destination.pathname}${destination.search}${destination.hash}`);
+      setCurrentPath(destination.pathname);
+
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          const target = destination.hash ? document.getElementById(destination.hash.slice(1)) : null;
+          if (target) target.scrollIntoView({ block: 'start' });
+          else window.scrollTo({ top: 0, left: 0 });
+        });
+      });
+    };
+
+    document.addEventListener('click', handleInternalNavigation);
+    return () => document.removeEventListener('click', handleInternalNavigation);
+  }, []);
+
   // Parse route from pathname
   const getRoute = () => {
     const path = currentPath;
@@ -1108,6 +1160,7 @@ function Router() {
       return articleExists ? 'blog-post' : '404';
     }
     if (path === '/about') return 'about';
+    if (getUseCaseBySlug(path.replace(/^\//, ''))) return 'use-case';
     return '404';
   };
 
@@ -1126,16 +1179,16 @@ function Router() {
     };
 
     if (route === 'app') {
-      document.title = 'Log Voyager | Free Log File Analyzer Online — Analyze 10GB+ Logs Instantly';
-      updateMeta('meta[name="description"]', 'content', 'Free online log file analyzer. Analyze massive log files (10GB+) directly in your browser. 100% privacy — no upload, no server. Instant error detection, filtering & export.');
+      document.title = 'Free Online Log File Analyzer & Viewer | Log Voyager';
+      updateMeta('meta[name="description"]', 'content', 'Open, search, filter and inspect log files locally in your browser. Free, private and open source - no account and no log upload.');
       updateMeta('meta[name="robots"]', 'content', 'index, follow');
-      updateMeta('meta[property="og:title"]', 'content', 'Log Voyager | Free Log File Analyzer Online — Analyze 10GB+ Logs Instantly');
-      updateMeta('meta[property="og:description"]', 'content', 'Free online log file analyzer. Analyze massive log files (10GB+) directly in your browser. 100% privacy — no upload, no server. Instant error detection, filtering & export.');
-      updateMeta('meta[property="twitter:title"]', 'content', 'Log Voyager | Free Log File Analyzer Online — Analyze 10GB+ Logs Instantly');
-      updateMeta('meta[property="twitter:description"]', 'content', 'Free online log file analyzer. Analyze massive log files (10GB+) directly in your browser. 100% privacy — no upload, no server. Instant error detection, filtering & export.');
+      updateMeta('meta[property="og:title"]', 'content', 'Free Online Log File Analyzer & Viewer | Log Voyager');
+      updateMeta('meta[property="og:description"]', 'content', 'Open, search, filter and inspect log files locally in your browser. Free, private and open source.');
+      updateMeta('meta[property="twitter:title"]', 'content', 'Free Online Log File Analyzer & Viewer | Log Voyager');
+      updateMeta('meta[property="twitter:description"]', 'content', 'Open, search, filter and inspect log files locally in your browser. Free, private and open source.');
     } else if (route === '404') {
       document.title = 'Page Not Found | Log Voyager';
-      updateMeta('meta[name="description"]', 'content', 'The page you are looking for does not exist. Return to Log Voyager — free online log file analyzer.');
+      updateMeta('meta[name="description"]', 'content', 'The page you are looking for does not exist. Return to Log Voyager - free online log file analyzer.');
       updateMeta('meta[name="robots"]', 'content', 'noindex, nofollow');
     }
     // blog / about / blog-post handle their own meta inside their components
@@ -1148,6 +1201,8 @@ function Router() {
       return <BlogPost slug={getBlogSlug()} />;
     case 'about':
       return <AboutPage />;
+    case 'use-case':
+      return <UseCasePage slug={currentPath.replace(/^\//, '')} />;
     case '404':
       return <NotFoundPage />;
     case 'app':

@@ -3,19 +3,19 @@ export default function handler(req, res) {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.logvoyager.cc/</loc>
-    <lastmod>2026-03-20</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.logvoyager.cc/about</loc>
-    <lastmod>2026-03-20</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.logvoyager.cc/blog</loc>
-    <lastmod>2026-03-20</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -25,7 +25,7 @@ export default function handler(req, res) {
       <image:loc>https://images.unsplash.com/photo-1588713444222-408f6d537ca3?q=80&amp;w=2064&amp;auto=format&amp;fit=crop</image:loc>
       <image:title>How to Analyze Log Files Online</image:title>
     </image:image>
-    <lastmod>2026-03-20</lastmod>
+    <lastmod>2026-03-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -35,7 +35,7 @@ export default function handler(req, res) {
       <image:loc>https://images.unsplash.com/photo-1627399270231-7d36245355a9?q=80&amp;w=1548&amp;auto=format&amp;fit=crop</image:loc>
       <image:title>Best Free Log File Analyzers</image:title>
     </image:image>
-    <lastmod>2026-03-20</lastmod>
+    <lastmod>2026-03-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -55,10 +55,16 @@ export default function handler(req, res) {
       <image:loc>https://images.unsplash.com/photo-1656836476760-77c0d09257ce?q=80&amp;w=1752&amp;auto=format&amp;fit=crop</image:loc>
       <image:title>JSON Log Viewer Guide</image:title>
     </image:image>
-    <lastmod>2026-03-20</lastmod>
+    <lastmod>2026-03-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url><loc>https://www.logvoyager.cc/json-log-viewer</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.logvoyager.cc/large-log-file-viewer</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.logvoyager.cc/nginx-log-analyzer</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.logvoyager.cc/apache-log-viewer</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.logvoyager.cc/docker-log-viewer</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.logvoyager.cc/syslog-viewer</loc><lastmod>2026-08-01</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
 </urlset>`;
 
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { BlogLayout } from './BlogLayout';
 import { getArticleBySlug, getRelatedArticles } from '../articles';
 import { Clock, Calendar, User, ArrowRight } from 'lucide-react';
@@ -20,10 +20,8 @@ interface BlogPostProps {
 }
 
 export const BlogPost: React.FC<BlogPostProps> = ({ slug }) => {
-  const [content, setContent] = useState<string>('');
-  const [loading, setLoading] = useState(true);
-  
   const article = getArticleBySlug(slug);
+  const content = article?.content ?? '';
   const relatedArticles = getRelatedArticles(slug);
 
   // Update document title and meta tags
@@ -73,7 +71,7 @@ export const BlogPost: React.FC<BlogPostProps> = ({ slug }) => {
         "name": "Log Voyager",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://www.logvoyager.cc/logo192.png"
+          "url": "https://www.logvoyager.cc/lv_new.png"
         }
       },
       "datePublished": article.publishedAt,
@@ -107,26 +105,6 @@ export const BlogPost: React.FC<BlogPostProps> = ({ slug }) => {
       if (existingBreadcrumb) existingBreadcrumb.remove();
     };
   }, [article, slug]);
-
-  useEffect(() => {
-    const loadContent = async () => {
-      try {
-        const response = await fetch(`/blog-articles/${slug}.md`);
-        if (response.ok) {
-          const text = await response.text();
-          setContent(text);
-        } else {
-          setContent('');
-        }
-      } catch {
-        setContent('');
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    loadContent();
-  }, [slug]);
 
   if (!article) {
     return (
@@ -190,24 +168,23 @@ export const BlogPost: React.FC<BlogPostProps> = ({ slug }) => {
         continue;
       }
       
-      // Headers (shifted down by one level so page H1 is unique)
+      // The article title is already the page H1; skip the Markdown title.
       if (line.startsWith('# ')) {
-        result.push(`<h2 style="color: ${TEXT}; font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; margin-top: 2rem;">${formatInline(line.slice(2))}</h2>`);
         i++;
         continue;
       }
       if (line.startsWith('## ')) {
-        result.push(`<h3 style="color: ${TEXT}; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; margin-top: 1.5rem;">${formatInline(line.slice(3))}</h3>`);
+        result.push(`<h2 style="color: ${TEXT}; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; margin-top: 1.5rem;">${formatInline(line.slice(3))}</h2>`);
         i++;
         continue;
       }
       if (line.startsWith('### ')) {
-        result.push(`<h4 style="color: ${TEXT}; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; margin-top: 1.25rem;">${formatInline(line.slice(4))}</h4>`);
+        result.push(`<h3 style="color: ${TEXT}; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; margin-top: 1.25rem;">${formatInline(line.slice(4))}</h3>`);
         i++;
         continue;
       }
       if (line.startsWith('#### ')) {
-        result.push(`<h5 style="color: ${TEXT}; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; margin-top: 1rem;">${formatInline(line.slice(5))}</h5>`);
+        result.push(`<h4 style="color: ${TEXT}; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; margin-top: 1rem;">${formatInline(line.slice(5))}</h4>`);
         i++;
         continue;
       }

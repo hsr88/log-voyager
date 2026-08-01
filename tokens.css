@@ -1,0 +1,96 @@
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · genre: modern-minimal · macrostructure: Workbench + Long Document · theme: studied-DNA (source: user-owned prior Log Voyager screenshot) · enrichment: semantic log stream · nav: N13 · footer: Ft5
+ * contrast: pass (40–41) · slop: pass (42–45) · honest: pass (46) · chrome: pass (47) · tokens: pass (48) · responsive/mobile: pass (34, 49–57) · icons: pass (30)
+ */
+:root {
+  --color-paper: oklch(14% 0.014 258);
+  --color-paper-2: oklch(18% 0.016 258);
+  --color-paper-3: oklch(22% 0.018 258);
+  --color-panel: oklch(19% 0.018 258);
+  --color-panel-raised: oklch(23% 0.02 258);
+  --color-rule: oklch(31% 0.018 258);
+  --color-rule-strong: oklch(43% 0.025 258);
+  --color-muted: oklch(70% 0.018 258);
+  --color-neutral: oklch(82% 0.012 258);
+  --color-ink: oklch(95% 0.008 250);
+  --color-accent: oklch(76% 0.16 210);
+  --color-accent-strong: oklch(66% 0.19 230);
+  --color-accent-ink: oklch(16% 0.02 258);
+  --color-focus: oklch(82% 0.16 210);
+  --color-support: oklch(70% 0.18 28);
+  --color-support-ink: oklch(16% 0.025 28);
+  --color-success: oklch(76% 0.14 155);
+  --color-warning: oklch(80% 0.14 82);
+  --color-error: oklch(68% 0.19 25);
+
+  --font-display: "Space Grotesk", "IBM Plex Sans", sans-serif;
+  --font-body: "IBM Plex Sans", "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --space-3xs: 0.125rem;
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+  --space-4xl: 9rem;
+
+  --text-xs: 0.72rem;
+  --text-sm: 0.84rem;
+  --text-base: 1rem;
+  --text-md: 1.25rem;
+  --text-lg: 1.56rem;
+  --text-xl: 1.95rem;
+  --text-2xl: 2.44rem;
+  --text-3xl: 3.05rem;
+  --text-display: clamp(2.7rem, 6vw, 5.25rem);
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --rule-hair: 1px;
+  --page-max: 76rem;
+  --page-gutter: clamp(1rem, 4vw, 3rem);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+
+  --z-base: 1;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-sticky-nav: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+}
+
+[data-theme="light"] {
+  --color-paper: oklch(98% 0.006 250);
+  --color-paper-2: oklch(95% 0.009 250);
+  --color-paper-3: oklch(91% 0.012 250);
+  --color-panel: oklch(99% 0.004 250);
+  --color-panel-raised: oklch(96% 0.008 250);
+  --color-rule: oklch(85% 0.014 250);
+  --color-rule-strong: oklch(70% 0.022 250);
+  --color-muted: oklch(48% 0.022 258);
+  --color-neutral: oklch(34% 0.02 258);
+  --color-ink: oklch(20% 0.022 258);
+  --color-accent: oklch(58% 0.2 256);
+  --color-accent-strong: oklch(50% 0.21 256);
+  --color-accent-ink: oklch(98% 0.006 250);
+  --color-focus: oklch(48% 0.21 256);
+  --color-support: oklch(62% 0.2 28);
+  --color-support-ink: oklch(98% 0.008 28);
+  --color-success: oklch(48% 0.14 155);
+  --color-warning: oklch(58% 0.15 82);
+  --color-error: oklch(54% 0.21 25);
+}

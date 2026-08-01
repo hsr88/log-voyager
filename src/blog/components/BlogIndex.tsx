@@ -36,7 +36,7 @@ export const BlogIndex: React.FC = () => {
 
   return (
     <BlogLayout 
-      title="Log Analysis Blog | Log Voyager — Online Log File Analyzer"
+      title="Log Analysis Blog | Log Voyager - Online Log File Analyzer"
       description="Free log file analyzer online resources and guides. Learn how to analyze log files online free with the best online log file analyzer tools and techniques."
     >
       {/* Breadcrumb UI */}

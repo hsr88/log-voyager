@@ -24,13 +24,13 @@ export const AboutPage: React.FC = () => {
 
     setMeta('meta[property="og:type"]', 'content', 'website');
     setMeta('meta[property="og:url"]', 'content', 'https://www.logvoyager.cc/about');
-    setMeta('meta[property="og:title"]', 'content', 'About Log Voyager — Free Online Log File Analyzer');
-    setMeta('meta[property="og:description"]', 'content', 'Log Voyager is a free log file analyzer online. Analyze 10GB+ logs instantly in your browser. 100% privacy — no upload, no server. Open source.');
+    setMeta('meta[property="og:title"]', 'content', 'About Log Voyager - Free Online Log File Analyzer');
+    setMeta('meta[property="og:description"]', 'content', 'Log Voyager is a free log file analyzer online. Analyze 10GB+ logs instantly in your browser. 100% privacy - no upload, no server. Open source.');
     setMeta('meta[property="og:image"]', 'content', 'https://www.logvoyager.cc/og-image.png');
     setMeta('meta[property="twitter:card"]', 'content', 'summary_large_image');
     setMeta('meta[property="twitter:url"]', 'content', 'https://www.logvoyager.cc/about');
-    setMeta('meta[property="twitter:title"]', 'content', 'About Log Voyager — Free Online Log File Analyzer');
-    setMeta('meta[property="twitter:description"]', 'content', 'Log Voyager is a free log file analyzer online. Analyze 10GB+ logs instantly in your browser. 100% privacy — no upload, no server. Open source.');
+    setMeta('meta[property="twitter:title"]', 'content', 'About Log Voyager - Free Online Log File Analyzer');
+    setMeta('meta[property="twitter:description"]', 'content', 'Log Voyager is a free log file analyzer online. Analyze 10GB+ logs instantly in your browser. 100% privacy - no upload, no server. Open source.');
     setMeta('meta[property="twitter:image"]', 'content', 'https://www.logvoyager.cc/og-image.png');
 
     // Canonical
@@ -41,7 +41,7 @@ export const AboutPage: React.FC = () => {
   return (
     <BlogLayout 
       showBackButton
-      title="About Log Voyager — Free Online Log File Analyzer"
+      title="About Log Voyager - Free Online Log File Analyzer"
       description="Log Voyager is a free log file analyzer online and online log file analyzer for massive files. 100% privacy, instant loading, cross-platform and open source."
     >
       {/* Breadcrumb JSON-LD */}
@@ -85,12 +85,12 @@ export const AboutPage: React.FC = () => {
           <Database className="w-10 h-10" style={{ color: CYAN }} />
         </div>
         <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: TEXT }}>
-          About Log Voyager — <span style={{ color: CYAN }}>Free Online Log File Analyzer</span>
+          About Log Voyager - <span style={{ color: CYAN }}>Free Online Log File Analyzer</span>
         </h1>
         <p className="text-lg max-w-3xl mx-auto" style={{ color: TEXT_MUTED }}>
           Log Voyager is a <strong style={{ color: TEXT }}>free log file analyzer online</strong> designed for developers who need to 
           <strong style={{ color: TEXT }}> analyze log files online</strong> instantly without compromising privacy. 
-          As an <strong style={{ color: TEXT }}>online log file analyzer</strong>, it processes massive files directly in your browser — no upload, no server, 100% free.
+          As an <strong style={{ color: TEXT }}>online log file analyzer</strong>, it processes massive files directly in your browser - no upload, no server, 100% free.
         </p>
       </div>
 
@@ -352,7 +352,7 @@ export const AboutPage: React.FC = () => {
         </h2>
         <p className="mb-6" style={{ color: TEXT_MUTED }}>
           Join thousands of developers who use Log Voyager as their free log file analyzer online. 
-          Analyze log files online free — open 10GB+ files instantly with complete privacy.
+          Analyze log files online free - open 10GB+ files instantly with complete privacy.
         </p>
         <a 
           href="https://www.logvoyager.cc"

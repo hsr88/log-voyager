@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BookOpen, ArrowLeft } from 'lucide-react';
+import { SeoFooter, SeoHeader } from '../../seo/SeoChrome';
 
 interface BlogLayoutProps {
   children: React.ReactNode;
@@ -69,9 +70,10 @@ export const BlogLayout: React.FC<BlogLayoutProps> = ({
                           linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)`
       }}
     >
+      <SeoHeader />
       {/* Header */}
       <header 
-        className="sticky top-0 z-50 backdrop-blur-md border-b"
+        className="hidden"
         style={{ 
           backgroundColor: DARK_PANEL,
           borderColor: BORDER
@@ -119,7 +121,7 @@ export const BlogLayout: React.FC<BlogLayoutProps> = ({
 
       {/* Footer */}
       <footer 
-        className="mt-16 border-t"
+        className="hidden"
         style={{ 
           backgroundColor: DARK_PANEL,
           borderColor: BORDER
@@ -149,6 +151,7 @@ export const BlogLayout: React.FC<BlogLayoutProps> = ({
           </div>
         </div>
       </footer>
+      <SeoFooter />
     </div>
   );
 };

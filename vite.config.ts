@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate', // Aplikacja zaktualizuje się sama po odświeżeniu
-      includeAssets: ['favicon.svg', 'og_image.png'], // Pliki statyczne do cache'owania
+      includeAssets: ['favicon.ico', 'favicon-32x32.png', 'apple-touch-icon.png'],
       manifest: {
         name: 'Log Voyager',
         short_name: 'LogVoyager',
@@ -40,7 +40,8 @@ export default defineConfig({
       },
       workbox: {
         // Cache'ujemy wszystko, żeby działało offline
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+        globPatterns: ['**/*.{js,css,html,ico,svg,webmanifest}'],
+        navigateFallbackDenylist: [/^\/api\//]
       }
     })
   ],

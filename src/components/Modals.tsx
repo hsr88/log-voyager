@@ -166,7 +166,7 @@ export const InfoModal = ({ onClose }: { onClose: () => void }) => {
                             <div>
                                 <h4 className="text-white font-bold mb-2 flex items-center gap-2"><Zap size={16} className="text-yellow-400" /> Core Technology</h4>
                                 <p className="text-slate-400 text-xs leading-relaxed">
-                                    We use <strong>File Slicing API</strong>. Instead of loading the entire file into memory (which kills the browser), the application reads it in small, 50KB chunks—just like streaming a video on YouTube. This allows you to open a 100GB log file on an old smartphone with zero latency.
+                                    We use the <strong>File API</strong>. Instead of building one complete in-memory document before showing anything, the application reads small, 50 KB slices around the current position. Practical performance depends on the browser, device and file structure.
                                 </p>
                             </div>
 
@@ -200,10 +200,10 @@ export const InfoModal = ({ onClose }: { onClose: () => void }) => {
                                     ⚡ Infinity Scroll Engine
                                 </h4>
                                 <p className="text-xs text-slate-400 leading-relaxed mb-2">
-                                    Open files larger than 10GB instantly using File Slicing API. Reads in 50KB chunks like streaming video.
+                                    Navigate large text logs with on-demand 50 KB file slices instead of a full-document import.
                                 </p>
                                 <div className="flex gap-2 flex-wrap">
-                                    <span className="px-2 py-1 bg-yellow-400/10 text-yellow-400 text-[10px] rounded">10GB+ Support</span>
+                                    <span className="px-2 py-1 bg-yellow-400/10 text-yellow-400 text-[10px] rounded">Chunked reading</span>
                                     <span className="px-2 py-1 bg-yellow-400/10 text-yellow-400 text-[10px] rounded">~10MB RAM</span>
                                 </div>
                             </div>

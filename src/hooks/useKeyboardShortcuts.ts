@@ -31,7 +31,7 @@ export const useKeyboardShortcuts = (shortcuts: KeyboardShortcut[]) => {
   }, [handleKeyDown]);
 };
 
-export const formatShortcut = (shortcut: { key: string; ctrl?: boolean; shift?: boolean; alt?: boolean }): string => {
+export const formatShortcut = (shortcut: { key: string; ctrl?: boolean; meta?: boolean; shift?: boolean; alt?: boolean }): string => {
   const parts: string[] = [];
   if (shortcut.ctrl || shortcut.meta) parts.push('Ctrl');
   if (shortcut.shift) parts.push('Shift');

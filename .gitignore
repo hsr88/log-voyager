@@ -29,3 +29,8 @@ key.properties
 *.njsproj
 *.sln
 *.sw?
+
+# Local Codex review artifacts
+.backups/
+.hallmark/
+artifacts/

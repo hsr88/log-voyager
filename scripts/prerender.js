@@ -17,15 +17,15 @@ const baseHtml = fs.readFileSync(indexPath, 'utf-8');
 const routes = [
   {
     path: '/',
-    title: 'Log Voyager | Free Log File Analyzer Online — Analyze 10GB+ Logs Instantly',
+    title: 'Log Voyager | Free Log File Analyzer Online - Analyze 10GB+ Logs Instantly',
     description:
-      'Free online log file analyzer. Analyze massive log files (10GB+) directly in your browser. 100% privacy — no upload, no server. Instant error detection, filtering & export.',
+      'Free online log file analyzer. Analyze massive log files (10GB+) directly in your browser. 100% privacy - no upload, no server. Instant error detection, filtering & export.',
     ogType: 'website',
     schema: true,
   },
   {
     path: '/blog',
-    title: 'Log Analysis Blog | Log Voyager — Free Online Log File Analyzer',
+    title: 'Log Analysis Blog | Log Voyager - Free Online Log File Analyzer',
     description:
       'Free log file analyzer online guides and tutorials. Learn how to analyze log files online free with the best online log file analyzer techniques, tools, and tips for DevOps professionals.',
     ogType: 'website',

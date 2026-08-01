@@ -480,7 +480,7 @@ A: Client-side tools (like Log Voyager) are 100% safe - files never leave your d
 A: PWAs like Log Voyager work offline after initial load. Others require constant internet connection.
 
 **Q: What's the largest file I can analyze?**
-A: With streaming tools like Log Voyager, there's no practical limit - we've tested up to 100GB successfully.
+A: There is no server upload limit because files stay local. Practical performance still depends on the browser, device resources and the structure of the file.
 
 **Q: Do online log readers work on mobile?**
 A: Yes, modern online log readers are fully responsive and work on phones and tablets.

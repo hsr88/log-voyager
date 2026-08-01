@@ -4,7 +4,7 @@
 
 Analyzing log files is a critical skill for modern software development and operations. Whether you're troubleshooting production incidents, debugging application errors, or monitoring system performance, understanding how to effectively analyze log files can save hours of investigation time and prevent costly downtime.
 
-In this comprehensive guide, we'll explore everything you need to know about analyzing log files online - from choosing the right tools to advanced techniques used by senior DevOps engineers at companies like Netflix, Google, and Amazon.
+This guide covers a practical browser-based workflow for opening, narrowing and exporting log evidence, with an emphasis on keeping production data local.
 
 ## Table of Contents
 1. [What is an Online Log File Analyzer?](#what-is-an-online-log-file-analyzer)
@@ -34,7 +34,7 @@ An **online log file analyzer** is a web-based application that allows you to ex
 
 ### Popular Online Log Analysis Scenarios
 
-Based on our analysis of over 50,000 log analysis sessions, here are the most common use cases:
+In practice, log investigations tend to fall into a few recurring use cases:
 
 1. **Production Debugging (42%)** - Finding root cause of production errors
 2. **Performance Monitoring (23%)** - Analyzing response times and bottlenecks
@@ -70,7 +70,7 @@ Memory Usage by File Size:
 
 ### The Streaming Solution
 
-Modern online log analyzers like Log Voyager use **streaming architecture** - similar to how Netflix streams video:
+Local-first log viewers such as Log Voyager can use the browser File API to read only the part of a file needed for the current view:
 
 1. **File Mapping:** Create an index of file structure without loading content
 2. **Chunk Loading:** Load only the visible portion (50KB chunks)

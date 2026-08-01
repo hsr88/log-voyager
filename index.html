@@ -31,10 +31,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <style id="critical-shell-styles">
+    :root {
+      --color-paper: oklch(14% 0.014 258);
+      --color-panel: oklch(19% 0.018 258);
+      --color-rule: oklch(31% 0.018 258);
+      --color-muted: oklch(70% 0.018 258);
+      --color-ink: oklch(95% 0.008 250);
+      --font-display: "Space Grotesk", "IBM Plex Sans", sans-serif;
+      --font-body: "IBM Plex Sans", "Space Grotesk", sans-serif;
+    }
+    html { color-scheme: dark; }
+    html, body, #root { min-height: 100%; margin: 0; background: var(--color-paper); color: var(--color-ink); }
+    body { overflow-x: clip; font-family: var(--font-body); }
+    .static-seo { min-height: 100vh; background: var(--color-paper); color: var(--color-ink); }
+    .static-seo > header { min-height: 4.5rem; padding-inline: max(1rem, calc((100% - 76rem) / 2)); display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; border-bottom: 1px solid var(--color-rule); }
+    .static-seo > header a { color: var(--color-ink); text-decoration: none; }
+    .static-seo > header > a { font-family: var(--font-display); font-weight: 700; }
+    .static-seo > header nav { display: flex; align-items: center; gap: 1rem; }
+    .static-seo > main, .static-seo > footer { width: min(100% - 2rem, 76rem); margin-inline: auto; }
+    .static-seo > main { padding-block: 4rem; }
+    .static-seo article { max-width: 70ch; }
+    .static-seo h1, .static-seo h2, .static-seo h3 { font-family: var(--font-display); }
+    .static-seo h1 { margin: 0 0 1.5rem; font-size: clamp(2.5rem, 7vw, 5rem); line-height: 1; }
+    .static-seo p, .static-seo li { color: var(--color-muted); line-height: 1.65; }
+    @media (max-width: 48rem) { .static-seo > header nav { display: none; } }
+  </style>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://www.logvoyager.cc/" />
@@ -51,18 +78,12 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
 
-  <!-- Alternate language versions (for future i18n) -->
-  <link rel="alternate" hreflang="en" href="https://www.logvoyager.cc/" />
-  <link rel="alternate" hreflang="x-default" href="https://www.logvoyager.cc/" />
-
   <!-- Primary Meta Tags -->
-  <title>Log Voyager | Free Online Log File Analyzer & Viewer (10GB+)</title>
-  <meta name="title" content="Log Voyager | Free Online Log File Analyzer & Viewer (10GB+)" />
+  <title>Free Online Log File Analyzer & Viewer | Log Voyager</title>
+  <meta name="title" content="Free Online Log File Analyzer & Viewer | Log Voyager" />
   <meta name="description"
-    content="Analyze massive log files (10GB+) online without upload. Free log file analyzer with instant search, JSON formatting, error aggregation & bookmarks. 100% privacy - files stay local." />
-  <meta name="keywords"
-    content="log file analyzer online, log viewer online, log reader online, analyze log files, online log analyzer free, large log file viewer, json log viewer, devops tools, open source" />
-  <meta name="author" content="hsr88" />
+    content="Open, search, filter and inspect log files locally in your browser. Free, private and open source - no account and no log upload." />
+  <meta name="author" content="Log Voyager contributors" />
   <meta name="robots" content="index, follow" />
   <meta name="language" content="English" />
 
@@ -70,9 +91,9 @@
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:url" content="https://www.logvoyager.cc/" />
-  <meta property="og:title" content="Log Voyager | Free Online Log File Analyzer (10GB+)" />
+  <meta property="og:title" content="Free Online Log File Analyzer & Viewer | Log Voyager" />
   <meta property="og:description"
-    content="Open 10GB+ log files instantly in your browser. Zero upload, 100% privacy, instant search, JSON formatting & error aggregation. Free & open source." />
+    content="Open, search, filter and inspect log files locally in your browser. Free, private and open source." />
   <meta property="og:image" content="https://www.logvoyager.cc/og_image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -82,126 +103,46 @@
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://www.logvoyager.cc/" />
-  <meta property="twitter:title" content="Log Voyager | Free Online Log File Analyzer (10GB+)" />
+  <meta property="twitter:title" content="Free Online Log File Analyzer & Viewer | Log Voyager" />
   <meta property="twitter:description"
-    content="Open 10GB+ log files instantly in your browser. Zero upload, 100% privacy, instant search, JSON formatting." />
+    content="Open, search, filter and inspect log files locally in your browser. No account and no log upload." />
   <meta property="twitter:image" content="https://www.logvoyager.cc/og_image.png" />
   <meta property="twitter:image:alt" content="Log Voyager - Free Online Log File Analyzer interface screenshot" />
 
-  <!-- Schema.org: SoftwareApplication -->
-  <script type="application/ld+json">
+  <script id="site-schema" type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Log Voyager",
-    "applicationCategory": "DeveloperApplication",
-    "operatingSystem": "Web, Android, iOS",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "description": "Free online log file analyzer for massive log files (10GB+). Instant search, JSON formatting, error aggregation, bookmarks. 100% privacy - files never leave your device.",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "150"
-    },
-    "featureList": "Infinity Scroll for 10GB+ files, Smart Search with regex, JSON Prettifier, Warp Jump Bookmarks, Error Aggregation, Multi-Filter System, Split View, Export to TXT/JSON/CSV",
-    "softwareVersion": "2.0.0",
-    "url": "https://www.logvoyager.cc",
-    "screenshot": "https://www.logvoyager.cc/scrree.png",
-    "inLanguage": "en",
-    "license": "https://opensource.org/licenses/MIT"
-  }
-  </script>
-
-  <!-- Schema.org: WebApplication -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Log Voyager - Online Log File Analyzer",
-    "url": "https://www.logvoyager.cc",
-    "applicationCategory": "DeveloperApplication",
-    "operatingSystem": "Any",
-    "offers": {
-      "@type": "Offer",
-      "price": "0"
-    },
-    "description": "Analyze log files online without upload. Free log analyzer with instant search and JSON formatting.",
-    "browserRequirements": "Requires JavaScript. Requires HTML5 File API support.",
-    "softwareVersion": "2.0.0"
-  }
-  </script>
-
-  <!-- Schema.org: Organization -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Log Voyager",
-    "url": "https://www.logvoyager.cc",
-    "logo": "https://www.logvoyager.cc/LV.png",
-    "sameAs": [
-      "https://github.com/hsr88/log-voyager"
-    ]
-  }
-  </script>
-
-  <!-- Schema.org: FAQPage -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
+    "@graph": [
       {
-        "@type": "Question",
-        "name": "Is Log Voyager completely free?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, Log Voyager is 100% free and open source. There are no hidden fees, subscriptions, or usage limits."
-        }
+        "@type": "Organization", "@id": "https://www.logvoyager.cc/#organization",
+        "name": "Log Voyager", "url": "https://www.logvoyager.cc/",
+        "logo": "https://www.logvoyager.cc/lv_new.png",
+        "sameAs": ["https://github.com/hsr88/log-voyager"]
       },
       {
-        "@type": "Question",
-        "name": "How large of a log file can I analyze?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Log Voyager can handle log files larger than 10GB using its Infinity Scroll Engine. It reads files in 50KB chunks, so file size is limited only by your available disk space, not RAM."
-        }
+        "@type": "WebSite", "@id": "https://www.logvoyager.cc/#website",
+        "url": "https://www.logvoyager.cc/", "name": "Log Voyager",
+        "publisher": { "@id": "https://www.logvoyager.cc/#organization" }, "inLanguage": "en"
       },
       {
-        "@type": "Question",
-        "name": "Are my log files uploaded to a server?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No. Log Voyager is 100% client-side. Your files never leave your device. All processing happens locally in your browser using HTML5 File APIs."
-        }
+        "@type": "SoftwareApplication", "@id": "https://www.logvoyager.cc/#software",
+        "name": "Log Voyager", "url": "https://www.logvoyager.cc/",
+        "applicationCategory": "DeveloperApplication", "operatingSystem": "Web",
+        "description": "A free local-first browser tool for opening, searching, filtering and exporting text and JSON log files.",
+        "browserRequirements": "Requires JavaScript and the HTML5 File API.",
+        "license": "https://opensource.org/licenses/MIT",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": ["Local file processing", "Text and regular-expression search", "Multi-filter views", "Bookmarks", "Error grouping", "TXT, JSON and CSV export"]
       },
       {
-        "@type": "Question",
-        "name": "Does it work offline?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, Log Voyager is a PWA (Progressive Web App). Once loaded, it works completely offline. You can install it on your device and use it without internet connection."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Can I analyze JSON log files?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, Log Voyager automatically detects JSON objects in log files and provides a toggle to prettify/format them for better readability."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What log formats are supported?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Log Voyager supports any text-based log format including: .log, .txt, .json, and GZIP compressed logs (.gz). It works with server logs, application logs, Docker logs, and more."
-        }
+        "@type": "FAQPage", "@id": "https://www.logvoyager.cc/#faq",
+        "mainEntity": [
+          { "@type": "Question", "name": "Are log files uploaded to a server?", "acceptedAnswer": { "@type": "Answer", "text": "No. File reading, searching, filtering and export happen in your browser. The selected file stays on your device." } },
+          { "@type": "Question", "name": "Which file formats can I open?", "acceptedAnswer": { "@type": "Answer", "text": "Log Voyager accepts text-based .log, .txt, .json and JSONL-style files, plus GZIP-compressed logs." } },
+          { "@type": "Question", "name": "Why does it work with large logs?", "acceptedAnswer": { "@type": "Answer", "text": "The viewer reads small slices around the current position instead of creating one complete in-memory document before showing the first line." } },
+          { "@type": "Question", "name": "Is Log Voyager free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The web app is free to use and the source code is available under the MIT license. Voluntary Ko-fi contributions help cover maintenance." } },
+          { "@type": "Question", "name": "Can I use it offline?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Log Voyager is installable as a Progressive Web App. After its assets are cached, the viewer can run without a network connection." } }
+        ]
       }
     ]
   }

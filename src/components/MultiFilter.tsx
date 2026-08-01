@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, X, Filter, Trash2, CaseSensitive, Regex } from 'lucide-react';
+import { Plus, X, Filter as FilterIcon, Trash2, CaseSensitive, Regex } from 'lucide-react';
 import type { Filter } from '../types';
 
 interface MultiFilterProps {
@@ -48,7 +48,7 @@ export const MultiFilter: React.FC<MultiFilterProps> = ({ filters, onChange }) =
             : 'bg-white/5 border border-white/10 text-slate-400 hover:bg-white/10'
         }`}
       >
-        <Filter size={12} />
+        <FilterIcon size={12} />
         <span>FILTERS {activeCount > 0 && `(${activeCount})`}</span>
       </button>
 
@@ -56,7 +56,7 @@ export const MultiFilter: React.FC<MultiFilterProps> = ({ filters, onChange }) =
         <div className="absolute top-full left-0 mt-2 w-96 glass-panel border border-white/10 rounded-xl z-50 shadow-2xl">
           <div className="flex items-center justify-between p-3 border-b border-white/10">
             <span className="text-xs font-bold text-white flex items-center gap-2">
-              <Filter size={12} className="text-[#00f3ff]" />
+              <FilterIcon size={12} className="text-[#00f3ff]" />
               MULTI-FILTER
             </span>
             <div className="flex items-center gap-1">

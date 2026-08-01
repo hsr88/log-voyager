@@ -737,7 +737,7 @@ JSON logs provide the foundation for modern observability and debugging. By usin
 4. Choose a viewer that handles your file sizes
 5. Never log sensitive information
 
-**Ready to analyze your JSON logs?** Try our [free log file analyzer online](https://www.logvoyager.cc) — it provides instant JSON prettification, powerful search, and handles files of any size. All in your browser with complete privacy. The best way to **analyze log files online free** with structured data.
+**Ready to analyze your JSON logs?** Try our [free log file analyzer online](https://www.logvoyager.cc) - it provides instant JSON prettification, powerful search, and handles files of any size. All in your browser with complete privacy. The best way to **analyze log files online free** with structured data.
 
 ---
 
