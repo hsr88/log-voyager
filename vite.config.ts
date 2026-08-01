@@ -41,7 +41,10 @@ export default defineConfig({
       workbox: {
         // Cache'ujemy wszystko, żeby działało offline
         globPatterns: ['**/*.{js,css,html,ico,svg,webmanifest}'],
-        navigateFallbackDenylist: [/^\/api\//]
+        navigateFallbackDenylist: [
+          /^\/api\//,
+          /^\/(?:sitemap(?:\.xml|\.txt)|robots\.txt)(?:\?.*)?$/
+        ]
       }
     })
   ],

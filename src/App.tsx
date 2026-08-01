@@ -1131,6 +1131,7 @@ function Router() {
 
       const destination = new URL(anchor.href, window.location.href);
       if (destination.origin !== window.location.origin || !['http:', 'https:'].includes(destination.protocol)) return;
+      if (/\.(?:xml|txt|json|webmanifest)$/i.test(destination.pathname) || destination.pathname.startsWith('/api/')) return;
 
       event.preventDefault();
       window.history.pushState({}, '', `${destination.pathname}${destination.search}${destination.hash}`);
