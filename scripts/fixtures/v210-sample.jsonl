@@ -1,0 +1,6 @@
+{"timestamp":"2026-08-02T10:00:00Z","level":"info","service":"payments","message":"checkout started","request_id":"req-1001"}
+{"timestamp":"2026-08-02T10:00:10Z","level":"warn","service":"payments","message":"gateway latency 1842ms","request_id":"req-1001"}
+{"timestamp":"2026-08-02T10:00:20Z","level":"error","service":"payments","message":"gateway timeout request_id=req-1001","client_ip":"203.0.113.10"}
+{"timestamp":"2026-08-02T10:01:00Z","level":"info","service":"payments","message":"checkout started","request_id":"req-1002"}
+{"timestamp":"2026-08-02T10:01:20Z","level":"error","service":"payments","message":"gateway timeout request_id=req-1002","client_ip":"203.0.113.11"}
+{"timestamp":"2026-08-02T10:02:00Z","level":"error","service":"identity","message":"token validation failed session_id=9e7a2c1d","client_ip":"203.0.113.12"}

@@ -17,6 +17,7 @@ import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { formatBytes } from './utils/helpers';
 import type { BookmarkData, HistoryItem, Filter, Command as CommandType, KeyboardShortcut, Selection } from './types';
 import { isGzip, decompressGzip } from './utils/decompression';
+import { detectLogFormat } from './utils/logAnalysis';
 import { HomeWorkbench } from './seo/HomeWorkbench';
 import { UseCasePage } from './seo/UseCasePage';
 import { getUseCaseBySlug } from './seo/useCases';
@@ -214,6 +215,8 @@ function AppContent() {
   const [selection, setSelection] = useState<Selection>({ lineNumbers: [], contents: [] });
   const [showExportModal, setShowExportModal] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
+
+  const detectedFormat = useMemo(() => detectLogFormat(lines, file?.name || ''), [lines, file?.name]);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -585,7 +588,14 @@ function AppContent() {
                 <div className="text-sm font-bold text-white tracking-wider group-hover:text-[#00f3ff] transition-colors duration-300 neon-text">
                   LOG VOYAGER <span className="text-[8px] bg-[#0088ff] text-white px-1.5 py-0.5 rounded ml-1 hidden sm:inline-block">Analyze huge log files instantly in your browser</span>
                 </div>
-                {file && <p className="text-[10px] text-[#00f3ff] font-mono">{file.name} ({formatBytes(fileSize)})</p>}
+                {file && (
+                  <p className="text-[10px] text-[#00f3ff] font-mono flex items-center gap-2">
+                    <span>{file.name} ({formatBytes(fileSize)})</span>
+                    <span className="rounded border border-[#00f3ff]/25 bg-[#00f3ff]/10 px-1.5 py-0.5 text-[8px] uppercase tracking-wider" title={`${detectedFormat.description} - ${Math.round(detectedFormat.confidence * 100)}% confidence`}>
+                      {detectedFormat.label}
+                    </span>
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -773,7 +783,7 @@ function AppContent() {
                       className="glass-panel px-3 py-1.5 rounded text-[10px] flex items-center gap-2 text-slate-400 hover:bg-[#00f3ff]/20 hover:text-[#00f3ff] transition-all"
                     >
                       <BarChart size={10} />
-                      STATS
+                      TIMELINE
                     </button>
                     
                     {/* Selection Mode */}
@@ -1069,7 +1079,6 @@ function AppContent() {
         <ErrorAggregation
           lines={lines}
           offset={currentOffset}
-          bookmarks={bookmarks}
           onJumpToLine={(lineNum, chunkOffset) => {
             if (chunkOffset !== currentOffset) {
               readChunk(chunkOffset);
@@ -1085,7 +1094,6 @@ function AppContent() {
             setShowErrorAggregation(false);
           }}
           onClose={() => setShowErrorAggregation(false)}
-          onToggleBookmark={toggleBookmark}
         />
       )}
       {showLogStats && file && (
@@ -1094,6 +1102,15 @@ function AppContent() {
           offset={currentOffset}
           fileSize={fileSize}
           fileName={file.name}
+          onJumpToLine={(lineNum) => {
+            const element = document.getElementById(`line-${lineNum}`);
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              element.classList.add('animate-flash');
+              setTimeout(() => element.classList.remove('animate-flash'), 1500);
+            }
+            setShowLogStats(false);
+          }}
           onClose={() => setShowLogStats(false)}
         />
       )}

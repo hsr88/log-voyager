@@ -1,80 +1,27 @@
 import { useState, useMemo } from 'react';
-import { X, AlertCircle, ChevronDown, ChevronUp, Copy, MapPin, Trash2 } from 'lucide-react';
-import type { BookmarkData } from '../types';
+import { X, AlertCircle, ChevronDown, ChevronUp, Copy, MapPin } from 'lucide-react';
+import { groupSimilarErrors } from '../utils/logAnalysis';
 
 interface ErrorAggregationProps {
   lines: string[];
   offset: number;
-  bookmarks: Map<number, BookmarkData>;
   onJumpToLine: (lineNum: number, chunkOffset: number) => void;
   onClose: () => void;
-  onToggleBookmark: (lineNum: number, content: string) => void;
-}
-
-interface ErrorGroup {
-  key: string;
-  count: number;
-  sample: string;
-  lineNumbers: number[];
-  level: 'error' | 'warn' | 'info';
 }
 
 export const ErrorAggregation: React.FC<ErrorAggregationProps> = ({
   lines,
   offset,
-  bookmarks,
   onJumpToLine,
   onClose,
-  onToggleBookmark,
 }) => {
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [minCount, setMinCount] = useState(1);
 
   const errorGroups = useMemo(() => {
-    const groups = new Map<string, ErrorGroup>();
     const baseIndex = Math.floor(offset / 50);
-
-    lines.forEach((line, idx) => {
-      const globalIndex = baseIndex + idx;
-      
-      // Detect error level
-      let level: 'error' | 'warn' | 'info' = 'info';
-      if (/\b(error|exception|fail|failed|fatal|crash)\b/i.test(line)) {
-        level = 'error';
-      } else if (/\b(warn|warning|caution)\b/i.test(line)) {
-        level = 'warn';
-      }
-
-      if (level === 'error' || level === 'warn') {
-        // Extract error key - remove timestamps, line numbers, IDs
-        let key = line
-          .replace(/\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}[\.,]?\d*/g, '')
-          .replace(/\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/gi, '<UUID>')
-          .replace(/\b0x[0-9a-f]+\b/gi, '<ADDR>')
-          .replace(/\d+/g, '<N>')
-          .replace(/\s+/g, ' ')
-          .trim();
-
-        // Truncate long keys
-        if (key.length > 100) key = key.substring(0, 100) + '...';
-
-        if (groups.has(key)) {
-          const group = groups.get(key)!;
-          group.count++;
-          group.lineNumbers.push(globalIndex);
-        } else {
-          groups.set(key, {
-            key,
-            count: 1,
-            sample: line.substring(0, 200),
-            lineNumbers: [globalIndex],
-            level,
-          });
-        }
-      }
-    });
-
-    return Array.from(groups.values())
+    return groupSimilarErrors(lines)
+      .map(group => ({ ...group, lineNumbers: group.lineIndexes.map(index => baseIndex + index) }))
       .filter(g => g.count >= minCount)
       .sort((a, b) => b.count - a.count);
   }, [lines, offset, minCount]);
@@ -107,9 +54,9 @@ export const ErrorAggregation: React.FC<ErrorAggregationProps> = ({
           <div className="flex items-center gap-3">
             <AlertCircle size={20} className="text-red-500" />
             <div>
-              <h3 className="font-bold text-white tracking-wider">ERROR AGGREGATION</h3>
+              <h3 className="font-bold text-white tracking-wider">SIMILAR ERROR GROUPS</h3>
               <p className="text-[10px] text-slate-400">
-                {uniqueErrors} unique • {totalErrors} total in current chunk
+                {uniqueErrors} signatures • {totalErrors} events in this 50 KB window
               </p>
             </div>
           </div>
@@ -155,7 +102,7 @@ export const ErrorAggregation: React.FC<ErrorAggregationProps> = ({
           {errorGroups.length === 0 ? (
             <div className="text-center py-10 text-slate-500">
               <AlertCircle size={48} className="mx-auto mb-4 opacity-20" />
-              <p className="text-sm">No errors or warnings found in current chunk</p>
+              <p className="text-sm">No errors or warnings found in this window</p>
             </div>
           ) : (
             errorGroups.map((group) => (

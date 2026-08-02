@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import {
   ArrowRight, BookOpen, Boxes, Braces, Clipboard, Coffee, FileJson, FileText,
-  Filter, Github, History, LockKeyhole, ScanSearch, Search, Server, ShieldCheck,
+  Bug, Filter, Github, History, LockKeyhole, ScanSearch, Search, Server, ShieldCheck,
   UploadCloud, Wrench, Zap
 } from 'lucide-react';
 import type { HistoryItem } from '../types';
@@ -88,6 +88,36 @@ export const HomeWorkbench: React.FC<HomeWorkbenchProps> = ({ history, onOpenFil
             <span><LockKeyhole size={18} /> Zero-byte upload</span>
             <span><Wrench size={18} /> Search, regex, filters and export</span>
             <span><FileJson size={18} /> Text, JSON and compressed logs</span>
+          </div>
+        </section>
+
+        <section className="seo-container home-release" aria-labelledby="release-title">
+          <div className="home-release__head">
+            <div>
+              <p className="seo-kicker">New in v2.1.0</p>
+              <h2 id="release-title" className="seo-heading">From raw lines to visible patterns</h2>
+            </div>
+            <p className="seo-prose">Log Voyager now identifies common log formats, maps timestamped events on an interactive timeline and groups repeated failures into stable signatures. The analysis runs locally in the current file window.</p>
+          </div>
+          <div className="home-release__grid">
+            <article>
+              <ScanSearch size={22} aria-hidden="true" />
+              <span>01</span>
+              <h3>Automatic format detection</h3>
+              <p>Recognizes JSONL, Docker JSON, Kubernetes CRI, Nginx, Apache, syslog and structured application logs.</p>
+            </article>
+            <article>
+              <History size={22} aria-hidden="true" />
+              <span>02</span>
+              <h3>Interactive event timeline</h3>
+              <p>See activity, warning and error spikes over time. Click any histogram bar to jump to matching lines.</p>
+            </article>
+            <article>
+              <Bug size={22} aria-hidden="true" />
+              <span>03</span>
+              <h3>Similar error groups</h3>
+              <p>Collapses repeated failures while normalizing timestamps, IDs, addresses and changing values that create noise.</p>
+            </article>
           </div>
         </section>
 

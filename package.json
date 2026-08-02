@@ -1,12 +1,13 @@
 {
   "name": "log-voyager",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/static-render.js",
     "lint": "eslint .",
+    "test:analysis": "node --experimental-strip-types scripts/test-log-analysis.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
