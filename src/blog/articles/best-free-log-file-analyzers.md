@@ -39,7 +39,7 @@ Log Voyager is a client-side log analyzer that runs entirely in your browser. It
 | Error Aggregation | Auto-group similar | Pattern recognition |
 | Export | TXT/JSON/CSV formats | Flexible output |
 | PWA Support | Offline capable | Works without internet |
-| Mobile App | Android native | On-call debugging |
+| Mobile App | Installable PWA | On-call debugging |
 
 #### Performance Benchmarks
 
@@ -73,7 +73,7 @@ File Size: 10GB Apache access log
 - ✅ Works offline after initial load
 - ✅ No registration or installation
 - ✅ Mobile and tablet support
-- ✅ Native Android app available
+- ✅ Installable PWA for desktop and mobile browsers
 
 #### Cons
 - ❌ Limited team collaboration features
