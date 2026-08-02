@@ -124,18 +124,18 @@ const getStyles = (isDark: boolean) => `
   .font-jetbrains { font-family: 'JetBrains Mono', monospace; }
   
   .tech-grid {
-    background-color: ${isDark ? '#050505' : '#e2e8f0'};
+    background-color: ${isDark ? '#050505' : '#f4f7fb'};
     background-size: 40px 40px;
     background-image: linear-gradient(to right, ${isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'} 1px, transparent 1px),
                       linear-gradient(to bottom, ${isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'} 1px, transparent 1px);
   }
   
   .glass-panel {
-    background: ${isDark ? 'rgba(20, 20, 25, 0.7)' : 'rgba(203, 213, 225, 0.7)'};
+    background: ${isDark ? 'rgba(20, 20, 25, 0.7)' : 'rgba(255, 255, 255, 0.92)'};
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'};
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    border: 1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.14)'};
+    box-shadow: ${isDark ? '0 8px 32px rgba(0, 0, 0, 0.2)' : '0 8px 24px rgba(15, 23, 42, 0.08)'};
   }
 
   .neon-text {
@@ -569,7 +569,7 @@ function AppContent() {
   // --- Render ---
   return (
     <>
-      <div className={`${isDark ? 'bg-[#050505] text-slate-300' : 'bg-slate-200 text-slate-600'} ${file ? 'font-jetbrains h-[100dvh] overflow-hidden' : 'seo-shell min-h-[100dvh] overflow-x-clip'} flex flex-col relative`}>
+      <div className={`analyzer-shell ${isDark ? 'bg-[#050505] text-slate-300' : 'analyzer-shell--light bg-[#f4f7fb] text-slate-700'} ${file ? 'font-jetbrains h-[100dvh] overflow-hidden' : 'seo-shell min-h-[100dvh] overflow-x-clip'} flex flex-col relative`}>
         <style>{getStyles(isDark)}</style>
 
         {/* --- TOP BAR --- */}

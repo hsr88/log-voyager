@@ -1,5 +1,6 @@
 import React from 'react';
-import { BookOpenText, Braces, Coffee, Github, Heart, Info, Wrench } from 'lucide-react';
+import { BookOpenText, Braces, Coffee, Github, Heart, Info, Moon, Sun, Wrench } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const navItems = [
   { label: 'Formats', href: '/#formats', Icon: Braces, key: 'formats' },
@@ -9,6 +10,7 @@ const navItems = [
 ];
 
 export const SeoHeader: React.FC = () => {
+  const { isDark, toggleTheme } = useTheme();
   const pathname = typeof window === 'undefined' ? '/' : window.location.pathname;
 
   return (
@@ -41,6 +43,11 @@ export const SeoHeader: React.FC = () => {
           })}
         </nav>
         <div className="seo-site-header__actions">
+          <button type="button" className="seo-theme-toggle" onClick={toggleTheme}
+            aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+            title={isDark ? 'Light theme' : 'Dark theme'}>
+            {isDark ? <Sun size={17} aria-hidden="true" /> : <Moon size={17} aria-hidden="true" />}
+          </button>
           <a className="seo-button seo-button--support seo-header-support" href="https://ko-fi.com/hsr" target="_blank" rel="noreferrer">
             <Coffee size={16} aria-hidden="true" /> Support
           </a>

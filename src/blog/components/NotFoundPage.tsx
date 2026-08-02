@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { BlogLayout } from './BlogLayout';
 import { Ghost, ArrowLeft, Home } from 'lucide-react';
 
-const CYAN = '#00f3ff';
-const TEXT = '#e2e8f0';
-const TEXT_MUTED = 'rgba(226, 232, 240, 0.6)';
-const PANEL = 'rgba(20, 20, 25, 0.7)';
-const BORDER = 'rgba(255, 255, 255, 0.08)';
+const CYAN = 'var(--color-accent)';
+const TEXT = 'var(--color-ink)';
+const TEXT_MUTED = 'var(--color-muted)';
+const PANEL = 'var(--color-panel)';
+const BORDER = 'var(--color-rule)';
 
 export const NotFoundPage: React.FC = () => {
   useEffect(() => {
@@ -40,7 +40,7 @@ export const NotFoundPage: React.FC = () => {
         {/* 404 Icon */}
         <div 
           className="inline-flex items-center justify-center w-24 h-24 rounded-full mb-8"
-          style={{ background: `${CYAN}15` }}
+          style={{ background: 'color-mix(in oklch, var(--color-accent) 10%, transparent)' }}
         >
           <Ghost className="w-12 h-12" style={{ color: CYAN }} />
         </div>
@@ -88,7 +88,7 @@ export const NotFoundPage: React.FC = () => {
             className="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all"
             style={{ 
               backgroundColor: CYAN,
-              color: '#000' 
+              color: 'var(--color-accent-ink)'
             }}
           >
             <Home size={18} />

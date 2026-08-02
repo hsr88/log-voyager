@@ -4,13 +4,12 @@ import { getArticleBySlug, getRelatedArticles } from '../articles';
 import { Clock, Calendar, User, ArrowRight } from 'lucide-react';
 
 // Dark theme colors
-const DARK_BG = '#050505';
-const DARK_PANEL = 'rgba(20, 20, 25, 0.7)';
-const CYAN = '#00f3ff';
-const MAGENTA = '#ff00ff';
-const TEXT = '#e2e8f0';
-const TEXT_MUTED = 'rgba(226, 232, 240, 0.6)';
-const BORDER = 'rgba(255, 255, 255, 0.08)';
+const DARK_BG = 'var(--color-paper-2)';
+const DARK_PANEL = 'var(--color-panel)';
+const CYAN = 'var(--color-accent)';
+const TEXT = 'var(--color-ink)';
+const TEXT_MUTED = 'var(--color-muted)';
+const BORDER = 'var(--color-rule)';
 const ERROR_RED = '#ef4444';
 const WARN_ORANGE = '#fb923c';
 const INFO_BLUE = '#3b82f6';
@@ -229,7 +228,7 @@ export const BlogPost: React.FC<BlogPostProps> = ({ slug }) => {
   const formatInline = (text: string): string => {
     return text
       .replace(/\*\*(.*?)\*\*/g, `<strong style="color: ${TEXT}; font-weight: 600;">$1</strong>`)
-      .replace(/`([^`]+)`/g, `<code style="background: ${CYAN}20; color: ${CYAN}; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875rem; font-family: monospace;">$1</code>`)
+      .replace(/`([^`]+)`/g, `<code style="background: color-mix(in oklch, var(--color-accent) 10%, transparent); color: ${CYAN}; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875rem; font-family: monospace;">$1</code>`)
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, `<a href="$2" style="color: ${CYAN}; text-decoration: underline;">$1</a>`);
   };
   
@@ -382,7 +381,7 @@ Log Voyager offers pretty-print, collapsible sections, and field search for JSON
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
               <h1 
                 className="text-2xl md:text-4xl font-bold leading-tight"
-                style={{ color: TEXT }}
+                style={{ color: '#fff', textShadow: '0 2px 18px rgba(0, 0, 0, 0.75)' }}
               >
                 {article.title}
               </h1>
@@ -422,7 +421,7 @@ Log Voyager offers pretty-print, collapsible sections, and field search for JSON
                 key={keyword}
                 className="text-xs px-3 py-1.5 rounded-full"
                 style={{ 
-                  backgroundColor: `${CYAN}15`,
+                  backgroundColor: 'color-mix(in oklch, var(--color-accent) 10%, transparent)',
                   color: CYAN 
                 }}
               >
@@ -466,7 +465,7 @@ Log Voyager offers pretty-print, collapsible sections, and field search for JSON
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold transition-all duration-200 hover:opacity-90"
             style={{ 
               backgroundColor: CYAN,
-              color: '#000' 
+              color: 'var(--color-accent-ink)'
             }}
           >
             Open Log Voyager →

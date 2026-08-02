@@ -31,6 +31,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <script>
+    (function () {
+      var saved = localStorage.getItem('logvoyager_theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.colorScheme = theme;
+    }());
+  </script>
+
   <style id="critical-shell-styles">
     :root {
       --color-paper: oklch(14% 0.014 258);
@@ -42,6 +51,14 @@
       --font-body: "IBM Plex Sans", "Space Grotesk", sans-serif;
     }
     html { color-scheme: dark; }
+    html[data-theme="light"] {
+      color-scheme: light;
+      --color-paper: oklch(98% 0.006 250);
+      --color-panel: oklch(100% 0 0);
+      --color-rule: oklch(85% 0.018 250);
+      --color-muted: oklch(43% 0.03 255);
+      --color-ink: oklch(20% 0.025 258);
+    }
     html, body, #root { min-height: 100%; margin: 0; background: var(--color-paper); color: var(--color-ink); }
     body { overflow-x: clip; font-family: var(--font-body); }
     .static-seo { min-height: 100vh; background: var(--color-paper); color: var(--color-ink); }

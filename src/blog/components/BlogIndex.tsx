@@ -4,13 +4,11 @@ import { blogArticles } from '../articles';
 import { Clock, ArrowRight, Search } from 'lucide-react';
 
 // Dark theme colors
-const DARK_BG = '#050505';
-const DARK_PANEL = 'rgba(20, 20, 25, 0.7)';
-const CYAN = '#00f3ff';
-const MAGENTA = '#ff00ff';
-const TEXT = '#e2e8f0';
-const TEXT_MUTED = 'rgba(226, 232, 240, 0.6)';
-const BORDER = 'rgba(255, 255, 255, 0.08)';
+const DARK_PANEL = 'var(--color-panel)';
+const CYAN = 'var(--color-accent)';
+const TEXT = 'var(--color-ink)';
+const TEXT_MUTED = 'var(--color-muted)';
+const BORDER = 'var(--color-rule)';
 
 export const BlogIndex: React.FC = () => {
   // Inject BreadcrumbList JSON-LD
@@ -92,7 +90,7 @@ export const BlogIndex: React.FC = () => {
               key={tag}
               className="px-3 py-1.5 rounded-full text-sm"
               style={{ 
-                backgroundColor: `${CYAN}15`,
+                backgroundColor: 'color-mix(in oklch, var(--color-accent) 10%, transparent)',
                 color: CYAN 
               }}
             >
@@ -128,7 +126,7 @@ export const BlogIndex: React.FC = () => {
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <h3 
                     className="text-xl md:text-2xl font-bold mb-2 transition-opacity group-hover:opacity-90"
-                    style={{ color: TEXT }}
+                    style={{ color: '#fff', textShadow: '0 2px 18px rgba(0, 0, 0, 0.75)' }}
                   >
                     {article.title}
                   </h3>
@@ -163,7 +161,7 @@ export const BlogIndex: React.FC = () => {
                         key={keyword}
                         className="text-xs px-2 py-1 rounded"
                         style={{ 
-                          backgroundColor: `${CYAN}10`,
+                          backgroundColor: 'color-mix(in oklch, var(--color-accent) 8%, transparent)',
                           color: CYAN 
                         }}
                       >
@@ -210,7 +208,7 @@ export const BlogIndex: React.FC = () => {
           className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:opacity-90"
           style={{ 
             backgroundColor: CYAN,
-            color: '#000' 
+            color: 'var(--color-accent-ink)'
           }}
         >
           Open Log Voyager →

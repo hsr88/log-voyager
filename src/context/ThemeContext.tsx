@@ -24,16 +24,16 @@ const darkTheme: Theme = {
 
 const lightTheme: Theme = {
   name: 'light',
-  background: '#e2e8f0',  // Slate-200 - przyciemniony szary
-  foreground: '#334155',  // Slate-700 - mniej kontrastu
-  accent: '#0ea5e9',      // Sky-500 - łagodniejszy niebieski
+  background: '#f4f7fb',
+  foreground: '#172033',
+  accent: '#0877d1',
   accentSecondary: '#db2777',
-  panel: 'rgba(203, 213, 225, 0.7)',  // Slate-300 z przezroczystością
-  border: 'rgba(0, 0, 0, 0.08)',  // Subtelniejsze obramowania
+  panel: 'rgba(255, 255, 255, 0.92)',
+  border: 'rgba(15, 23, 42, 0.14)',
   text: {
-    primary: '#475569',   // Slate-600 - mniej agresywny
-    secondary: '#64748b', // Slate-500
-    muted: '#94a3b8',     // Slate-400
+    primary: '#111827',
+    secondary: '#475569',
+    muted: '#64748b',
   },
   logLevels: {
     error: '#dc2626',
@@ -64,9 +64,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     localStorage.setItem('logvoyager_theme', isDark ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isDark ? '#050505' : '#f4f7fb');
   }, [isDark]);
 
-  const toggleTheme = () => setIsDark(!isDark);
+  const toggleTheme = () => setIsDark((current) => !current);
   const setTheme = (t: 'dark' | 'light') => setIsDark(t === 'dark');
 
   return (

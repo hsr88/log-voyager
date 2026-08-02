@@ -11,12 +11,12 @@ interface BlogLayoutProps {
 }
 
 // Dark theme colors (matching main app)
-const DARK_BG = '#050505';
-const DARK_PANEL = 'rgba(20, 20, 25, 0.7)';
-const CYAN = '#00f3ff';
-const TEXT = '#e2e8f0';
-const TEXT_MUTED = 'rgba(226, 232, 240, 0.6)';
-const BORDER = 'rgba(255, 255, 255, 0.08)';
+const DARK_BG = 'var(--color-paper)';
+const DARK_PANEL = 'var(--color-panel)';
+const CYAN = 'var(--color-accent)';
+const TEXT = 'var(--color-ink)';
+const TEXT_MUTED = 'var(--color-muted)';
+const BORDER = 'var(--color-rule)';
 
 export const BlogLayout: React.FC<BlogLayoutProps> = ({ 
   children, 
@@ -66,8 +66,8 @@ export const BlogLayout: React.FC<BlogLayoutProps> = ({
       style={{ 
         backgroundColor: DARK_BG,
         backgroundSize: '40px 40px',
-        backgroundImage: `linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                          linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)`
+        backgroundImage: `linear-gradient(to right, color-mix(in oklch, var(--color-rule) 35%, transparent) 1px, transparent 1px),
+                          linear-gradient(to bottom, color-mix(in oklch, var(--color-rule) 35%, transparent) 1px, transparent 1px)`
       }}
     >
       <SeoHeader />
@@ -91,7 +91,7 @@ export const BlogLayout: React.FC<BlogLayoutProps> = ({
             href="https://www.logvoyager.cc" 
             className="flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 hover:opacity-80 font-medium"
             style={{ 
-              backgroundColor: `${CYAN}20`,
+              backgroundColor: 'color-mix(in oklch, var(--color-accent) 12%, transparent)',
               color: CYAN 
             }}
           >
