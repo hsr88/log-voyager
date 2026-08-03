@@ -29,10 +29,15 @@ No installation, account or server-side import is required.
 - **Interactive event timeline:** Builds a timestamp histogram for the current file window, highlights warning and error spikes, and lets you jump from a bar to the matching lines.
 - **Similar error groups:** Normalizes timestamps, UUIDs, IP addresses, request IDs and changing values, then groups repeated failures by stable signature.
 - **Multi-filter system:** Combine include and exclude rules with optional regular expressions and log-level conditions.
+- **Visual minimap:** Shows activity, severity markers, bookmarks and the current position across the file for fast navigation.
+- **Focus mode:** Reduces the current view to matching search results or active filters while preserving the original file.
 - **JSON formatting:** Detect and pretty-print structured objects inside log lines.
+- **GZIP input:** Opens supported `.gz` log archives directly in modern browsers without a server-side extraction step.
 - **Bookmarks and selection:** Mark useful lines, navigate between them and export a focused evidence set.
 - **Split view:** Compare two positions in the same file.
+- **Keyboard-first workflow:** Open the command palette with `Ctrl+K`, move between matches, toggle views and export selections with shortcuts.
 - **Local export:** Save selected lines as TXT, JSON or CSV.
+- **Light and dark themes:** Switch the analyzer and public pages between accessible themes; the preference is saved locally.
 - **PWA and offline use:** Install on desktop or mobile and reopen the cached application without a network connection.
 - **Privacy by design:** Log contents are processed locally and are not uploaded to Log Voyager servers.
 
