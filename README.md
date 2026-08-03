@@ -8,7 +8,12 @@ Log Voyager is a free, local-first log file analyzer for developers, DevOps engi
 
 > Files stay on your device. Analysis runs locally and works offline after the PWA assets are cached.
 
-![Log Voyager interface](https://github.com/user-attachments/assets/910d1ed8-abd5-43c2-9e57-85102be09188)
+
+
+https://github.com/user-attachments/assets/b2ba6373-2c27-4c4f-82db-309a72586287
+
+
+
 
 ## Live application
 
@@ -16,7 +21,7 @@ Log Voyager is a free, local-first log file analyzer for developers, DevOps engi
 
 No installation, account or server-side import is required.
 
-## Key features
+## 
 
 - **Large-file streaming:** Reads 50 KB file slices on demand instead of building one complete in-memory document.
 - **Smart Search 2.0:** Plain-text search, regular expressions, case matching, match navigation and local search history.
